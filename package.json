@@ -3,15 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "jwt-decode": "^2.2.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
+    "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "aws:dev": "rm -rf ./build && react-scripts build && aws s3 cp --recursive ./build/ s3://ccx-webwallet-dev-v0.1.0/ --profile=priv --cache-control max-age=30 --region=us-west-2 --metadata-directive REPLACE"
   },
   "eslintConfig": {
     "extends": "react-app"
