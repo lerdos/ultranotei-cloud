@@ -85,7 +85,7 @@ class SignUp extends React.Component {
             value={password}
             onChange={this._handleChange}
           />
-          <button type="Submit">Submit</button>
+          <button type="submit">Submit</button>
         </form>
 
         <div>
