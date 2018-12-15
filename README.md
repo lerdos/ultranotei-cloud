@@ -7,8 +7,8 @@
  - [ ] Resend verification email
  - [ ] Restore password
  - [ ] Show txin/txout properly
- - [ ] Show tx details
+ - [x] Show tx details
  - [ ] Signup form validation
- - [ ] Send form validation
+ - [x] Send form validation
  - [ ] Export keys
- - [ ] Limit number of wallets
+ - [x] Limit number of wallets

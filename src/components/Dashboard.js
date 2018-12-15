@@ -18,6 +18,7 @@ class Dashboard extends Component {
       wallets: {},
       updateInterval: 10,  // in seconds
       lastUpdate: new Date(),
+      maxWallets: 10,
     };
 
     this.createWallet = this.createWallet.bind(this);
@@ -141,6 +142,7 @@ class Dashboard extends Component {
       user,
       wallets,
       lastUpdate,
+      maxWallets,
     } = this.state;
 
     return (
@@ -156,7 +158,9 @@ class Dashboard extends Component {
         <div>
           <small>Last Update: {lastUpdate.toUTCString()}</small>
         </div>
-        <button onClick={this.createWallet}>Create New Wallet</button>
+        {Object.keys(wallets).length < maxWallets &&
+          <button onClick={this.createWallet}>Create New Wallet</button>
+        }
         <div>
           <button onClick={this._handleLogout}>LOGOUT</button>
         </div>

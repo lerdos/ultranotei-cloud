@@ -55,17 +55,98 @@ button:hover {
 
 input:disabled,
 button:disabled {
-  background-color: rgb(24, 24, 24);
-  color: rgb(54, 54, 54);
-  border: 1px solid rgb(59, 59, 59);
+  background-color: rgb(23, 23, 23);
+  color: rgb(35, 35, 35);
+  border: 1px solid rgb(35, 35, 35);
 }
 
 input[type=number]{
   width: 7rem;
 }
 
+.login button {
+  width: 100px;
+}
+
+.login-message {
+  border: 1px solid rgb(30, 30, 30);
+  border-radius: 0.3rem;
+  background-color: rgb(56, 56, 56);
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0;
+  display: inline-block;
+}
+
 .wallet {
+  margin: 0.1rem auto;
+  padding: 0.5rem;
+}
+
+.wallet:hover {
+  background-color: rgb(18, 18, 18);
+}
+
+.wallet-address,
+.wallet-balance,
+.wallet-txs {
+  display: inline-block;
+}
+
+.wallet-balance,
+.wallet-txs {
+  margin: auto 0.5rem;
+  text-align: right;
+}
+
+.wallet-address {
   font-family: 'Roboto Mono', 'Courier New', 'Courier', monospace;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 25%;
+  line-height: 0.8rem;
+}
+
+.wallet-balance {
+  min-width: 110px;
+}
+
+.wallet-txs * {
+  margin: auto 0.1rem;
+}
+
+.wallet-button {
+  font-size: 0.75rem;
+  line-height: 0.8rem;
+  padding: 0.08rem 0.3rem;
+  font-weight: 700;
+  margin: auto 0.2rem;
+}
+
+.tx {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgb(30, 30, 30);
+}
+
+.tx:hover {
+  background-color: rgb(18, 18, 18);
+}
+
+.tx-received {
+  color: rgb(37, 158, 18);
+}
+
+.tx-sent {
+  color: rgb(164, 34, 26);
+}
+
+.send-form div {
+  margin: 1rem 0;
+}
+
+.send-form input[type=text] {
+  width: 90%;
 }
 
 .backdrop {
@@ -76,14 +157,46 @@ input[type=number]{
   right: 0;
   background-color: rgba(0, 0, 0, 0.8);
   padding: 50px;
+  z-index: 1;
 }
 
 .modal {
   color: rgb(175, 175, 175);
   background-color: rgba(15, 15, 15, 0.7);
   border-radius: 5px;
-  max-width: 700px;
-  min-height: 80px;
+  max-width: 900px;
+  min-height: 200px;
   margin: 0 auto;
-  padding: 30px;
+}
+
+.modal-header,
+.modal-footer {
+  padding: 1.2rem;
+}
+
+.modal-header {
+  border-bottom: 1px solid rgb(30, 30, 30);
+}
+
+.modal-header h1 {
+  margin: 0;
+}
+
+.modal-content {
+  padding: 1.5rem;
+  max-height: 400px;
+  overflow: auto;
+}
+
+.modal-footer {
+  border-top: 1px solid rgb(30, 30, 30);
+}
+
+.modal .wallet-address {
+  font-size: 0.9rem;
+  white-space: unset;
+  overflow: unset;
+  text-overflow: unset;
+  max-width: unset;
+  line-height: unset;
 }

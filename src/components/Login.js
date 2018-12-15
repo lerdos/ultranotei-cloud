@@ -13,6 +13,8 @@ class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
+      message: null,
+      loggingIn: false,
     };
 
     this.loginUser = this.loginUser.bind(this);
@@ -28,6 +30,7 @@ class Login extends React.Component {
 
   loginUser(event) {
     event.preventDefault();
+    this.setState({ loggingIn: true });
     const {
       email,
       password,
@@ -35,7 +38,10 @@ class Login extends React.Component {
 
     this.Auth.login(email, password)
       .then(res => {
-        if (res === false) return alert('Wrong credentials');
+        if (res.result === 'error') {
+          this.setState({ message: res.message, loggingIn: false });
+          return;
+        }
         this.props.history.replace('/dashboard');
       })
       .catch(err => console.log(err));
@@ -45,10 +51,12 @@ class Login extends React.Component {
     const {
       email,
       password,
+      message,
+      loggingIn,
     } = this.state;
 
     return (
-      <div id="login">
+      <div id="login" className="login">
         <h1>Login</h1>
         <form onSubmit={this.loginUser}>
           <input
@@ -65,8 +73,12 @@ class Login extends React.Component {
             value={password}
             onChange={this._handleChange}
           />
-          <button type="submit">Submit</button>
+          <button type="submit" disabled={loggingIn}>{loggingIn ? 'Logging In...' : 'Submit'}</button>
         </form>
+
+        {message &&
+          <div className="login-message">{message}</div>
+        }
 
         <div>
           Don't have an account yet? <Link className="link" to="/signup">Sign up</Link>
