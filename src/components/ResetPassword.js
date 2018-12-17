@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import AuthHelper from './AuthHelper';
 
 
-class SignUp extends React.Component {
+class ResetPassword extends React.Component {
 
   Auth = new AuthHelper();
 
@@ -15,11 +15,9 @@ class SignUp extends React.Component {
       formSubmitted: false,
       formValid: false,
       message: null,
-      password: '',
-      userName: '',
     };
 
-    this.signUpUser = this.signUpUser.bind(this);
+    this.resetPassword = this.resetPassword.bind(this);
   }
 
   componentDidMount() {
@@ -31,38 +29,30 @@ class SignUp extends React.Component {
   };
 
   _validateForm = () => {
-    const { email, password, username } = this.state;
-    const formValid = (
-      email !== '' &&
-      password !== '' &&
-      username !== ''
-    );
+    const { email } = this.state;
+    const formValid = email !== '';
     this.setState({ formValid });
   };
 
-  signUpUser(e) {
+  resetPassword(e) {
     e.preventDefault();
     this.setState({ formSubmitted: true, message: null });
     const {
       email,
-      password,
-      userName,
     } = this.state;
 
-    fetch('http://wallet.conceal.network/api/user/', {
-      method: 'post',
+    fetch('http://wallet.conceal.network/api/auth/', {
+      method: 'put',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         email,
-        name: userName,
-        password,
       }),
     })
       .then(r => r.json())
       .then(res => {
-        // console.log(res);
+        console.log(res);
         if (res.result === 'success') return this.props.history.replace('/login');
         this.setState({ formSubmitted: false, message: res.message });
       });
@@ -71,38 +61,20 @@ class SignUp extends React.Component {
   render() {
     const {
       email,
+      message,
       formSubmitted,
       formValid,
-      message,
-      password,
-      userName,
     } = this.state;
 
     return (
-      <div id="register">
-        <h1>Register</h1>
-        <form onSubmit={this.signUpUser}>
-          <input
-            placeholder="User Name"
-            type="text"
-            name="userName"
-            value={userName}
-            minLength={4}
-            onChange={this._handleChange}
-          />
+      <div id="reset-password">
+        <h1>Reset Password</h1>
+        <form onSubmit={this.resetPassword}>
           <input
             placeholder="E-mail"
             type="email"
             name="email"
             value={email}
-            onChange={this._handleChange}
-          />
-          <input
-            placeholder="Password"
-            type="password"
-            name="password"
-            value={password}
-            minLength={8}
             onChange={this._handleChange}
           />
           <button
@@ -118,8 +90,8 @@ class SignUp extends React.Component {
         }
 
         <div>
-          Already have an account? <Link className="link" to="/login">Login</Link><br />
-          Lost password? <Link className="link" to="/reset_password">Reset here</Link>
+          Don't have an account yet? <Link className="link" to="/signup">Sign up</Link><br />
+          Already have an account? <Link className="link" to="/login">Login</Link>
         </div>
         ​
       </div>
@@ -127,4 +99,4 @@ class SignUp extends React.Component {
   }
 }
 
-export default SignUp;
+export default ResetPassword;

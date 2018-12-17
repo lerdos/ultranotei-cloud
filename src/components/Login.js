@@ -12,9 +12,10 @@ class Login extends React.Component {
     super(props, context);
     this.state = {
       email: '',
-      password: '',
+      formSubmitted: false,
+      formValid: false,
       message: null,
-      loggingIn: false,
+      password: '',
     };
 
     this.loginUser = this.loginUser.bind(this);
@@ -25,12 +26,18 @@ class Login extends React.Component {
   }
 
   _handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value })
+    this.setState({ [e.target.name]: e.target.value }, () => this._validateForm())
   };
 
-  loginUser(event) {
-    event.preventDefault();
-    this.setState({ loggingIn: true });
+  _validateForm = () => {
+    const { email, password } = this.state;
+    const formValid = email !== '' && password !== '';
+    this.setState({ formValid });
+  };
+
+  loginUser(e) {
+    e.preventDefault();
+    this.setState({ formSubmitted: true, message: null });
     const {
       email,
       password,
@@ -38,11 +45,9 @@ class Login extends React.Component {
 
     this.Auth.login(email, password)
       .then(res => {
-        if (res.result === 'error') {
-          this.setState({ message: res.message, loggingIn: false });
-          return;
-        }
-        this.props.history.replace('/dashboard');
+        // console.log(res);
+        if (res.result === 'success') return this.props.history.replace('/dashboard');
+        this.setState({ formSubmitted: false, message: res.message });
       })
       .catch(err => console.log(err));
   };
@@ -50,9 +55,10 @@ class Login extends React.Component {
   render() {
     const {
       email,
+      formSubmitted,
+      formValid,
       password,
       message,
-      loggingIn,
     } = this.state;
 
     return (
@@ -64,6 +70,7 @@ class Login extends React.Component {
             type="email"
             name="email"
             value={email}
+            minLength={4}
             onChange={this._handleChange}
           />
           <input
@@ -71,9 +78,15 @@ class Login extends React.Component {
             type="password"
             name="password"
             value={password}
+            minLength={8}
             onChange={this._handleChange}
           />
-          <button type="submit" disabled={loggingIn}>{loggingIn ? 'Logging In...' : 'Submit'}</button>
+          <button
+            type="submit"
+            disabled={formSubmitted || !formValid}
+          >
+            {formSubmitted ? 'Logging In...' : 'Submit'}
+            </button>
         </form>
 
         {message &&
@@ -81,7 +94,8 @@ class Login extends React.Component {
         }
 
         <div>
-          Don't have an account yet? <Link className="link" to="/signup">Sign up</Link>
+          Don't have an account yet? <Link className="link" to="/signup">Sign up</Link><br />
+          Lost password? <Link className="link" to="/reset_password">Reset here</Link>
         </div>
         ​
       </div>

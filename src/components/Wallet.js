@@ -10,21 +10,21 @@ class Wallet extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      address: '',
+      amount: 0,
+      detailsModalOpen: false,
+      explorerURL: 'https://explorer.conceal.network',
+      message: '',
+      receiveModalOpen: false,
+      sendFormValid: false,
+      sendModalOpen: false,
+      sendResponse: null,
       wallet: {
-        transactions: [],
         balance: null,
         locked: null,
         total: null,
+        transactions: [],
       },
-      amount: 0,
-      address: '',
-      message: '',
-      sendModalOpen: false,
-      receiveModalOpen: false,
-      detailsModalOpen: false,
-      sendFormValid: false,
-      sendResponse: null,
-      explorerURL: 'https://explorer.conceal.network',
     };
 
     this.sendTx = this.sendTx.bind(this);
@@ -46,12 +46,12 @@ class Wallet extends Component {
   _validateForm = () => {
     const { wallet, address, amount } = this.state;
     const sendFormValid = (
-      wallet.balance &&
-      amount <= wallet.balance &&
-      amount > 0 &&
-      amount.toString() !== '' &&
       address.length === 98 &&
-      address.startsWith('ccx7')
+      address.startsWith('ccx7') &&
+      amount.toString() !== '' &&
+      amount > 0 &&
+      amount <= wallet.balance &&
+      wallet.balance
     );
     this.setState({ sendFormValid });
   };
@@ -70,15 +70,15 @@ class Wallet extends Component {
         'Token': this.Auth.getToken(),
       },
       body: JSON.stringify({
-        wallet,
         address,
         amount: parseFloat(amount),
         message,
+        wallet,
       }),
     })
       .then(r => r.json())
       .then(res => {
-        console.log(res)
+        // console.log(res);
         if (res.result === 'error' || res.message.error) {
           this.setState({
             sendResponse: {
