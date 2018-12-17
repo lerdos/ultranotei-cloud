@@ -12,3 +12,4 @@
  - [x] Send form validation
  - [ ] Export keys
  - [x] Limit number of wallets
+ - [ ] Add tx date in details

@@ -77,7 +77,7 @@ class Login extends React.Component {
         </form>
 
         {message &&
-          <div className="login-message">{message}</div>
+          <div className="error-message">{message}</div>
         }
 
         <div>

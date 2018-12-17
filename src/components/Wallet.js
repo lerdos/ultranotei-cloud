@@ -1,8 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Modal from './Modal';
+import AuthHelper from './AuthHelper';
 
 
 class Wallet extends Component {
+
+  Auth = new AuthHelper();
+
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -19,7 +23,11 @@ class Wallet extends Component {
       receiveModalOpen: false,
       detailsModalOpen: false,
       sendFormValid: false,
+      sendResponse: null,
+      explorerURL: 'https://explorer.conceal.network',
     };
+
+    this.sendTx = this.sendTx.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -32,7 +40,7 @@ class Wallet extends Component {
   }
 
   _handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value }, () => this._validateForm());
+    if (e.target.name) this.setState({ [e.target.name]: e.target.value }, () => this._validateForm());
   };
 
   _validateForm = () => {
@@ -52,6 +60,46 @@ class Wallet extends Component {
     this.setState({ [`${e.target.name}Open`]: !this.state[`${e.target.name}Open`] });
   };
 
+  sendTx(e, wallet, address, amount, message) {
+    this.setState({ sendResponse: null });
+    e.preventDefault();
+    fetch(`http://wallet.conceal.network/api/wallet/`, {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+        'Token': this.Auth.getToken(),
+      },
+      body: JSON.stringify({
+        wallet,
+        address,
+        amount: parseFloat(amount),
+        message,
+      }),
+    })
+      .then(r => r.json())
+      .then(res => {
+        console.log(res)
+        if (res.result === 'error' || res.message.error) {
+          this.setState({
+            sendResponse: {
+              status: 'error',
+              message: res.message === 'error' ? res.message : `Wallet Error: ${res.message.error.message}`,
+            },
+          });
+          return;
+        }
+        this.setState({
+          address: '',
+          amount: '',
+          sendFormValid: false,
+          sendResponse: {
+            status: 'success',
+            message: res.message.result,
+          },
+        });
+      });
+  }
+
   render() {
     const {
       amount,
@@ -62,8 +110,9 @@ class Wallet extends Component {
       receiveModalOpen,
       detailsModalOpen,
       sendFormValid,
+      sendResponse,
+      explorerURL,
     } = this.state;
-    const { sendTx } = this.props;
 
     const txs = wallet.transactions || [];
     const txIn = txs.length > 0 && wallet.transactions.filter(t => t.type === 'received');
@@ -80,7 +129,7 @@ class Wallet extends Component {
         </div>
         <div className="wallet-txs">
           [
-          {balance > 0
+          {txs.length > 0
             ? <a href="#" name="detailsModal" onClick={this._toggleModal}>{txs.length} TXS</a>
             : "0 TXS"
           }
@@ -102,7 +151,6 @@ class Wallet extends Component {
           onClick={this._toggleModal}
           name="receiveModal"
           className="wallet-button"
-          disabled={balance === 0}
         >
           RECEIVE
         </button>
@@ -114,7 +162,7 @@ class Wallet extends Component {
           title="Send CCX"
         >
           From: <span className="wallet-address">{wallet.address}</span>
-          <form onSubmit={(e) => sendTx(e, address, wallet.address, amount, message)} className="send-form">
+          <form onSubmit={(e) => this.sendTx(e, address, wallet.address, amount, message)} className="send-form">
             <div>
               To:&nbsp;
               <input
@@ -140,18 +188,45 @@ class Wallet extends Component {
                 value={amount}
                 min={0}
                 max={balance}
-                step={0.5}
+                step={0.1}
                 onChange={this._handleChange}
               /> CCX
             </div>
             <button
               type="submit"
-              onClick={(e) => sendTx(e, wallet.address, address, amount, message)}
               disabled={!sendFormValid}
             >
               Send
             </button>
+            {sendResponse &&
+              <div className={`${sendResponse.status}-message`}>
+                {
+                  sendResponse.message === 'error'
+                    ? sendResponse.message
+                    : <Fragment>
+                        TX Hash: <a
+                          href={`${explorerURL}/?hash=${sendResponse.message.transactionHash}#blockchain_transaction`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {sendResponse.message.transactionHash}
+                        </a><br />
+                        Secret Key: {sendResponse.message.transactionSecretKey}
+                      </Fragment>
+                }
+              </div>
+            }
           </form>
+        </Modal>
+
+        <Modal
+          show={receiveModalOpen}
+          name="receiveModal"
+          onClose={this._toggleModal}
+          title="Receive CCX"
+        >
+          <div>Address: {wallet.address}</div>
+          <div>QR Code...</div>
         </Modal>
 
         <Modal
@@ -168,7 +243,7 @@ class Wallet extends Component {
               <div className="tx-hash">
                 TX Hash:&nbsp;
                 <a
-                  href={`https://explorer.conceal.network/?hash=${tx.hash}#blockchain_transaction`}
+                  href={`${explorerURL}/?hash=${tx.hash}#blockchain_transaction`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -181,15 +256,6 @@ class Wallet extends Component {
               {/*{tx.address}*/}
             </div>
           )}
-        </Modal>
-
-        <Modal
-          show={receiveModalOpen}
-          name="receiveModal"
-          onClose={this._toggleModal}
-          title="Receive CCX"
-        >
-          QR Code...
         </Modal>
       </div>
     );

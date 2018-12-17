@@ -24,7 +24,6 @@ class Dashboard extends Component {
     this.createWallet = this.createWallet.bind(this);
     this.getWalletDetails = this.getWalletDetails.bind(this);
     this.updateWallets = this.updateWallets.bind(this);
-    this.sendTx = this.sendTx.bind(this);
   }
 
   _handleLogout = () => {
@@ -116,27 +115,6 @@ class Dashboard extends Component {
       });
   }
 
-  sendTx(e, wallet, address, amount, message) {
-    e.preventDefault();
-    fetch(`http://wallet.conceal.network/api/wallet/`, {
-      method: 'put',
-      headers: {
-        'Content-Type': 'application/json',
-        'Token': this.Auth.getToken(),
-      },
-      body: JSON.stringify({
-        wallet,
-        address,
-        amount: parseFloat(amount),
-        message,
-      }),
-    })
-      .then(r => r.json())
-      .then(res => {
-        console.log(res);
-      });
-  }
-
   render() {
     const {
       user,
@@ -152,7 +130,7 @@ class Dashboard extends Component {
         <h2>Your Wallets</h2>
         {
           Object.keys(wallets).length > 0
-            ? Object.keys(wallets).map(wallet => <Wallet key={wallet} wallet={wallets[wallet]} sendTx={this.sendTx}/>)
+            ? Object.keys(wallets).map(wallet => <Wallet key={wallet} wallet={wallets[wallet]}/>)
             : <span>You have no wallets, please create one!</span>
         }
         <div>
