@@ -12,9 +12,13 @@ class Wallet extends Component {
     this.state = {
       address: '',
       amount: 0,
+      coinDecimals: 5,
+      defaultFee: 0.00001,
       detailsModalOpen: false,
       explorerURL: 'https://explorer.conceal.network',
+      feePerChar: 0.00001,
       message: '',
+      paymentID: '',
       receiveModalOpen: false,
       sendFormValid: false,
       sendModalOpen: false,
@@ -40,17 +44,21 @@ class Wallet extends Component {
   }
 
   _handleChange = (e) => {
-    if (e.target.name) this.setState({ [e.target.name]: e.target.value }, () => this._validateForm());
+    let val = e.target.value;
+    if (e.target.name === 'amount') {
+      val = e.target.value === '' ? 0 : parseFloat(e.target.value);
+    }
+    if (e.target.name) this.setState({ [e.target.name]: val }, () => this._validateForm());
   };
 
   _validateForm = () => {
-    const { wallet, address, amount } = this.state;
+    const { address, amount, defaultFee, feePerChar, message, wallet } = this.state;
     const sendFormValid = (
       address.length === 98 &&
       address.startsWith('ccx7') &&
       amount.toString() !== '' &&
       amount > 0 &&
-      amount <= wallet.balance &&
+      (amount + defaultFee) + (message.length * feePerChar) <= wallet.balance &&
       wallet.balance
     );
     this.setState({ sendFormValid });
@@ -60,30 +68,37 @@ class Wallet extends Component {
     this.setState({ [`${e.target.name}Open`]: !this.state[`${e.target.name}Open`] });
   };
 
-  sendTx(e, wallet, address, amount, message) {
+  _calculateMax = () => {
+    const { coinDecimals, defaultFee, feePerChar, message, wallet } = this.state;
+    const calculated = (wallet.balance - defaultFee - (message.length * feePerChar)).toFixed(coinDecimals);
+    this.setState({ amount: parseFloat(calculated) }, () => this._validateForm());
+  };
+
+  sendTx(e, wallet, address, paymentID, amount, message) {
     this.setState({ sendResponse: null });
     e.preventDefault();
-    fetch(`http://wallet.conceal.network/api/wallet/`, {
+    fetch(`http://wallet.conceal.network/api/wallet`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json',
         'Token': this.Auth.getToken(),
       },
       body: JSON.stringify({
-        address,
+        address,  // destination
         amount: parseFloat(amount),
         message,
-        wallet,
+        paymentID,
+        wallet,  // origin
       }),
     })
       .then(r => r.json())
       .then(res => {
-        // console.log(res);
+        console.log(res);
         if (res.result === 'error' || res.message.error) {
           this.setState({
             sendResponse: {
               status: 'error',
-              message: res.message === 'error' ? res.message : `Wallet Error: ${res.message.error.message}`,
+              message: `Wallet Error: ${res.message}`,
             },
           });
           return;
@@ -102,16 +117,20 @@ class Wallet extends Component {
 
   render() {
     const {
-      amount,
-      wallet,
       address,
-      message,
-      sendModalOpen,
-      receiveModalOpen,
+      amount,
+      coinDecimals,
       detailsModalOpen,
-      sendFormValid,
-      sendResponse,
+      defaultFee,
       explorerURL,
+      feePerChar,
+      message,
+      paymentID,
+      receiveModalOpen,
+      sendFormValid,
+      sendModalOpen,
+      sendResponse,
+      wallet,
     } = this.state;
 
     const txs = wallet.transactions || [];
@@ -162,7 +181,10 @@ class Wallet extends Component {
           title="Send CCX"
         >
           From: <span className="wallet-address">{wallet.address}</span>
-          <form onSubmit={(e) => this.sendTx(e, address, wallet.address, amount, message)} className="send-form">
+          <form
+            onSubmit={(e) => this.sendTx(e, wallet.address, address, paymentID, amount, message)}
+            className="send-form"
+          >
             <div>
               To:&nbsp;
               <input
@@ -178,6 +200,20 @@ class Wallet extends Component {
               />
             </div>
             <div>
+              Payment ID (optional):&nbsp;
+              <input
+                size={6}
+                placeholder="Payment ID"
+                name="paymentID"
+                type="text"
+                disabled={balance === 0}
+                minLength={98}
+                maxLength={98}
+                value={paymentID}
+                onChange={this._handleChange}
+              />
+            </div>
+            <div>
               Amount:&nbsp;
               <input
                 size={2}
@@ -187,10 +223,27 @@ class Wallet extends Component {
                 disabled={balance === 0}
                 value={amount}
                 min={0}
-                max={balance}
-                step={0.1}
+                max={balance - defaultFee}
+                step={0.00001}
                 onChange={this._handleChange}
-              /> CCX
+              /> CCX&nbsp;
+              <button onClick={this._calculateMax} type="button" className="wallet-button">
+                Send Max. Amount
+              </button>
+            </div>
+            <div>
+              Message (optional):&nbsp;
+              <input
+                size={6}
+                placeholder="Message"
+                name="message"
+                type="text"
+                disabled={balance === 0}
+                value={message}
+                onChange={this._handleChange}
+              />
+              <br />
+              <small>Msg fee: {message.length > 0 ? (message.length * feePerChar).toFixed(coinDecimals) : 0} CCX</small>
             </div>
             <button
               type="submit"
@@ -198,10 +251,18 @@ class Wallet extends Component {
             >
               Send
             </button>
+            <div>
+              <strong>
+                TOTAL: {message.length > 0
+                  ? (amount + defaultFee + (message.length * feePerChar)).toFixed(coinDecimals)
+                  : (amount + defaultFee).toFixed(coinDecimals)
+                } CCX
+              </strong> (Available: {balance.toFixed(coinDecimals)} CCX)
+            </div>
             {sendResponse &&
               <div className={`${sendResponse.status}-message`}>
                 {
-                  sendResponse.message === 'error'
+                  sendResponse.status === 'error'
                     ? sendResponse.message
                     : <Fragment>
                         TX Hash: <a
@@ -238,7 +299,7 @@ class Wallet extends Component {
           {txs.map(tx =>
             <div key={tx.hash} className={`tx tx-${tx.type}`}>
               <div className="tx-type">
-                <strong>{tx.type === 'received' ? 'TX IN' : 'TX OUT'}</strong>
+                <strong>{tx.type === 'received' ? 'TX IN' : 'TX OUT'} ({tx.timestamp})</strong>
               </div>
               <div className="tx-hash">
                 TX Hash:&nbsp;
@@ -252,6 +313,9 @@ class Wallet extends Component {
               </div>
               <div className="tx-amount">
                 Amount: <strong>{tx.amount} CCX</strong>
+              </div>
+              <div className="tx-fee">
+                Fee: <strong>{tx.fee} CCX</strong>
               </div>
               {/*{tx.address}*/}
             </div>

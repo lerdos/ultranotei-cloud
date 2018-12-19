@@ -147,7 +147,7 @@ input[type=number]{
 }
 
 .send-form input[type=text] {
-  width: 90%;
+  width: 80%;
 }
 
 .backdrop {

@@ -32,7 +32,7 @@ class Dashboard extends Component {
   };
 
   componentWillMount() {
-    fetch('http://wallet.conceal.network/api/user/', {
+    fetch('http://wallet.conceal.network/api/user', {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
