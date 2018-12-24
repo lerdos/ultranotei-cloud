@@ -11,6 +11,7 @@ import Height from './cards/Height';
 import PortfolioBTC from './cards/PortfolioBTC';
 import PortfolioCCX from './cards/PortfolioCCX';
 import Transactions from './cards/Transactions';
+import Market from './cards/Market';
 
 
 class Dashboard extends React.Component {
@@ -20,16 +21,21 @@ class Dashboard extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      user: {},
-      wallets: {},
-      updateInterval: 10,  // in seconds
+      coingeckoAPI: 'https://api.coingecko.com/api/v3',
       lastUpdate: new Date(),
       maxWallets: 10,
+      priceCCXBTC: 0,
+      updateInterval: 10,  // in seconds
+      updateBTCPriceInterval: 30,  // in seconds
+      updateCCXPriceInterval: 30,  // in seconds
+      user: {},
+      wallets: {},
     };
 
     this.createWallet = this.createWallet.bind(this);
     this.getWalletDetails = this.getWalletDetails.bind(this);
     this.updateWallets = this.updateWallets.bind(this);
+    this.fetchPrices = this.fetchPrices.bind(this);
   }
 
   _handleLogout = () => {
@@ -66,14 +72,17 @@ class Dashboard extends React.Component {
           this.getWalletDetails(address);
         });
       });
+    this.fetchPrices();
   }
 
   componentDidMount() {
-    this.updateWalletsInterval = setInterval(this.updateWallets, this.state.updateInterval * 1000);
+    this.fetchPricesInterval = setInterval(this.updateWallets, this.state.updateInterval * 1000);
+    this.updatePricesInterval = setInterval(this.fetchPrices, this.state.updatePricesInterval * 1000);
   }
 
   componentWillUnmount() {
-    clearInterval(this.updateWalletsInterval);
+    clearInterval(this.fetchPricesInterval);
+    clearInterval(this.updatePricesInterval);
   }
 
   getWalletDetails(address) {
@@ -121,12 +130,21 @@ class Dashboard extends React.Component {
       });
   }
 
+  fetchPrices() {
+    const { coingeckoAPI } = this.state;
+    fetch(`${coingeckoAPI}/simple/price?ids=conceal&vs_currencies=btc&include_last_updated_at=true`)
+      .then(r => r.json())
+      .then(res => this.setState({ priceCCXBTC: res.conceal && res.conceal.btc ? res.conceal.btc : 0 }))
+      .catch(err => console.error(err));
+  }
+
   render() {
     const {
-      user,
-      wallets,
       lastUpdate,
       maxWallets,
+      priceCCXBTC,
+      user,
+      wallets,
     } = this.state;
 
     return (
@@ -150,7 +168,7 @@ class Dashboard extends React.Component {
                   <PortfolioCCX wallets={wallets} />
                 </div>
                 <div className="col-lg-3">
-                  <PortfolioBTC />
+                  <PortfolioBTC wallets={wallets} priceCCXBTC={priceCCXBTC}  />
                 </div>
                 <div className="col-lg-3">
                   <Transactions wallets={wallets}/>
@@ -199,38 +217,7 @@ class Dashboard extends React.Component {
                 </div>
               </div>
               <div className="col-lg-4 mg-t-20 mg-lg-t-0">
-                <div className="card card-sales">
-                  <h6 className="slim-card-title tx-primary">Graviex</h6>
-                  <div className="row">
-                    <div className="col">
-                      <label className="tx-12">Ask</label>
-                      <p>1,898</p>
-                    </div>
-                    <div className="col">
-                      <label className="tx-12">Buy</label>
-                      <p>1,112</p>
-                    </div>
-                    <div className="col">
-                      <label className="tx-12">Volume</label>
-                      <p>72,067</p>
-                    </div>
-                  </div>
-                  <h6 className="slim-card-title tx-primary">STEX</h6>
-                  <div className="row">
-                    <div className="col">
-                      <label className="tx-12">Ask</label>
-                      <p>1,598</p>
-                    </div>
-                    <div className="col">
-                      <label className="tx-12">Buy</label>
-                      <p>1,212</p>
-                    </div>
-                    <div className="col">
-                      <label className="tx-12">Volume</label>
-                      <p>62,067</p>
-                    </div>
-                  </div>
-                </div>
+                <Market />
               </div>
             </div>
 
