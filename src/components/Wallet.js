@@ -1,9 +1,16 @@
-import React, { Component, Fragment } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
+
 import Modal from './Modal';
 import AuthHelper from './AuthHelper';
+import { maskAddress } from '../helpers/address';
+import MdArrowUp from 'react-ionicons/lib/MdArrowUp';
+import MdArrowDown from 'react-ionicons/lib/MdArrowDown';
+import MdExpand from 'react-ionicons/lib/MdExpand';
+import MdListBox from 'react-ionicons/lib/MdListBox';
 
 
-class Wallet extends Component {
+class Wallet extends React.Component {
 
   Auth = new AuthHelper();
 
@@ -52,13 +59,14 @@ class Wallet extends Component {
   };
 
   _validateForm = () => {
-    const { address, amount, defaultFee, feePerChar, message, wallet } = this.state;
+    const { address, amount, defaultFee, feePerChar, message, paymentID, wallet } = this.state;
     const sendFormValid = (
       address.length === 98 &&
       address.startsWith('ccx7') &&
       amount.toString() !== '' &&
       amount > 0 &&
       (amount + defaultFee) + (message.length * feePerChar) <= wallet.balance &&
+      (paymentID && paymentID.length === 64) &&
       wallet.balance
     );
     this.setState({ sendFormValid });
@@ -134,45 +142,36 @@ class Wallet extends Component {
     } = this.state;
 
     const txs = wallet.transactions || [];
-    const txIn = txs.length > 0 && wallet.transactions.filter(t => t.type === 'received');
-    const txOut = txs.length > 0 && wallet.transactions.filter(t => t.type === 'sent');
+    const txIn = txs.length > 0 ? wallet.transactions.filter(t => t.type === 'received') : [];
+    const txOut = txs.length > 0 ? wallet.transactions.filter(t => t.type === 'sent') : [];
     const balance = wallet.balance || 0;
 
     return (
-      <div className="wallet">
-        <div className="wallet-address">
-          {wallet.address}
-        </div>
-        <div className="wallet-balance">
-          <strong>{balance.toFixed(6)} CCX</strong>
-        </div>
-        <div className="wallet-txs">
-          [
-          {txs.length > 0
-            ? <a href="#" name="detailsModal" onClick={this._toggleModal}>{txs.length} TXS</a>
-            : "0 TXS"
-          }
-          {txIn && <small className="tx-received">{txIn.length} IN</small>}
-          {txOut && <small className="tx-sent">{txOut.length} OUT</small>}
-          ]
-        </div>
-
-        <button
-          onClick={this._toggleModal}
-          name="sendModal"
-          className="wallet-button"
-          disabled={balance === 0}
-        >
-          SEND
-        </button>
-
-        <button
-          onClick={this._toggleModal}
-          name="receiveModal"
-          className="wallet-button"
-        >
-          RECEIVE
-        </button>
+      <div className="list-group-item">
+        {wallet.address &&
+          <>
+            <div className="user-name-address">
+              <p>{maskAddress(wallet.address)}</p>
+              <span>Available Balance: {balance.toFixed(coinDecimals)} CCX</span>
+              <span>Transactions in: {txIn.length}</span>
+              <span>Transactions out: {txOut.length}</span>
+            </div>
+            <div className="user-btn-wrapper">
+              <Link to="#" className="btn btn-outline-light btn-icon">
+                <div className="tx-20"><MdArrowUp className="icon" color="#868ba1" /></div>
+              </Link>
+              <Link to="#" className="btn btn-outline-light btn-icon">
+                <div className="tx-20"><MdArrowDown className="icon" color="#868ba1" /></div>
+              </Link>
+              <Link to="#" className="btn btn-outline-light btn-icon">
+                <div className="tx-20"><MdExpand className="icon" color="#868ba1" /></div>
+              </Link>
+              <Link to="#" className="btn btn-outline-light btn-icon" onClick={this._toggleModal}>
+                <div className="tx-20"><MdListBox className="icon" color="#868ba1" /></div>
+              </Link>
+            </div>
+          </>
+        }
 
         <Modal
           show={sendModalOpen}
@@ -207,8 +206,8 @@ class Wallet extends Component {
                 name="paymentID"
                 type="text"
                 disabled={balance === 0}
-                minLength={98}
-                maxLength={98}
+                minLength={64}
+                maxLength={64}
                 value={paymentID}
                 onChange={this._handleChange}
               />
@@ -264,7 +263,7 @@ class Wallet extends Component {
                 {
                   sendResponse.status === 'error'
                     ? sendResponse.message
-                    : <Fragment>
+                    : <>
                         TX Hash: <a
                           href={`${explorerURL}/?hash=${sendResponse.message.transactionHash}#blockchain_transaction`}
                           target="_blank"
@@ -273,7 +272,7 @@ class Wallet extends Component {
                           {sendResponse.message.transactionHash}
                         </a><br />
                         Secret Key: {sendResponse.message.transactionSecretKey}
-                      </Fragment>
+                      </>
                 }
               </div>
             }
@@ -317,10 +316,10 @@ class Wallet extends Component {
               <div className="tx-fee">
                 Fee: <strong>{tx.fee} CCX</strong>
               </div>
-              {/*{tx.address}*/}
             </div>
           )}
         </Modal>
+
       </div>
     );
   }

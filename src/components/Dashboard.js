@@ -1,13 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 import update from 'immutability-helper';
+import { Link } from 'react-router-dom';
 
 import withAuth from './withAuth';
 import AuthHelper from './AuthHelper';
-import Menu from './Menu';
+import Header from './Header';
+import Footer from './Footer';
 import Wallet from './Wallet';
+import Height from './cards/Height';
+import PortfolioBTC from './cards/PortfolioBTC';
+import PortfolioCCX from './cards/PortfolioCCX';
+import Transactions from './cards/Transactions';
 
 
-class Dashboard extends Component {
+class Dashboard extends React.Component {
 
   Auth = new AuthHelper();
 
@@ -124,24 +130,120 @@ class Dashboard extends Component {
     } = this.state;
 
     return (
-      <div className="main-page">
-        <h1>Welcome {user.name}!</h1>
-        <Menu />
-        <h2>Your Wallets</h2>
-        {
-          Object.keys(wallets).length > 0
-            ? Object.keys(wallets).map(wallet => <Wallet key={wallet} wallet={wallets[wallet]}/>)
-            : <span>You have no wallets, please create one!</span>
-        }
-        <div>
-          <small>Last Update: {lastUpdate.toUTCString()}</small>
+      <div>
+        <Header user={user} handleLogout={this._handleLogout} />
+
+        <div className="slim-mainpanel">
+          <div className="container">
+
+            <div className="slim-pageheader">
+              <ol className="breadcrumb slim-breadcrumb">
+                <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+                <li className="breadcrumb-item active" aria-current="page">Dashboard</li>
+              </ol>
+              <h6 className="slim-pagetitle">Dashboard</h6>
+            </div>
+
+            <div className="card card-dash-one mg-t-20">
+              <div className="row no-gutters">
+                <div className="col-lg-3">
+                  <PortfolioCCX wallets={wallets} />
+                </div>
+                <div className="col-lg-3">
+                  <PortfolioBTC />
+                </div>
+                <div className="col-lg-3">
+                  <Transactions wallets={wallets}/>
+                </div>
+                <div className="col-lg-3">
+                  <Height />
+                </div>
+              </div>
+            </div>
+
+            <div className="section-wrapper mg-t-20">
+              <label className="section-title">Your Wallets</label>
+              <div className="row">
+                <div className="col-lg-12">
+                  <div className="list-group list-group-user">
+                    {
+                      Object.keys(wallets).length > 0
+                        ? Object.keys(wallets).map(wallet => <Wallet key={wallet} wallet={wallets[wallet]}/>)
+                        : ''
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="row row-sm mg-t-20">
+              <div className="col-lg-4">
+                <div className="card card-info">
+                  <div className="card-body pd-40">
+                    <h5 className="tx-inverse mg-b-20">How the wallet works</h5>
+                    <p>An introductory tour of all the elements that currently make up the online wallet. Click for more
+                      information.</p>
+                    <Link to="#" className="btn btn-primary btn-block">Getting Started</Link>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-4 mg-t-20 mg-lg-t-0">
+                <div className="card card-info">
+                  <div className="card-body pd-40">
+
+                    <h5 className="tx-inverse mg-b-20">Upcoming Features</h5>
+                    <p>Click for a list of upcoming features, including encrypted messages, deposits, and
+                      investments.</p>
+                    <Link to="#" className="btn btn-primary btn-block">Take a Tour</Link>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-4 mg-t-20 mg-lg-t-0">
+                <div className="card card-sales">
+                  <h6 className="slim-card-title tx-primary">Graviex</h6>
+                  <div className="row">
+                    <div className="col">
+                      <label className="tx-12">Ask</label>
+                      <p>1,898</p>
+                    </div>
+                    <div className="col">
+                      <label className="tx-12">Buy</label>
+                      <p>1,112</p>
+                    </div>
+                    <div className="col">
+                      <label className="tx-12">Volume</label>
+                      <p>72,067</p>
+                    </div>
+                  </div>
+                  <h6 className="slim-card-title tx-primary">STEX</h6>
+                  <div className="row">
+                    <div className="col">
+                      <label className="tx-12">Ask</label>
+                      <p>1,598</p>
+                    </div>
+                    <div className="col">
+                      <label className="tx-12">Buy</label>
+                      <p>1,212</p>
+                    </div>
+                    <div className="col">
+                      <label className="tx-12">Volume</label>
+                      <p>62,067</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
+
+        <Footer lastUpdate={lastUpdate} />
+
+        {/*
         {Object.keys(wallets).length < maxWallets &&
           <button onClick={this.createWallet}>Create New Wallet</button>
         }
-        <div>
-          <button onClick={this._handleLogout}>LOGOUT</button>
-        </div>
+        */}
       </div>
     );
   }
