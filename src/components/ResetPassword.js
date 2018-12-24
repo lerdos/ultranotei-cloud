@@ -67,31 +67,40 @@ class ResetPassword extends React.Component {
     } = this.state;
 
     return (
-      <div id="reset-password">
-        <h1>Reset Password</h1>
-        <form onSubmit={this.resetPassword}>
-          <input
-            placeholder="E-mail"
-            type="email"
-            name="email"
-            value={email}
-            onChange={this._handleChange}
-          />
-          <button
-            type="submit"
-            disabled={formSubmitted || !formValid}
-          >
-            Submit
-          </button>
-        </form>
+      <div className="signin-wrapper">
 
-        {message &&
+        <div className="signin-box">
+          <h2 className="slim-logo"><a href="/">Conceal</a></h2>
+          <h3 className="signin-title-secondary">Reset Password</h3>
+
+          <form onSubmit={this.resetPassword}>
+            <div className="form-group mg-b-50">
+              <input
+                placeholder="Enter your email"
+                type="email"
+                name="email"
+                className="form-control"
+                value={email}
+                minLength={4}
+                onChange={this._handleChange}
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={formSubmitted || !formValid}
+              className="btn btn-primary btn-block btn-signin"
+            >
+              Submit
+            </button>
+          </form>
+
+          {message &&
           <div className="error-message">{message}</div>
-        }
+          }
 
-        <div>
-          Don't have an account yet? <Link className="link" to="/signup">Sign up</Link><br />
-          Already have an account? <Link className="link" to="/login">Login</Link>
+          <p className="mg-b-0">Don't have an account? <Link to="/signup">Sign Up</Link></p>
+          <p className="mg-b-0">Already have an account? <Link to="/login">Sign In</Link></p>
         </div>
         ​
       </div>
