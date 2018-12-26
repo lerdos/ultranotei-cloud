@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Button from 'react-bootstrap/lib/Button';
+import Modal from 'react-bootstrap/lib/Modal';
 
-import Modal from './Modal';
 import AuthHelper from './AuthHelper';
 import { maskAddress } from '../helpers/address';
 import MdArrowUp from 'react-ionicons/lib/MdArrowUp';
@@ -60,20 +60,20 @@ class Wallet extends React.Component {
 
   _validateForm = () => {
     const { address, amount, defaultFee, feePerChar, message, paymentID, wallet } = this.state;
-    const sendFormValid = (
+    const sendFormValid = !!(
       address.length === 98 &&
       address.startsWith('ccx7') &&
       amount.toString() !== '' &&
       amount > 0 &&
       (amount + defaultFee) + (message.length * feePerChar) <= wallet.balance &&
-      (paymentID && paymentID.length === 64) &&
+      (paymentID === '' || (paymentID !== '' && paymentID.length === 64)) &&
       wallet.balance
     );
     this.setState({ sendFormValid });
   };
 
-  _toggleModal = (e) => {
-    this.setState({ [`${e.target.name}Open`]: !this.state[`${e.target.name}Open`] });
+  _toggleModal = (modalName) => {
+    this.setState({ [`${modalName}ModalOpen`]: !this.state[`${modalName}ModalOpen`] });
   };
 
   _calculateMax = () => {
@@ -113,7 +113,9 @@ class Wallet extends React.Component {
         }
         this.setState({
           address: '',
-          amount: '',
+          amount: 0,
+          message: '',
+          paymentID: '',
           sendFormValid: false,
           sendResponse: {
             status: 'success',
@@ -157,169 +159,203 @@ class Wallet extends React.Component {
               <span>Transactions out: {txOut.length}</span>
             </div>
             <div className="user-btn-wrapper">
-              <Link to="#" className="btn btn-outline-light btn-icon">
-                <div className="tx-20"><MdArrowUp className="icon" color="#868ba1" /></div>
-              </Link>
-              <Link to="#" className="btn btn-outline-light btn-icon">
-                <div className="tx-20"><MdArrowDown className="icon" color="#868ba1" /></div>
-              </Link>
-              <Link to="#" className="btn btn-outline-light btn-icon">
-                <div className="tx-20"><MdExpand className="icon" color="#868ba1" /></div>
-              </Link>
-              <Link to="#" className="btn btn-outline-light btn-icon" onClick={this._toggleModal}>
-                <div className="tx-20"><MdListBox className="icon" color="#868ba1" /></div>
-              </Link>
+              <button
+                onClick={() => this._toggleModal('send')}
+                className="btn btn-outline-light btn-icon"
+                disabled={balance === 0}
+              >
+                <MdArrowUp className="icon" color="#868ba1" />
+              </button>
+              <button
+                className="btn btn-outline-light btn-icon"
+                onClick={() => this._toggleModal('receive')}
+              >
+                <MdArrowDown className="icon" color="#868ba1" />
+              </button>
+              <button
+                className="btn btn-outline-light btn-icon"
+              >
+                <MdExpand className="icon" color="#868ba1" />
+              </button>
+              <button
+                className="btn btn-outline-light btn-icon"
+                onClick={() => this._toggleModal('details')}
+              >
+                <MdListBox className="icon" color="#868ba1" />
+              </button>
             </div>
           </>
         }
 
         <Modal
+          size="lg"
           show={sendModalOpen}
-          name="sendModal"
-          onClose={this._toggleModal}
-          title="Send CCX"
+          onHide={() => this._toggleModal('send')}
         >
-          From: <span className="wallet-address">{wallet.address}</span>
-          <form
-            onSubmit={(e) => this.sendTx(e, wallet.address, address, paymentID, amount, message)}
-            className="send-form"
-          >
-            <div>
-              To:&nbsp;
-              <input
-                size={8}
-                placeholder="Address"
-                name="address"
-                type="text"
-                disabled={balance === 0}
-                minLength={98}
-                maxLength={98}
-                value={address}
-                onChange={this._handleChange}
-              />
-            </div>
-            <div>
-              Payment ID (optional):&nbsp;
-              <input
-                size={6}
-                placeholder="Payment ID"
-                name="paymentID"
-                type="text"
-                disabled={balance === 0}
-                minLength={64}
-                maxLength={64}
-                value={paymentID}
-                onChange={this._handleChange}
-              />
-            </div>
-            <div>
-              Amount:&nbsp;
-              <input
-                size={2}
-                placeholder="Amount"
-                name="amount"
-                type="number"
-                disabled={balance === 0}
-                value={amount}
-                min={0}
-                max={balance - defaultFee}
-                step={0.00001}
-                onChange={this._handleChange}
-              /> CCX&nbsp;
-              <button onClick={this._calculateMax} type="button" className="wallet-button">
-                Send Max. Amount
-              </button>
-            </div>
-            <div>
-              Message (optional):&nbsp;
-              <input
-                size={6}
-                placeholder="Message"
-                name="message"
-                type="text"
-                disabled={balance === 0}
-                value={message}
-                onChange={this._handleChange}
-              />
-              <br />
-              <small>Msg fee: {message.length > 0 ? (message.length * feePerChar).toFixed(coinDecimals) : 0} CCX</small>
-            </div>
-            <button
-              type="submit"
-              disabled={!sendFormValid}
+          <Modal.Header closeButton>
+            <Modal.Title>Send CCX</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            From: <span className="wallet-address">{wallet.address}</span>
+            <form
+              onSubmit={(e) => this.sendTx(e, wallet.address, address, paymentID, amount, message)}
+              className="send-form"
             >
-              Send
-            </button>
-            <div>
-              <strong>
-                TOTAL: {message.length > 0
+              <div>
+                To:&nbsp;
+                <input
+                  size={8}
+                  placeholder="Address"
+                  name="address"
+                  type="text"
+                  minLength={98}
+                  maxLength={98}
+                  value={address}
+                  onChange={this._handleChange}
+                />
+              </div>
+              <div>
+                Payment ID (optional):&nbsp;
+                <input
+                  size={6}
+                  placeholder="Payment ID"
+                  name="paymentID"
+                  type="text"
+                  minLength={64}
+                  maxLength={64}
+                  value={paymentID}
+                  onChange={this._handleChange}
+                />
+              </div>
+              <div>
+                Amount:&nbsp;
+                <input
+                  size={2}
+                  placeholder="Amount"
+                  name="amount"
+                  type="number"
+                  value={amount}
+                  min={0}
+                  max={balance - defaultFee}
+                  step={0.00001}
+                  onChange={this._handleChange}
+                /> CCX&nbsp;
+                <button onClick={this._calculateMax} type="button" className="wallet-button">
+                  Send Max. Amount
+                </button>
+              </div>
+              <div>
+                Message (optional):&nbsp;
+                <input
+                  size={6}
+                  placeholder="Message"
+                  name="message"
+                  type="text"
+                  value={message}
+                  onChange={this._handleChange}
+                />
+                <br />
+                <small>Msg fee: {message.length > 0 ? (message.length * feePerChar).toFixed(coinDecimals) : 0} CCX</small>
+              </div>
+              <button
+                type="submit"
+                disabled={!sendFormValid}
+              >
+                Send
+              </button>
+              <div>
+                <strong>
+                  TOTAL: {message.length > 0
                   ? (amount + defaultFee + (message.length * feePerChar)).toFixed(coinDecimals)
                   : (amount + defaultFee).toFixed(coinDecimals)
                 } CCX
-              </strong> (Available: {balance.toFixed(coinDecimals)} CCX)
-            </div>
-            {sendResponse &&
+                </strong> (Available: {balance.toFixed(coinDecimals)} CCX)
+              </div>
+              {sendResponse &&
               <div className={`${sendResponse.status}-message`}>
                 {
                   sendResponse.status === 'error'
                     ? sendResponse.message
                     : <>
-                        TX Hash: <a
-                          href={`${explorerURL}/?hash=${sendResponse.message.transactionHash}#blockchain_transaction`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {sendResponse.message.transactionHash}
-                        </a><br />
-                        Secret Key: {sendResponse.message.transactionSecretKey}
-                      </>
+                      TX Hash: <a
+                        href={`${explorerURL}/?hash=${sendResponse.message.transactionHash}#blockchain_transaction`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {sendResponse.message.transactionHash}
+                      </a><br />
+                      Secret Key: {sendResponse.message.transactionSecretKey}
+                    </>
                 }
               </div>
-            }
-          </form>
+              }
+            </form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => this._toggleModal('send')}>
+              Close
+            </Button>
+          </Modal.Footer>
         </Modal>
 
         <Modal
+          size="lg"
           show={receiveModalOpen}
-          name="receiveModal"
-          onClose={this._toggleModal}
-          title="Receive CCX"
+          onHide={() => this._toggleModal('receive')}
         >
-          <div>Address: {wallet.address}</div>
-          <div>QR Code...</div>
+          <Modal.Header closeButton>
+            <Modal.Title>Receive CCX</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div>Address: {wallet.address}</div>
+            <div>QR Code...</div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => this._toggleModal('receive')}>
+              Close
+            </Button>
+          </Modal.Footer>
         </Modal>
 
         <Modal
+          size="lg"
           show={detailsModalOpen}
-          name="detailsModal"
-          onClose={this._toggleModal}
-          title="Transaction History"
+          onHide={() => this._toggleModal('details')}
         >
-          {txs.map(tx =>
-            <div key={tx.hash} className={`tx tx-${tx.type}`}>
-              <div className="tx-type">
-                <strong>{tx.type === 'received' ? 'TX IN' : 'TX OUT'} ({tx.timestamp})</strong>
+          <Modal.Header closeButton>
+            <Modal.Title>Wallet Transactions</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {txs.map(tx =>
+              <div key={tx.hash}>
+                <div>
+                  <strong>{tx.type === 'received' ? 'TX IN' : 'TX OUT'} ({tx.timestamp})</strong>
+                </div>
+                <div>
+                  TX Hash:&nbsp;
+                  <a
+                    href={`${explorerURL}/?hash=${tx.hash}#blockchain_transaction`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {tx.hash}
+                  </a>
+                </div>
+                <div>
+                  Amount: <strong>{tx.amount} CCX</strong>
+                </div>
+                <div>
+                  Fee: <strong>{tx.fee} CCX</strong>
+                </div>
               </div>
-              <div className="tx-hash">
-                TX Hash:&nbsp;
-                <a
-                  href={`${explorerURL}/?hash=${tx.hash}#blockchain_transaction`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {tx.hash}
-                </a>
-              </div>
-              <div className="tx-amount">
-                Amount: <strong>{tx.amount} CCX</strong>
-              </div>
-              <div className="tx-fee">
-                Fee: <strong>{tx.fee} CCX</strong>
-              </div>
-            </div>
-          )}
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => this._toggleModal('details')}>
+              Close
+            </Button>
+          </Modal.Footer>
         </Modal>
-
       </div>
     );
   }
