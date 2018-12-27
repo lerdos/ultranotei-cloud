@@ -10,7 +10,6 @@ import ResetPassword from './components/ResetPassword';
 import Settings from './components/Settings';
 import SignUp from './components/SignUp';
 import * as serviceWorker from './serviceWorker';
-import './static/css/layout.css';
 
 
 ReactDOM.render(
