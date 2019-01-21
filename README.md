@@ -42,9 +42,9 @@ yarn build
 
 API endpoint can be overwritten with `REACT_APP_API_ENDPOINT` environmental variable:
 ```bash
-set REACT_APP_API_ENDPOINT=http://blah/ && yarn build
+export REACT_APP_API_ENDPOINT=http://blah/ && yarn build
 # or
-# set REACT_APP_API_ENDPOINT=http://blah/ && npm run-script build
+# export REACT_APP_API_ENDPOINT=http://blah/ && npm run-script build
 ```
 
 #### Production
