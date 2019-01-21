@@ -3,11 +3,11 @@ import decode from 'jwt-decode';
 
 export default class AuthHelper {
   constructor(domain) {
-    this.domain = 'http://wallet.conceal.network';
+    this.domain = process.env.REACT_APP_API_ENDPOINT;
   }
 
   login = (email, password) => {
-    return this.fetch(`${this.domain}/api/auth`, {
+    return this.fetch(`${this.domain}/auth`, {
       method: 'POST',
       body: JSON.stringify({
         email,
