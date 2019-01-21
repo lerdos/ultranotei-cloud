@@ -19,6 +19,7 @@ class Dashboard extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      apiEndpoint: process.env.REACT_APP_API_ENDPOINT,
       coingeckoAPI: 'https://api.coingecko.com/api/v3',
       maxWallets: 10,
       priceCCXBTC: 0,
@@ -50,7 +51,7 @@ class Dashboard extends React.Component {
 
   getWalletList() {
     // console.log('GETTING WALLET LIST...');
-    fetch('http://wallet.conceal.network/api/wallet/list', {
+    fetch(`${this.state.apiEndpoint}/wallet/list`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -73,7 +74,7 @@ class Dashboard extends React.Component {
 
   getWalletDetails(address) {
     // console.log(`GETTING WALLET DETAILS... ${address}`);
-    fetch(`http://wallet.conceal.network/api/wallet/get/address/${address}`, {
+    fetch(`${this.state.apiEndpoint}/wallet/get/address/${address}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -97,7 +98,7 @@ class Dashboard extends React.Component {
   }
 
   createWallet() {
-    fetch('http://wallet.conceal.network/api/wallet/', {
+    fetch(`${this.state.apiEndpoint}/wallet/`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',

@@ -7,6 +7,7 @@ class SendModal extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      apiEndpoint: process.env.REACT_APP_API_ENDPOINT,
       address: '',
       amount: 0,
       coinDecimals: 5,
@@ -63,7 +64,7 @@ class SendModal extends React.Component {
   sendTx(e, wallet, address, paymentID, amount, message) {
     this.setState({ sendResponse: null });
     e.preventDefault();
-    fetch(`http://wallet.conceal.network/api/wallet`, {
+    fetch(`${this.state.apiEndpoint}/wallet`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json',

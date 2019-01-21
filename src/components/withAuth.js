@@ -13,6 +13,7 @@ export default function withAuth(AuthComponent) {
     constructor(props, context) {
       super(props, context);
       this.state = {
+        apiEndpoint: process.env.REACT_APP_API_ENDPOINT,
         confirm: null,
         lastUpdate: new Date(),
         loaded: false,
@@ -47,7 +48,7 @@ export default function withAuth(AuthComponent) {
 
     getUserDetails() {
       // console.log('GETTING USER DETAILS...');
-      fetch('http://wallet.conceal.network/api/user', {
+      fetch(`${this.state.apiEndpoint}/user`, {
         method: 'get',
         headers: {
           'Content-Type': 'application/json',

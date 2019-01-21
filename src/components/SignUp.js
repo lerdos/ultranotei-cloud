@@ -11,6 +11,7 @@ class SignUp extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      apiEndpoint: process.env.REACT_APP_API_ENDPOINT,
       email: '',
       formSubmitted: false,
       formValid: false,
@@ -44,12 +45,13 @@ class SignUp extends React.Component {
     e.preventDefault();
     this.setState({ formSubmitted: true, message: null });
     const {
+      apiEndpoint,
       email,
       password,
       userName,
     } = this.state;
 
-    fetch('http://wallet.conceal.network/api/user/', {
+    fetch(`${apiEndpoint}/user/`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -64,7 +66,7 @@ class SignUp extends React.Component {
       .then(res => {
         // console.log(res);
         if (res.result === 'success') return this.props.history.replace('/login');
-        this.setState({ formSubmitted: false, message: res.message });
+        this.setState({ formSubmitted: false, message: res.message[0] });
       });
   };
 
@@ -119,6 +121,10 @@ class SignUp extends React.Component {
               />
             </div>
 
+            {message &&
+              <div className="text-danger">{message}</div>
+            }
+
             <button
               type="submit"
               disabled={formSubmitted || !formValid}
@@ -127,10 +133,6 @@ class SignUp extends React.Component {
               Submit
             </button>
           </form>
-
-          {message &&
-          <div className="error-message">{message}</div>
-          }
 
           <p className="mg-b-0">Already have an account? <Link to="/login">Sign In</Link></p>
           <p className="mg-b-0">Forgot your password? <Link to="/reset_password">Reset It</Link></p>
