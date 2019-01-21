@@ -1,14 +1,12 @@
 import React from 'react';
+import Button from 'react-bootstrap/lib/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import AuthHelper from './AuthHelper';
 import { maskAddress } from '../helpers/address';
 import DetailsModal from './modals/Details';
 import ReceiveModal from './modals/Receive';
 import SendModal from './modals/Send';
-import MdArrowUp from 'react-ionicons/lib/MdArrowUp';
-import MdArrowDown from 'react-ionicons/lib/MdArrowDown';
-import MdExpand from 'react-ionicons/lib/MdExpand';
-import MdListBox from 'react-ionicons/lib/MdListBox';
 
 
 class Wallet extends React.Component {
@@ -69,31 +67,33 @@ class Wallet extends React.Component {
               <span>Transactions in: {txIn.length}</span>
               <span>Transactions out: {txOut.length}</span>
             </div>
-            <div className="user-btn-wrapper">
-              <button
+            <div className="btn-group" role="group">
+              <Button
+                type="button"
+                variant={`outline-secondary ${balance === 0 ? 'disabled' : ''}`}
                 onClick={() => this._toggleModal('send')}
-                className="btn btn-outline-light btn-icon"
                 disabled={balance === 0}
               >
-                <MdArrowUp className="icon" color="#868ba1" />
-              </button>
-              <button
-                className="btn btn-outline-light btn-icon"
+                <FontAwesomeIcon icon="arrow-up" />
+              </Button>
+              <Button
+                variant="outline-secondary"
                 onClick={() => this._toggleModal('receive')}
               >
-                <MdArrowDown className="icon" color="#868ba1" />
-              </button>
-              <button
-                className="btn btn-outline-light btn-icon"
-              >
-                <MdExpand className="icon" color="#868ba1" />
-              </button>
-              <button
-                className="btn btn-outline-light btn-icon"
+                <FontAwesomeIcon icon="arrow-down" />
+              </Button>
+              <Button
+                variant="outline-secondary"
                 onClick={() => this._toggleModal('details')}
               >
-                <MdListBox className="icon" color="#868ba1" />
-              </button>
+                {/*<MdListBox className="icon" color="#868ba1" />*/}
+                <FontAwesomeIcon icon="list-alt" />
+              </Button>
+              <Button
+                variant="outline-secondary"
+              >
+                <FontAwesomeIcon icon="key" />
+              </Button>
             </div>
           </>
         }
@@ -101,7 +101,6 @@ class Wallet extends React.Component {
         <SendModal
           show={sendModalOpen}
           toggleModal={this._toggleModal}
-          explorerURL={explorerURL}
           wallet={wallet}
         />
 

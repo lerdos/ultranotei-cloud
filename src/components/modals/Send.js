@@ -121,6 +121,13 @@ class SendModal extends React.Component {
 
     const balance = wallet.balance || 0;
 
+    let totalAmount = 0;
+    if (message.length > 0) {
+      totalAmount = amount + defaultFee + (message.length * feePerChar);
+    } else {
+      if (amount > 0) totalAmount = amount + defaultFee;
+    }
+
     return (
       <Modal
         { ...rest }
@@ -136,76 +143,119 @@ class SendModal extends React.Component {
             onSubmit={(e) => this.sendTx(e, wallet.address, address, paymentID, amount, message)}
             className="send-form"
           >
-            <div>
-              To:&nbsp;
-              <input
-                size={8}
-                placeholder="Address"
-                name="address"
-                type="text"
-                minLength={98}
-                maxLength={98}
-                value={address}
-                onChange={this._handleChange}
-              />
+            <div className="form-layout form-layout-7">
+              <div className="row no-gutters">
+                <div className="col-5 col-sm-4">
+                  To
+                </div>
+                <div className="col-7 col-sm-8">
+                  <input
+                    size={8}
+                    placeholder="Address"
+                    className="form-control"
+                    name="address"
+                    type="text"
+                    minLength={98}
+                    maxLength={98}
+                    value={address}
+                    onChange={this._handleChange}
+                  />
+                </div>
+              </div>
+              <div className="row no-gutters">
+                <div className="col-5 col-sm-4">
+                  Payment ID (optional)
+                </div>
+                <div className="col-7 col-sm-8">
+                  <input
+                    size={6}
+                    placeholder="Payment ID"
+                    className="form-control"
+                    name="paymentID"
+                    type="text"
+                    minLength={64}
+                    maxLength={64}
+                    value={paymentID}
+                    onChange={this._handleChange}
+                  />
+                </div>
+              </div>
+              <div className="row no-gutters">
+                <div className="col-5 col-sm-4">
+                  Amount
+                </div>
+                <div className="col-7 col-sm-8">
+                  <div className="input-group">
+                    <input
+                      size={2}
+                      placeholder="Amount"
+                      className="form-control"
+                      name="amount"
+                      type="number"
+                      value={amount}
+                      min={0}
+                      max={balance - defaultFee}
+                      step={0.00001}
+                      onChange={this._handleChange}
+                    />
+                    <span className="input-group-btn">
+                      <button className="btn btn-max" onClick={this._calculateMax} type="button">
+                        <small><strong>SEND MAX</strong></small>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="row no-gutters">
+                <div className="col-5 col-sm-4">
+                  Message (optional)
+                </div>
+                <div className="col-7 col-sm-8">
+                  <div className="input-group">
+                    <input
+                      size={6}
+                      placeholder="Message"
+                      className="form-control"
+                      name="message"
+                      type="text"
+                      value={message}
+                      onChange={this._handleChange}
+                    />
+                    <div className="input-group-append">
+                      <span className="input-group-text">
+                        <small>
+                          <strong>
+                            FEE: {(message.length * feePerChar).toFixed(coinDecimals)} CCX
+                          </strong>
+                        </small>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div>
-              Payment ID (optional):&nbsp;
-              <input
-                size={6}
-                placeholder="Payment ID"
-                name="paymentID"
-                type="text"
-                minLength={64}
-                maxLength={64}
-                value={paymentID}
-                onChange={this._handleChange}
-              />
-            </div>
-            <div>
-              Amount:&nbsp;
-              <input
-                size={2}
-                placeholder="Amount"
-                name="amount"
-                type="number"
-                value={amount}
-                min={0}
-                max={balance - defaultFee}
-                step={0.00001}
-                onChange={this._handleChange}
-              /> CCX&nbsp;
-              <button onClick={this._calculateMax} type="button" className="wallet-button">
-                Send Max. Amount
-              </button>
-            </div>
-            <div>
-              Message (optional):&nbsp;
-              <input
-                size={6}
-                placeholder="Message"
-                name="message"
-                type="text"
-                value={message}
-                onChange={this._handleChange}
-              />&nbsp;
-              <small>Msg fee: {message.length > 0 ? (message.length * feePerChar).toFixed(coinDecimals) : 0} CCX</small>
-            </div>
+
             <hr />
-            <div>
-              <strong>
-                TOTAL: {message.length > 0
-                ? (amount + defaultFee + (message.length * feePerChar)).toFixed(coinDecimals)
-                : amount > 0 ? (amount + defaultFee).toFixed(coinDecimals) : (0).toFixed(coinDecimals)
-              } CCX
-              </strong> (Available: {balance.toFixed(coinDecimals)} CCX)
+
+            <div className="tx-total">
+              <Button
+                type="submit"
+                disabled={!sendFormValid}
+                className="btn-send"
+                variant={!sendFormValid ? 'outline-secondary' : 'outline-success'}
+              >
+                SEND
+              </Button>
+              <span className="tx-right">
+                <h2>
+                  <span className="tx-total-text">TOTAL</span>&nbsp;
+                  <span className={`${totalAmount > balance ? 'text-danger' : ''}`}>
+                    {totalAmount.toFixed(coinDecimals)} CCX
+                  </span>
+                </h2>
+                <span className="tx-available-text">AVAILABLE</span> <strong>{balance.toFixed(coinDecimals)}</strong> CCX
+              </span>
             </div>
-            <button
-              type="submit"
-              disabled={!sendFormValid}
-            >
-              Send
-            </button>
             {sendResponse &&
             <div className={`${sendResponse.status}-message`}>
               {
@@ -227,7 +277,7 @@ class SendModal extends React.Component {
           </form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => toggleModal('send')}>
+          <Button variant="outline-secondary" onClick={() => toggleModal('send')}>
             Close
           </Button>
         </Modal.Footer>

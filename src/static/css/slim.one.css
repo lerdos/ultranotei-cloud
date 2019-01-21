@@ -1078,3 +1078,98 @@ hr {
 .skin-mode-item a.skin-light-mode,
 .skin-mode-item a.skin-dark-mode {
   border: 0; }
+
+/* probably needs to be fixed */
+
+.modal-content {
+  background-color: unset;
+  color: rgb(255, 255, 255);
+}
+
+.modal .modal-header,
+.modal .modal-footer {
+  background-color: rgb(22, 25, 28);
+}
+
+.modal .modal-header {
+  border-bottom: 1px solid rgb(56, 63, 70);
+}
+
+.modal .modal-footer {
+  border-top: 1px solid rgb(56, 63, 70);
+}
+
+.modal .modal-header .close {
+  color: rgb(255, 255, 255);
+  text-shadow: 0 1px 0 rgb(0, 0, 0);
+}
+
+.modal-body {
+  background-color: rgb(33, 37, 41);
+}
+
+.send-form .btn-max {
+  background-color: rgb(33, 37, 41);
+  color: rgb(158, 158, 158);
+  box-shadow: none;
+  border-radius: 2px;
+  padding: 0.2rem 0.6rem;
+  transition: background-color .3s, box-shadow .3s, color .3s;
+}
+
+.send-form .btn-max:hover {
+  background-color: rgb(34, 39, 43);
+  color: rgb(228, 228, 228);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: background-color .3s, box-shadow .3s, color .3s;
+}
+
+.send-form .input-group-append .input-group-text {
+  border: none;
+  background-color: rgb(33, 37, 41);
+  padding: 0.2rem 0.6rem;
+}
+
+.send-form .tx-total {
+  display: flex;
+  justify-content: space-between;
+}
+
+.send-form .tx-total .btn-send {
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
+}
+
+.send-form .tx-total h2 {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.send-form .tx-total-text,
+.send-form .tx-available-text {
+  color: rgb(111, 111, 111);
+}
+
+.tx-details,
+.tx-details .list-group-item {
+  color: rgb(255, 255, 255);
+}
+
+.tx-details .tx-icon {
+  font-size: 2rem;
+}
+
+.tx-details .tx-timestamp {
+  color: rgb(120, 120, 120);
+}
+
+.tx-details .tx-amount {
+  font-size: 1.2rem;
+}
+
+.tx-details .tx-fee {
+  color: rgb(120, 120, 120);
+}
+
+.tx-details .tx-link-icon {
+  font-size: 0.7rem;
+}
