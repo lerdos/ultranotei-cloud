@@ -25,6 +25,7 @@ class Dashboard extends React.Component {
       priceCCXBTC: 0,
       updateInterval: 30,  // in seconds
       wallets: {},
+      walletsLoaded: false,
     };
 
     this.getWalletList = this.getWalletList.bind(this);
@@ -65,7 +66,8 @@ class Dashboard extends React.Component {
             update(prevState, {
               wallets: {
                 [address]: { $set: { address } },
-              }
+              },
+              walletsLoaded: { $set: true },
             }));
           this.getWalletDetails(address);
         });
@@ -132,6 +134,7 @@ class Dashboard extends React.Component {
       maxWallets,
       priceCCXBTC,
       wallets,
+      walletsLoaded,
     } = this.state;
 
     return (
@@ -168,10 +171,12 @@ class Dashboard extends React.Component {
             <div className="row">
               <div className="col-lg-12">
                 <div className="list-group list-group-user">
+                  {Object.keys(wallets).length < maxWallets && walletsLoaded &&
+                    <button className="btn btn-primary btn-block" onClick={this.createWallet}>Create New Wallet</button>
+                  }
                   {
-                    Object.keys(wallets).length > 0
-                      ? Object.keys(wallets).map(wallet => <Wallet key={wallet} wallet={wallets[wallet]}/>)
-                      : ''
+                    Object.keys(wallets).length > 0 &&
+                    Object.keys(wallets).map(wallet => <Wallet key={wallet} wallet={wallets[wallet]}/>)
                   }
                 </div>
               </div>
@@ -206,11 +211,6 @@ class Dashboard extends React.Component {
           </div>
 
         </div>
-        {/*
-        {Object.keys(wallets).length < maxWallets &&
-          <button onClick={this.createWallet}>Create New Wallet</button>
-        }
-        */}
       </div>
     );
   }

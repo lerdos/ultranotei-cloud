@@ -16,9 +16,12 @@ class ResetPassword extends React.Component {
       formSubmitted: false,
       formValid: false,
       message: null,
+      password: '',
+      passwordConfirm: '',
     };
 
     this.resetPassword = this.resetPassword.bind(this);
+    this.resetPasswordConfirm = this.resetPasswordConfirm.bind(this);
   }
 
   componentDidMount() {
@@ -30,8 +33,11 @@ class ResetPassword extends React.Component {
   };
 
   _validateForm = () => {
-    const { email } = this.state;
-    const formValid = email !== '';
+    const { email, password, passwordConfirm } = this.state;
+    const { match } = this.props;
+    const formValid = match.params.token
+      ? password !== '' && passwordConfirm !== '' && password === passwordConfirm
+      : email !== '';
     this.setState({ formValid });
   };
 
@@ -60,13 +66,40 @@ class ResetPassword extends React.Component {
       });
   };
 
+  resetPasswordConfirm(e) {
+    e.preventDefault();
+    this.setState({ formSubmitted: true, message: null });
+    const { match } = this.props;
+    const {
+      apiEndpoint,
+      password,
+    } = this.state;
+    fetch(`${apiEndpoint}/auth/`, {
+      method: 'patch',
+      headers: {
+        'Content-Type': 'application/json',
+        Token: match.params.token,
+      },
+      body: JSON.stringify({ password }),
+    })
+      .then(r => r.json())
+      .then(res => {
+        console.log(res);
+        if (res.result === 'success') return this.props.history.replace('/login');
+        this.setState({ formSubmitted: false, message: res.message[0] });
+      });
+  }
+
   render() {
     const {
       email,
       message,
       formSubmitted,
       formValid,
+      password,
+      passwordConfirm,
     } = this.state;
+    const { match } = this.props;
 
     return (
       <div className="signin-wrapper">
@@ -75,31 +108,69 @@ class ResetPassword extends React.Component {
           <h2 className="slim-logo"><a href="/">Conceal</a></h2>
           <h3 className="signin-title-secondary">Reset Password</h3>
 
-          <form onSubmit={this.resetPassword}>
-            <div className="form-group mg-b-50">
-              <input
-                placeholder="Enter your email"
-                type="email"
-                name="email"
-                className="form-control"
-                value={email}
-                minLength={4}
-                onChange={this._handleChange}
-              />
-            </div>
+          {match.params.token
+            ? <form onSubmit={this.resetPasswordConfirm}>
+              <div className="form-group">
+                <input
+                  placeholder="New Password"
+                  type="password"
+                  name="password"
+                  className="form-control"
+                  value={password}
+                  minLength={8}
+                  onChange={this._handleChange}
+                />
+              </div>
+              <div className="form-group mg-b-50">
+                <input
+                  placeholder="Confirm New Password"
+                  type="password"
+                  name="passwordConfirm"
+                  className="form-control"
+                  value={passwordConfirm}
+                  minLength={8}
+                  onChange={this._handleChange}
+                />
+              </div>
 
-            {message &&
+              {message &&
+                <div className="text-danger">{message}</div>
+              }
+
+              <button
+                type="submit"
+                disabled={formSubmitted || !formValid}
+                className="btn btn-primary btn-block btn-signin"
+              >
+                Submit
+              </button>
+            </form>
+            : <form onSubmit={this.resetPassword}>
+              <div className="form-group mg-b-50">
+                <input
+                  placeholder="Enter your email"
+                  type="email"
+                  name="email"
+                  className="form-control"
+                  value={email}
+                  minLength={4}
+                  onChange={this._handleChange}
+                />
+              </div>
+
+              {message &&
               <div className="text-danger">{message}</div>
-            }
+              }
 
-            <button
-              type="submit"
-              disabled={formSubmitted || !formValid}
-              className="btn btn-primary btn-block btn-signin"
-            >
-              Submit
-            </button>
-          </form>
+              <button
+                type="submit"
+                disabled={formSubmitted || !formValid}
+                className="btn btn-primary btn-block btn-signin"
+              >
+                Submit
+              </button>
+            </form>
+          }
 
           <p className="mg-b-0">Don't have an account? <Link to="/signup">Sign Up</Link></p>
           <p className="mg-b-0">Already have an account? <Link to="/login">Sign In</Link></p>

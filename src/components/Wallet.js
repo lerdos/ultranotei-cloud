@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AuthHelper from './AuthHelper';
 import { maskAddress } from '../helpers/address';
 import DetailsModal from './modals/Details';
+import KeysModal from './modals/Keys';
 import ReceiveModal from './modals/Receive';
 import SendModal from './modals/Send';
 
@@ -18,6 +19,7 @@ class Wallet extends React.Component {
     this.state = {
       coinDecimals: 5,
       detailsModalOpen: false,
+      keysModalOpen: false,
       receiveModalOpen: false,
       sendModalOpen: false,
       wallet: {
@@ -47,6 +49,7 @@ class Wallet extends React.Component {
       coinDecimals,
       detailsModalOpen,
       explorerURL,
+      keysModalOpen,
       receiveModalOpen,
       sendModalOpen,
       wallet,
@@ -69,7 +72,6 @@ class Wallet extends React.Component {
             </div>
             <div className="btn-group" role="group">
               <Button
-                type="button"
                 variant={`outline-secondary ${balance === 0 ? 'disabled' : ''}`}
                 onClick={() => this._toggleModal('send')}
                 disabled={balance === 0}
@@ -83,14 +85,15 @@ class Wallet extends React.Component {
                 <FontAwesomeIcon icon="arrow-down" />
               </Button>
               <Button
-                variant="outline-secondary"
+                variant={`outline-secondary ${txs.length === 0 ? 'disabled' : ''}`}
                 onClick={() => this._toggleModal('details')}
+                disabled={txs.length === 0}
               >
-                {/*<MdListBox className="icon" color="#868ba1" />*/}
                 <FontAwesomeIcon icon="list-alt" />
               </Button>
               <Button
                 variant="outline-secondary"
+                onClick={() => this._toggleModal('keys')}
               >
                 <FontAwesomeIcon icon="key" />
               </Button>
@@ -115,6 +118,11 @@ class Wallet extends React.Component {
           toggleModal={this._toggleModal}
           explorerURL={explorerURL}
           txs={txs}
+        />
+
+        <KeysModal
+          show={keysModalOpen}
+          toggleModal={this._toggleModal}
         />
       </div>
     );

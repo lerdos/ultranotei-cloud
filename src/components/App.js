@@ -5,8 +5,11 @@ import {
   faArrowUp,
   faArrowDown,
   faExternalLinkAlt,
+  faCog,
   faKey,
   faListAlt,
+  faSignOutAlt,
+  faUser,
 } from '@fortawesome/free-solid-svg-icons';
 
 import withAuth from './withAuth';
@@ -15,11 +18,16 @@ import AuthHelper from './AuthHelper';
 import '../static/css/slim.css';
 import '../static/css/slim.one.css';
 
-library.add(faArrowUp);
-library.add(faArrowDown);
-library.add(faExternalLinkAlt);
-library.add(faKey);
-library.add(faListAlt);
+library.add(
+  faArrowUp,
+  faArrowDown,
+  faCog,
+  faExternalLinkAlt,
+  faKey,
+  faListAlt,
+  faSignOutAlt,
+  faUser,
+);
 
 class App extends React.Component {
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import IosPerson from 'react-ionicons/lib/IosPerson';
 import Dropdown from 'react-bootstrap/lib/Dropdown';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import NavLink from 'react-bootstrap/lib/NavLink';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 const Header = (props) => {
@@ -19,13 +19,13 @@ const Header = (props) => {
             <Dropdown.Toggle as={NavLink}>Welcome back {user.name}</Dropdown.Toggle>
             <Dropdown.Menu>
               <Link to="/profile" className="nav-link">
-                <IosPerson /> Your Profile
+                <FontAwesomeIcon icon="user" fixedWidth /> Your Profile
               </Link>
               <Link to="/settings" className="nav-link">
-                <i className="icon ion-ios-gear" /> Account Settings
+                <FontAwesomeIcon icon="cog" fixedWidth /> Account Settings
               </Link>
               <Link to="/#logout" className="nav-link" onClick={handleLogout}>
-                <i className="icon ion-forward" /> Sign Out
+                <FontAwesomeIcon icon="sign-out-alt" fixedWidth /> Sign Out
               </Link>
             </Dropdown.Menu>
           </Dropdown>

@@ -19,6 +19,7 @@ ReactDOM.render(
       <Route exact path="/signup" component={SignUp} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/reset_password" component={ResetPassword} />
+      <Route exact path="/reset_password/:token" component={ResetPassword} />
       <Route exact path="/dashboard" component={Dashboard} />
       <Route exact path="/profile" component={Profile} />
       <Route exact path="/settings" component={Settings} />

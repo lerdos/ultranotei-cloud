@@ -25,9 +25,12 @@ class Height extends React.Component {
   }
 
   fetchHeight() {
-    fetch('https://explorer.conceal.network/q/height/')
-      .then(r => r.text())
-      .then(blockchainHeight => this.setState({ blockchainHeight }))
+    fetch('https://api.wallet.conceal.network/api/status/height')
+      .then(r => r.json())
+      .then(res => {
+        const blockchainHeight = res.message.height;
+        this.setState({ blockchainHeight })
+      })
       .catch(err => console.error(err));
   }
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import QRCode from'qrcode.react';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 
@@ -16,7 +17,9 @@ const ReceiveModal = (props) => {
       </Modal.Header>
       <Modal.Body>
         <div>Address: {wallet && wallet.address}</div>
-        <div>QR Code...</div>
+        <div>
+          <QRCode value={`ccx:${wallet.address}`} size={256} />
+        </div>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={() => toggleModal('receive')}>

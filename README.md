@@ -57,7 +57,7 @@ npm run deploy
 ### TODO:
 
  - [ ] Resend verification email
- - [x] Restore password
+ - [x] Reset password
  - [x] Show txin/txout properly
  - [x] Show tx details
  - [x] Signup form validation
@@ -72,4 +72,4 @@ npm run deploy
  - [ ] Add deposits
  - [ ] Add investments
  - [ ] Finish CSS
- - [ ] Fetch prices
+ - [x] Fetch prices

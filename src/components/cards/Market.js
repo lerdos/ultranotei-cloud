@@ -1,15 +1,16 @@
 import React from 'react';
+import update from 'immutability-helper';
 
 
 class Market extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      coingeckoData: {},
-      graviexData: {},
-      // stexData: {},
+      markets: {
+        graviex: { apiURL: 'https://graviex.net/api/v2/tickers/ccxbtc.json' },
+        stex: { apiURL: 'https://api.wallet.conceal.network/api/stex/status' },
+      },
       updateInterval: 30,  // in seconds
-      tickers: [],
     };
 
     this.fetchPrices = this.fetchPrices.bind(this);
@@ -28,65 +29,54 @@ class Market extends React.Component {
   }
 
   fetchPrices() {
-    fetch('https://api.coingecko.com/api/v3/coins/conceal/tickers')
-      .then(r => r.json())
-      .then(coingeckoData => this.setState({ coingeckoData }))
-      .catch(err => console.error(err));
-    fetch('https://graviex.net/api/v2/tickers/ccxbtc.json')
-      .then(r => r.json())
-      .then(graviexData => this.setState({ graviexData }))
-      .catch(err => console.error(err));
-    /*fetch('https://app.stex.com/api2/prices')
-      .then(r => r.json())
-      .then(stexData => this.setState({ stexData }, () => console.log(this.state.stexData)))
-      .catch(err => console.error(err));*/
+    const { markets } = this.state;
+    Object.keys(markets).forEach(market => {
+      fetch(markets[market].apiURL)
+        .then(r => r.json())
+        .then(res => {
+          this.setState(prevState =>
+            update(prevState, {
+              markets: {
+                [market]: {
+                  $merge: {
+                    ask: parseFloat(market === 'graviex' ? res.ticker.sell : res.message[0].ask),
+                    buy: parseFloat(market === 'graviex' ? res.ticker.buy : res.message[0].bid),
+                    volume: parseFloat(market === 'graviex' ? res.ticker.vol : res.message[0].vol),
+                  },
+                },
+              },
+            }));
+        })
+        .catch(err => console.error(err));
+    });
   }
 
   render() {
-    const {
-      // coingeckoData,
-      graviexData,
-      // stexData,
-    } = this.state;
+    const { markets } = this.state;
 
     return (
       <div className="card card-sales">
-        <h6 className="slim-card-title tx-primary">GRAVIEX</h6>
-        <div className="row">
-          <div className="col">
-            <label className="tx-12">Ask</label>
-            <p>{graviexData.ticker && parseFloat(graviexData.ticker.sell).toFixed(8)}</p>
-          </div>
-          <div className="col">
-            <label className="tx-12">Buy</label>
-            <p>{graviexData.ticker && parseFloat(graviexData.ticker.buy).toFixed(8)}</p>
-          </div>
-          <div className="col">
-            <label className="tx-12">Volume</label>
-            <p>{graviexData.ticker && parseInt(graviexData.ticker.vol).toLocaleString()}</p>
-          </div>
-        </div>
-        {/*markets.map(market =>
-          <React.Fragment key={`${market.market.identifier}-${market.target}`}>
+        {Object.keys(markets).map(market =>
+          <React.Fragment key={market}>
             <h6 className="slim-card-title tx-primary">
-              {market.market.name}
+              {market.toUpperCase()}
             </h6>
             <div className="row">
               <div className="col">
                 <label className="tx-12">Ask</label>
-                <p>{market.last.toFixed(8)}</p>
+                <p>{markets[market].ask && markets[market].ask.toFixed(8)}</p>
               </div>
               <div className="col">
                 <label className="tx-12">Buy</label>
-                <p></p>
+                <p>{markets[market].buy && markets[market].buy.toFixed(8)}</p>
               </div>
               <div className="col">
                 <label className="tx-12">Volume</label>
-                <p>{market.volume.toFixed(5)}</p>
+                <p>{markets[market].volume && markets[market].volume.toFixed(2)}</p>
               </div>
             </div>
           </React.Fragment>
-        )*/}
+        )}
       </div>
     );
   }
