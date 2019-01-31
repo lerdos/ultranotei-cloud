@@ -1,9 +1,13 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import AuthHelper from '../AuthHelper';
 
 
 class SendModal extends React.Component {
+
+  Auth = new AuthHelper();
+
   constructor(props, context) {
     super(props, context);
     this.state = {

@@ -19,6 +19,7 @@ class Wallet extends React.Component {
     this.state = {
       coinDecimals: 5,
       detailsModalOpen: false,
+      explorerURL: 'https://explorer.conceal.network',
       keysModalOpen: false,
       receiveModalOpen: false,
       sendModalOpen: false,
@@ -104,6 +105,7 @@ class Wallet extends React.Component {
         <SendModal
           show={sendModalOpen}
           toggleModal={this._toggleModal}
+          explorerURL={explorerURL}
           wallet={wallet}
         />
 
