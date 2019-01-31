@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Dropdown from 'react-bootstrap/lib/Dropdown';
-import NavItem from 'react-bootstrap/lib/NavItem';
-import NavLink from 'react-bootstrap/lib/NavLink';
+import Dropdown from 'react-bootstrap/Dropdown';
+import NavItem from 'react-bootstrap/NavItem';
+import NavLink from 'react-bootstrap/NavLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
