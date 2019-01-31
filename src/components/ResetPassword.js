@@ -75,7 +75,7 @@ class ResetPassword extends React.Component {
       password,
     } = this.state;
     fetch(`${apiEndpoint}/auth/`, {
-      method: 'patch',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         Token: match.params.token,
