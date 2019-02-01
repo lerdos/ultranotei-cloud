@@ -1173,3 +1173,7 @@ hr {
 .tx-details .tx-link-icon {
   font-size: 0.7rem;
 }
+
+.slim-logo span.beta-header {
+  color: rgb(265, 165, 0);
+}

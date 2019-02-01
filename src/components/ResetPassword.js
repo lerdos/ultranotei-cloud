@@ -105,7 +105,7 @@ class ResetPassword extends React.Component {
       <div className="signin-wrapper">
 
         <div className="signin-box">
-          <h2 className="slim-logo"><a href="/">Conceal</a></h2>
+          <h2 className="slim-logo"><a href="/">Conceal</a> <span className="beta-header">BETA</span></h2>
           <h3 className="signin-title-secondary">Reset Password</h3>
 
           {match.params.token

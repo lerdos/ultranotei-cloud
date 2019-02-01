@@ -12,7 +12,7 @@ const Header = (props) => {
     <div className="slim-header">
       <div className="container">
         <div className="slim-header-left">
-          <h2 className="slim-logo"><a href="/">Conceal</a></h2>
+          <h2 className="slim-logo"><a href="/">Conceal</a> <span className="beta-header">BETA</span></h2>
         </div>
         <div className="slim-header-right">
           <Dropdown as={NavItem} className="dropdown dropdown-c">
