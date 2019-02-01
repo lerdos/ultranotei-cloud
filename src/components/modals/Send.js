@@ -16,7 +16,6 @@ class SendModal extends React.Component {
       amount: 0,
       coinDecimals: 5,
       defaultFee: 0.00001,
-      explorerURL: props.explorerURL,
       feePerChar: 0.00001,
       message: '',
       paymentID: '',
@@ -84,12 +83,11 @@ class SendModal extends React.Component {
     })
       .then(r => r.json())
       .then(res => {
-        console.log(res);
         if (res.result === 'error' || res.message.error) {
           this.setState({
             sendResponse: {
               status: 'error',
-              message: `Wallet Error: ${res.message}`,
+              message: `Wallet Error: ${res.message.error ? res.message.error.message : res.message}`,
             },
           });
           return;
@@ -114,7 +112,6 @@ class SendModal extends React.Component {
       amount,
       coinDecimals,
       defaultFee,
-      explorerURL,
       feePerChar,
       message,
       paymentID,
@@ -122,7 +119,7 @@ class SendModal extends React.Component {
       sendResponse,
       wallet,
     } = this.state;
-    const { toggleModal, ...rest } = this.props;
+    const { explorerURL, toggleModal, ...rest } = this.props;
 
     const balance = wallet.balance || 0;
 
