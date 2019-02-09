@@ -6,14 +6,16 @@ export default class AuthHelper {
     this.domain = process.env.REACT_APP_API_ENDPOINT;
   }
 
-  login = (email, password) => {
+  login = (email, password, twoFA) => {
+    const body = {
+      email,
+      password,
+      rememberme: false,
+    };
+    if (twoFA) body.code = twoFA;
     return this.fetch(`${this.domain}/auth`, {
       method: 'POST',
-      body: JSON.stringify({
-        email,
-        password,
-        rememberme: false,
-      })
+      body: JSON.stringify(body),
     }).then(res => {
       this.setToken(res.message.token);
       return Promise.resolve(res);

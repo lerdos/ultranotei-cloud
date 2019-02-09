@@ -16,6 +16,7 @@ class Login extends React.Component {
       formValid: false,
       message: null,
       password: '',
+      twoFA: null,
     };
 
     this.loginUser = this.loginUser.bind(this);
@@ -41,9 +42,10 @@ class Login extends React.Component {
     const {
       email,
       password,
+      twoFA,
     } = this.state;
 
-    this.Auth.login(email, password)
+    this.Auth.login(email, password, twoFA)
       .then(res => {
         // console.log(res);
         if (res.result === 'success') return this.props.history.replace('/dashboard');
@@ -59,6 +61,7 @@ class Login extends React.Component {
       formValid,
       password,
       message,
+      twoFA,
     } = this.state;
 
     return (
@@ -90,6 +93,19 @@ class Login extends React.Component {
                 className="form-control"
                 value={password}
                 minLength={8}
+                onChange={this._handleChange}
+              />
+            </div>
+
+            <div className="form-group mg-b-50">
+              <input
+                placeholder="2-Factor Authentication (if enabled)"
+                type="number"
+                name="twoFA"
+                className="form-control"
+                value={twoFA}
+                minLength={6}
+                maxLength={6}
                 onChange={this._handleChange}
               />
             </div>
