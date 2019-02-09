@@ -16,9 +16,20 @@ const ReceiveModal = (props) => {
         <Modal.Title>Receive CCX</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div>Address: {wallet && wallet.address}</div>
-        <div>
-          <QRCode value={`ccx:${wallet.address}`} size={256} />
+        <div className="form-layout form-layout-7">
+          <div className="row no-gutters">
+            <div className="col-5 col-sm-4">
+              Address
+            </div>
+            <div className="col-7 col-sm-8 wallet-address">
+              {wallet && wallet.address}
+            </div>
+          </div>
+          <div className="row no-gutters">
+            <div className="col-12 col-sm-12 justify-content-center">
+              <QRCode value={`ccx:${wallet.address}`} size={256} />
+            </div>
+          </div>
         </div>
       </Modal.Body>
       <Modal.Footer>

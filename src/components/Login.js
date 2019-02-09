@@ -45,7 +45,7 @@ class Login extends React.Component {
 
     this.Auth.login(email, password)
       .then(res => {
-        console.log(res);
+        // console.log(res);
         if (res.result === 'success') return this.props.history.replace('/dashboard');
         this.setState({ formSubmitted: false, message: res.message[0] });
       })

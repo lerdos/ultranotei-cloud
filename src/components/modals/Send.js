@@ -140,12 +140,19 @@ class SendModal extends React.Component {
           <Modal.Title>Send CCX</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          From: <span className="wallet-address">{wallet.address}</span>
           <form
             onSubmit={(e) => this.sendTx(e, wallet.address, address, paymentID, amount, message)}
             className="send-form"
           >
             <div className="form-layout form-layout-7">
+              <div className="row no-gutters">
+                <div className="col-5 col-sm-4">
+                  From
+                </div>
+                <div className="col-7 col-sm-8 wallet-address">
+                  {wallet.address}
+                </div>
+              </div>
               <div className="row no-gutters">
                 <div className="col-5 col-sm-4">
                   To

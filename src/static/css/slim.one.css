@@ -1177,3 +1177,9 @@ hr {
 .slim-logo span.beta-header {
   color: rgb(265, 165, 0);
 }
+
+.wallet-address {
+  font-size: 0.8rem;
+  max-width: 100%;
+  overflow: auto;
+}

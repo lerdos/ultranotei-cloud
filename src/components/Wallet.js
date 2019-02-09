@@ -1,4 +1,5 @@
 import React from 'react';
+import update from 'immutability-helper';
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -17,6 +18,7 @@ class Wallet extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      apiEndpoint: process.env.REACT_APP_API_ENDPOINT,
       coinDecimals: 5,
       detailsModalOpen: false,
       explorerURL: 'https://explorer.conceal.network',
@@ -28,21 +30,48 @@ class Wallet extends React.Component {
         locked: null,
         total: null,
         transactions: [],
+        keys: {},
       },
     };
+
+    this.fetchKeys = this.fetchKeys.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     const w = this.state.wallet;
     const { wallet } = nextProps;
     if (wallet.transactions && (wallet.transactions.length !== w.transactions.length || wallet.balance !== w.balance)) {
-      console.log(`updating wallet ${wallet.address}...`);
-      this.setState({ wallet });
+      // console.log(`updating wallet ${wallet.address}...`);
+      this.setState(prevState =>
+        update(prevState, {
+          wallet: { $merge: { ...wallet } }
+        }));
+    }
+  }
+
+  fetchKeys() {
+    if (Object.keys(this.state.wallet.keys).length === 0) {
+      // console.log('fetching keys...');
+      fetch(`${this.state.apiEndpoint}/wallet/keys?address=${this.state.wallet.address}`, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          'Token': this.Auth.getToken(),
+        },
+      })
+        .then(r => r.json())
+        .then(res => {
+          this.setState(prevState =>
+            update(prevState, {
+              wallet: { keys: { $set: res.message } }
+            }));
+        });
     }
   }
 
   _toggleModal = (modalName) => {
     this.setState({ [`${modalName}ModalOpen`]: !this.state[`${modalName}ModalOpen`] });
+    if (modalName === 'keys') this.fetchKeys();
   };
 
   render() {
@@ -125,6 +154,7 @@ class Wallet extends React.Component {
         <KeysModal
           show={keysModalOpen}
           toggleModal={this._toggleModal}
+          wallet={wallet}
         />
       </div>
     );
