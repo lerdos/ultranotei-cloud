@@ -11,7 +11,6 @@ class SendModal extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      apiEndpoint: process.env.REACT_APP_API_ENDPOINT,
       address: '',
       amount: 0,
       coinDecimals: 5,
@@ -67,7 +66,7 @@ class SendModal extends React.Component {
   sendTx(e, wallet, address, paymentID, amount, message) {
     this.setState({ sendResponse: null });
     e.preventDefault();
-    fetch(`${this.state.apiEndpoint}/wallet`, {
+    fetch(`${this.props.appSettings.apiEndpoint}/wallet`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json',
@@ -119,7 +118,7 @@ class SendModal extends React.Component {
       sendResponse,
       wallet,
     } = this.state;
-    const { explorerURL, toggleModal, ...rest } = this.props;
+    const { appSettings, toggleModal, ...rest } = this.props;
 
     const balance = wallet.balance || 0;
 
@@ -272,7 +271,7 @@ class SendModal extends React.Component {
                   ? sendResponse.message
                   : <>
                     TX Hash: <a
-                      href={`${explorerURL}/?hash=${sendResponse.message.transactionHash}#blockchain_transaction`}
+                      href={`${appSettings.explorerURL}/?hash=${sendResponse.message.transactionHash}#blockchain_transaction`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >

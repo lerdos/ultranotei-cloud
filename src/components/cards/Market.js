@@ -7,7 +7,7 @@ class Market extends React.Component {
     super(props, context);
     this.state = {
       markets: {
-        graviex: { apiURL: 'https://graviex.net/api/v2/tickers/ccxbtc.json' },
+        graviex: { apiURL: 'https://graviex.net/api/v3/tickers/ccxbtc.json' },
         stex: { apiURL: 'https://api.wallet.conceal.network/api/stex/status' },
       },
       updateInterval: 30,  // in seconds
@@ -39,9 +39,9 @@ class Market extends React.Component {
               markets: {
                 [market]: {
                   $merge: {
-                    ask: parseFloat(market === 'graviex' ? res.ticker.sell : res.message[0].ask),
-                    buy: parseFloat(market === 'graviex' ? res.ticker.buy : res.message[0].bid),
-                    volume: parseFloat(market === 'graviex' ? res.ticker.vol : res.message[0].vol),
+                    ask: parseFloat(market === 'graviex' ? res.sell : res.message[0].ask),
+                    buy: parseFloat(market === 'graviex' ? res.buy : res.message[0].bid),
+                    volume: parseFloat(market === 'graviex' ? res.volume : res.message[0].vol),
                   },
                 },
               },

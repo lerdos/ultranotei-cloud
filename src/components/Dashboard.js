@@ -19,8 +19,6 @@ class Dashboard extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      apiEndpoint: process.env.REACT_APP_API_ENDPOINT,
-      coingeckoAPI: 'https://api.coingecko.com/api/v3',
       maxWallets: 10,
       priceCCXBTC: 0,
       updateInterval: 30,  // in seconds
@@ -52,7 +50,7 @@ class Dashboard extends React.Component {
 
   getWalletList() {
     // console.log('GETTING WALLET LIST...');
-    fetch(`${this.state.apiEndpoint}/wallet/list`, {
+    fetch(`${this.props.appSettings.apiEndpoint}/wallet/list`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -76,7 +74,7 @@ class Dashboard extends React.Component {
 
   getWalletDetails(address) {
     // console.log(`GETTING WALLET DETAILS... ${address}`);
-    fetch(`${this.state.apiEndpoint}/wallet/get/address/${address}`, {
+    fetch(`${this.props.appSettings.apiEndpoint}/wallet/get/address/${address}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -100,7 +98,7 @@ class Dashboard extends React.Component {
   }
 
   createWallet() {
-    fetch(`${this.state.apiEndpoint}/wallet/`, {
+    fetch(`${this.props.appSettings.apiEndpoint}/wallet/`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -122,8 +120,8 @@ class Dashboard extends React.Component {
 
   fetchPrices() {
     // console.log('UPDATING PRICES...');
-    const { coingeckoAPI } = this.state;
-    fetch(`${coingeckoAPI}/simple/price?ids=conceal&vs_currencies=btc&include_last_updated_at=true`)
+    const { appSettings } = this.props;
+    fetch(`${appSettings.coingeckoAPI}/simple/price?ids=conceal&vs_currencies=btc&include_last_updated_at=true`)
       .then(r => r.json())
       .then(res => this.setState({ priceCCXBTC: res.conceal && res.conceal.btc ? res.conceal.btc : 0 }))
       .catch(err => console.error(err));
@@ -136,6 +134,7 @@ class Dashboard extends React.Component {
       wallets,
       walletsLoaded,
     } = this.state;
+    const { appSettings } = this.props;
 
     return (
       <div className="slim-mainpanel">
@@ -161,7 +160,7 @@ class Dashboard extends React.Component {
                 <Transactions wallets={wallets}/>
               </div>
               <div className="col-lg-3">
-                <Height />
+                <Height appSettings={appSettings} />
               </div>
             </div>
           </div>
@@ -176,7 +175,9 @@ class Dashboard extends React.Component {
                   }
                   {
                     Object.keys(wallets).length > 0 &&
-                    Object.keys(wallets).map(wallet => <Wallet key={wallet} wallet={wallets[wallet]}/>)
+                    Object.keys(wallets).map(wallet =>
+                      <Wallet key={wallet} wallet={wallets[wallet]} appSettings={appSettings}/>
+                    )
                   }
                 </div>
               </div>

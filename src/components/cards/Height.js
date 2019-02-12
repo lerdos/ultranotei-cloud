@@ -25,7 +25,7 @@ class Height extends React.Component {
   }
 
   fetchHeight() {
-    fetch('https://api.wallet.conceal.network/api/status/height')
+    fetch(`${this.props.appSettings.apiEndpoint}/status/height`)
       .then(r => r.json())
       .then(res => {
         const blockchainHeight = res.message.height;

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 const DetailsModal = (props) => {
-  const { explorerURL, toggleModal, txs, ...rest } = props;
+  const { appSettings, toggleModal, txs, ...rest } = props;
 
   return (
     <Modal
@@ -34,7 +34,7 @@ const DetailsModal = (props) => {
                   </p>
                   <p className="mg-b-5">
                     <a
-                      href={`${explorerURL}/?hash=${tx.hash}#blockchain_transaction`}
+                      href={`${appSettings.explorerURL}/?hash=${tx.hash}#blockchain_transaction`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >

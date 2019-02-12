@@ -12,7 +12,7 @@ export default class AuthHelper {
       password,
       rememberme: false,
     };
-    if (twoFA) body.code = twoFA;
+    if (twoFA && twoFA !== '') body.code = twoFA;
     return this.fetch(`${this.domain}/auth`, {
       method: 'POST',
       body: JSON.stringify(body),

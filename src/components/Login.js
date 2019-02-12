@@ -16,7 +16,7 @@ class Login extends React.Component {
       formValid: false,
       message: null,
       password: '',
-      twoFA: null,
+      twoFA: '',
     };
 
     this.loginUser = this.loginUser.bind(this);

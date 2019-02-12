@@ -13,7 +13,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import withAuth from './withAuth';
-import AuthHelper from './AuthHelper';
+// import AuthHelper from './AuthHelper';
 
 import '../static/css/slim.css';
 import '../static/css/slim.one.css';
@@ -31,7 +31,7 @@ library.add(
 
 class App extends React.Component {
 
-  Auth = new AuthHelper();
+  // Auth = new AuthHelper();
 
   constructor(props, context) {
     super(props, context);

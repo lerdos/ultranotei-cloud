@@ -18,10 +18,8 @@ class Wallet extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      apiEndpoint: process.env.REACT_APP_API_ENDPOINT,
       coinDecimals: 5,
       detailsModalOpen: false,
-      explorerURL: 'https://explorer.conceal.network',
       keysModalOpen: false,
       receiveModalOpen: false,
       sendModalOpen: false,
@@ -52,7 +50,7 @@ class Wallet extends React.Component {
   fetchKeys() {
     if (Object.keys(this.state.wallet.keys).length === 0) {
       // console.log('fetching keys...');
-      fetch(`${this.state.apiEndpoint}/wallet/keys?address=${this.state.wallet.address}`, {
+      fetch(`${this.props.appSettings.apiEndpoint}/wallet/keys?address=${this.state.wallet.address}`, {
         method: 'get',
         headers: {
           'Content-Type': 'application/json',
@@ -78,12 +76,12 @@ class Wallet extends React.Component {
     const {
       coinDecimals,
       detailsModalOpen,
-      explorerURL,
       keysModalOpen,
       receiveModalOpen,
       sendModalOpen,
       wallet,
     } = this.state;
+    const { appSettings } = this.props;
 
     const txs = wallet.transactions || [];
     const txIn = txs.length > 0 ? wallet.transactions.filter(t => t.type === 'received') : [];
@@ -134,7 +132,7 @@ class Wallet extends React.Component {
         <SendModal
           show={sendModalOpen}
           toggleModal={this._toggleModal}
-          explorerURL={explorerURL}
+          appSettings={appSettings}
           wallet={wallet}
         />
 
@@ -147,7 +145,7 @@ class Wallet extends React.Component {
         <DetailsModal
           show={detailsModalOpen}
           toggleModal={this._toggleModal}
-          explorerURL={explorerURL}
+          appSettings={appSettings}
           txs={txs}
         />
 
