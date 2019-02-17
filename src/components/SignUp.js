@@ -1,146 +1,84 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 
-import AuthHelper from './AuthHelper';
+import { AppContext } from './ContextProvider';
+import { useFormInput, useFormValidation } from '../helpers/hooks';
 
 
-class SignUp extends React.Component {
+const SignUp = () => {
+  const { layout, user, userActions } = useContext(AppContext);
+  const { formSubmitted, message } = layout;
 
-  Auth = new AuthHelper();
+  const userName = useFormInput('');
+  const email = useFormInput('');
+  const password = useFormInput('');
 
-  constructor(props, context) {
-    super(props, context);
-    this.state = {
-      apiEndpoint: process.env.REACT_APP_API_ENDPOINT,
-      email: '',
-      formSubmitted: false,
-      formValid: false,
-      message: null,
-      password: '',
-      userName: '',
-    };
+  const formValidation = (
+    email.value !== '' &&
+    password.value !== '' &&
+    userName.value !== ''
+  );
+  const formValid = useFormValidation(formValidation);
 
-    this.signUpUser = this.signUpUser.bind(this);
-  }
+  if (user.loggedIn) return <Redirect to="/" />;
 
-  componentDidMount() {
-    if(this.Auth.loggedIn()) this.props.history.push('/dashboard');
-  }
+  return (
+    <div className="signin-wrapper">
 
-  _handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value }, () => this._validateForm());
-  };
+      <div className="signin-box">
+        <h2 className="slim-logo"><a href="/">Conceal</a> <span className="beta-header">BETA</span></h2>
+        <h3 className="signin-title-secondary">Sign Up</h3>
 
-  _validateForm = () => {
-    const { email, password, username } = this.state;
-    const formValid = (
-      email !== '' &&
-      password !== '' &&
-      username !== ''
-    );
-    this.setState({ formValid });
-  };
+        <form onSubmit={(e) => userActions.signUpUser(e, userName.value, email.value, password.value)}>
+          <div className="form-group">
+            <input
+              {...userName}
+              placeholder="User Name"
+              type="text"
+              name="userName"
+              className="form-control"
+              minLength={4}
+            />
+          </div>
+          <div className="form-group">
+            <input
+              {...email}
+              placeholder="E-mail"
+              type="email"
+              name="email"
+              className="form-control"
+            />
+          </div>
+          <div className="form-group mg-b-50">
+            <input
+              {...password}
+              placeholder="Password"
+              type="password"
+              name="password"
+              className="form-control"
+              minLength={8}
+            />
+          </div>
 
-  signUpUser(e) {
-    e.preventDefault();
-    this.setState({ formSubmitted: true, message: null });
-    const {
-      apiEndpoint,
-      email,
-      password,
-      userName,
-    } = this.state;
+          {message &&
+            <div className="text-danger text-center">{message}</div>
+          }
 
-    fetch(`${apiEndpoint}/user/`, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        name: userName,
-        password,
-      }),
-    })
-      .then(r => r.json())
-      .then(res => {
-        // console.log(res);
-        if (res.result === 'success') return this.props.history.replace('/login');
-        this.setState({ formSubmitted: false, message: res.message[0] });
-      });
-  };
+          <button
+            type="submit"
+            disabled={formSubmitted || !formValid}
+            className="btn btn-primary btn-block btn-signin"
+          >
+            {formSubmitted ? 'Signing Up...' : 'Sign Up'}
+          </button>
+        </form>
 
-  render() {
-    const {
-      email,
-      formSubmitted,
-      formValid,
-      message,
-      password,
-      userName,
-    } = this.state;
-
-    return (
-      <div className="signin-wrapper">
-
-        <div className="signin-box">
-          <h2 className="slim-logo"><a href="/">Conceal</a> <span className="beta-header">BETA</span></h2>
-          <h3 className="signin-title-secondary">Sign Up</h3>
-
-          <form onSubmit={this.signUpUser}>
-            <div className="form-group">
-              <input
-                placeholder="User Name"
-                type="text"
-                name="userName"
-                className="form-control"
-                value={userName}
-                minLength={4}
-                onChange={this._handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <input
-                placeholder="E-mail"
-                type="email"
-                name="email"
-                className="form-control"
-                value={email}
-                onChange={this._handleChange}
-              />
-            </div>
-            <div className="form-group mg-b-50">
-              <input
-                placeholder="Password"
-                type="password"
-                name="password"
-                className="form-control"
-                value={password}
-                minLength={8}
-                onChange={this._handleChange}
-              />
-            </div>
-
-            {message &&
-              <div className="text-danger">{message}</div>
-            }
-
-            <button
-              type="submit"
-              disabled={formSubmitted || !formValid}
-              className="btn btn-primary btn-block btn-signin"
-            >
-              Submit
-            </button>
-          </form>
-
-          <p className="mg-b-0">Already have an account? <Link to="/login">Sign In</Link></p>
-          <p className="mg-b-0">Forgot your password? <Link to="/reset_password">Reset It</Link></p>
-        </div>
-        ​
+        <p className="mg-b-0">Already have an account? <Link to="/login">Sign In</Link></p>
+        <p className="mg-b-0">Forgot your password? <Link to="/reset_password">Reset It</Link></p>
       </div>
-    );
-  }
-}
+      ​
+    </div>
+  )
+};
 
 export default SignUp;

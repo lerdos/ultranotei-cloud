@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
+
+import { AppContext } from './ContextProvider';
 
 
-const Footer = (props) => {
-  const { lastUpdate } = props;
+const Footer = () => {
+  const { appSettings } = useContext(AppContext);
 
   return (
     <div className="slim-footer">
       <div className="container">
         <p>Copyright 2019 &copy; All Rights Reserved. Conceal Network</p>
-        <p>Version: {process.env.REACT_APP_VERSION} | Last Update: {lastUpdate.toUTCString()}</p>
+        <p>Version: {appSettings.appVersion} | Last Update: {appSettings.lastUpdate.toUTCString()}</p>
       </div>
     </div>
   )

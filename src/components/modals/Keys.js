@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
 
@@ -44,9 +43,9 @@ const KeysModal = (props) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={() => toggleModal('keys')}>
+        <button className="btn btn-outline-secondary" onClick={() => toggleModal('keys')}>
           Close
-        </Button>
+        </button>
       </Modal.Footer>
     </Modal>
   )

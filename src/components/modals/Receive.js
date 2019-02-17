@@ -1,11 +1,11 @@
 import React from 'react';
 import QRCode from'qrcode.react';
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
 
 const ReceiveModal = (props) => {
-  const { toggleModal, wallet, ...rest } = props;
+  const { toggleModal, ...rest } = props;
+
   return (
     <Modal
       { ...rest }
@@ -22,20 +22,20 @@ const ReceiveModal = (props) => {
               Address
             </div>
             <div className="col-7 col-sm-8 wallet-address">
-              {wallet && wallet.address}
+              {props.address}
             </div>
           </div>
           <div className="row no-gutters">
             <div className="col-12 col-sm-12 justify-content-center">
-              <QRCode value={`ccx:${wallet.address}`} size={256} />
+              <QRCode value={`ccx:${props.address}`} size={256} />
             </div>
           </div>
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={() => toggleModal('receive')}>
+        <button className="btn btn-outline-secondary" onClick={() => toggleModal('receive')}>
           Close
-        </Button>
+        </button>
       </Modal.Footer>
     </Modal>
   )

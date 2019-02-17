@@ -6,18 +6,18 @@ export default class AuthHelper {
     this.domain = process.env.REACT_APP_API_ENDPOINT;
   }
 
-  login = (email, password, twoFA) => {
+  login = (email, password, twoFACode) => {
     const body = {
       email,
       password,
       rememberme: false,
     };
-    if (twoFA && twoFA !== '') body.code = twoFA;
+    if (twoFACode && twoFACode !== '') body.code = twoFACode;
     return this.fetch(`${this.domain}/auth`, {
       method: 'POST',
       body: JSON.stringify(body),
     }).then(res => {
-      this.setToken(res.message.token);
+      if (res.message.token) this.setToken(res.message.token);
       return Promise.resolve(res);
     });
   };
@@ -32,7 +32,6 @@ export default class AuthHelper {
       const decoded = decode(token);
       return decoded.exp < Date.now() / 1000;
     } catch (err) {
-      console.log('expired');
       return false;
     }
   };

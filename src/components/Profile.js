@@ -1,49 +1,41 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import withAuth from './withAuth';
-import AuthHelper from './AuthHelper';
+import { AppContext } from './ContextProvider';
 
 
-class Profile extends React.Component {
+const Profile = () => {
+  const { user } = useContext(AppContext);
 
-  Auth = new AuthHelper();
+  return (
+    <div>
+      <div className="slim-mainpanel">
+        <div className="container">
 
-  constructor(props, context) {
-    super(props, context);
-    this.state = {
+          <div className="slim-pageheader">
+            <ol className="breadcrumb slim-breadcrumb">
+              <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+              <li className="breadcrumb-item active" aria-current="page">Profile</li>
+            </ol>
+            <h6 className="slim-pagetitle">Profile</h6>
+          </div>
 
-    };
-  }
-
-  render() {
-    return (
-      <div>
-        <div className="slim-mainpanel">
-          <div className="container">
-
-            <div className="slim-pageheader">
-              <ol className="breadcrumb slim-breadcrumb">
-                <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                <li className="breadcrumb-item active" aria-current="page">Profile</li>
-              </ol>
-              <h6 className="slim-pagetitle">Profile</h6>
-            </div>
-
-            <div className="section-wrapper mg-t-20">
-              <label className="section-title">Profile</label>
-              <div className="row">
-                <div className="col-lg-12">
-                  Profile...
-                </div>
+          <div className="section-wrapper mg-t-20">
+            <label className="section-title">Profile</label>
+            <div className="row">
+              <div className="col-lg-12">
+                <p>Avatar: {user.avatar}</p>
+                <p>User name: {user.name}</p>
+                <p>E-mail: {user.email}</p>
               </div>
             </div>
-
           </div>
+
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  )
+};
 
-export default withAuth(Profile);
+export default Profile;
+
