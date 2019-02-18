@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { AppContext } from './ContextProvider';
-import PortfolioCCX from './cards/PortfolioCCX';
-import PortfolioBTC from './cards/PortfolioBTC';
-import Transactions from './cards/Transactions';
-import Height from './cards/Height';
-import Wallet from './Wallet';
-import GettingStarted from './cards/GettingStarted';
-import UpcomingFeatures from './cards/UpcomingFeatures';
-import Market from './cards/Market';
+import { AppContext } from '../ContextProvider';
+import PortfolioCCX from '../cards/PortfolioCCX';
+import PortfolioBTC from '../cards/PortfolioBTC';
+import Transactions from '../cards/Transactions';
+import Height from '../cards/Height';
+import Wallet from '../Wallet';
+import GettingStarted from '../cards/GettingStarted';
+import UpcomingFeatures from '../cards/UpcomingFeatures';
+import Market from '../cards/Market';
 
 
 const Dashboard = () => {

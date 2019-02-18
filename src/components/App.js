@@ -17,13 +17,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import AppContextProvider from './ContextProvider';
-import Login from './Login';
-import SignUp from './SignUp';
-import ResetPassword from './ResetPassword';
+import Login from './pages/Login';
+import SignUp from './pages/SignUp';
+import ResetPassword from './pages/ResetPassword';
 import PrivateRoute from './PrivateRoute';
-import Profile from './Profile';
-import Settings from './Settings';
-import Dashboard from './Dashboard';
+import Profile from './pages/Profile';
+import Settings from './pages/Settings';
+import Dashboard from './pages/Dashboard';
+import Terms from './pages/Terms';
 
 import '../static/css/slim.css';
 import '../static/css/slim.one.css';
@@ -52,6 +53,7 @@ const App = () => (
       <Route exact path="/login" component={Login} />
       <Route exact path="/reset_password" component={ResetPassword} />
       <Route exact path="/reset_password/:token" component={ResetPassword} />
+      <Route exact path="/terms" component={Terms} />
 
       <PrivateRoute exact path="/profile" component={Profile} />
       <PrivateRoute exact path="/settings" component={Settings} />

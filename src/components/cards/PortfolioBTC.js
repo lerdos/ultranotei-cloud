@@ -8,10 +8,12 @@ const PortfolioBTC = () => {
 
   const totalCCX = Object.keys(wallets).reduce((acc, curr) => acc + wallets[curr].balance || acc, 0);
 
+  const formatOptions = { minimumFractionDigits: 8, maximumFractionDigits: 8 };
+
   return (
     <div className="dash-content">
       <label className="tx-primary">PORTFOLIO BTC</label>
-      <h2>{(prices.priceCCXBTC * totalCCX).toLocaleString(undefined, { minimumFractionDigits: 8 })} BTC</h2>
+      <h2>{(prices.priceCCXBTC * totalCCX).toLocaleString(undefined, formatOptions)} BTC</h2>
     </div>
   )
 };

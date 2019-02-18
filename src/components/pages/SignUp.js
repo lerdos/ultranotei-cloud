@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 
-import { AppContext } from './ContextProvider';
-import { useFormInput, useFormValidation } from '../helpers/hooks';
+import { AppContext } from '../ContextProvider';
+import { useFormInput, useFormValidation } from '../../helpers/hooks';
 
 
 const SignUp = () => {
@@ -75,6 +75,10 @@ const SignUp = () => {
 
         <p className="mg-b-0">Already have an account? <Link to="/login">Sign In</Link></p>
         <p className="mg-b-0">Forgot your password? <Link to="/reset_password">Reset It</Link></p>
+        <hr />
+        <p className="mg-b-0 box-footer">
+          Copyright 2019 &copy; All Rights Reserved. Conceal Network<br /><Link to="/terms">Terms and Conditions</Link>
+        </p>
       </div>
       ​
     </div>

@@ -34,9 +34,14 @@ const SendModal = (props) => {
     if (parseFloat(amount.value) > 0) totalAmount = parseFloat(amount.value);
   }
 
+  const formatOptions = {
+    minimumFractionDigits: coinDecimals,
+    maximumFractionDigits: coinDecimals,
+  };
+
   const maxValue = (wallet.balance - defaultFee - (message.value.length * feePerChar));
   const calculateMax = () => {
-    const value = maxValue.toLocaleString(undefined, { minimumFractionDigits: coinDecimals });
+    const value = maxValue.toLocaleString(undefined, formatOptions);
     amount.onChange({ target: { value } });
   };
 
@@ -140,7 +145,7 @@ const SendModal = (props) => {
                       <span className="input-group-text">
                         <small>
                           <strong>
-                            MESSAGE FEE: {(message.value.length * feePerChar).toLocaleString(undefined, { minimumFractionDigits: coinDecimals })} CCX
+                            MESSAGE FEE: {(message.value.length * feePerChar).toLocaleString(undefined, formatOptions)} CCX
                           </strong>
                         </small>
                       </span>
@@ -164,17 +169,17 @@ const SendModal = (props) => {
                 <h2>
                   <span className="tx-total-text">TOTAL</span>&nbsp;
                   <span className={`${totalAmount > wallet.balance ? 'text-danger' : ''}`}>
-                    {totalAmount.toLocaleString(undefined, { minimumFractionDigits: coinDecimals })} CCX
+                    {totalAmount.toLocaleString(undefined, formatOptions)} CCX
                   </span>
                 </h2>
                 <div>
                   <span className="tx-available-text">AVAILABLE</span>&nbsp;
                   <strong>
-                    {wallet.balance && wallet.balance.toLocaleString(undefined, { minimumFractionDigits: coinDecimals })}
+                    {wallet.balance && wallet.balance.toLocaleString(undefined, formatOptions)}
                   </strong> CCX
                 </div>
                 <div className="tx-default-fee-text">
-                    TRANSACTION FEE: {defaultFee.toLocaleString(undefined, { minimumFractionDigits: coinDecimals })} CCX
+                    TRANSACTION FEE: {defaultFee.toLocaleString(undefined, formatOptions)} CCX
                 </div>
               </span>
           </div>
