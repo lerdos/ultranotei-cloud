@@ -275,7 +275,7 @@ class AppContextProvider extends React.Component {
         maxWallets: 10,
         lastUpdate: new Date(),
         coinDecimals: 5,
-        defaultFee: 0.00001,
+        defaultFee: 0.0001,
         feePerChar: 0.00001,
       },
       layout: {
