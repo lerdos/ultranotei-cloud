@@ -1,22 +1,19 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import { AppContext } from '../ContextProvider';
+import { useFormInput, useFormValidation } from '../../helpers/hooks';
 
 
 const Settings = () => {
-  const [twoFACode, setTwoFACode] = useState('');
-  const [twoFADialogOpened, toggle2FADialog] = useState(false);
-  const [formValid, setFormValid] = useState(false);
-  const { layout, userActions, userSettings } = useContext(AppContext);
+  const { layout, user, userActions, userSettings } = useContext(AppContext);
   const { formSubmitted, message } = layout;
-  useEffect(() => { validateForm() });
 
-  const handleTwoFACodeChange = (e) => { setTwoFACode(e.target.value) };
+  const twoFACode = useFormInput('');
+  const [twoFADialogOpened, toggle2FADialog] = useState(false);
 
-  const validateForm = () => {
-    setFormValid(parseInt(twoFACode) && twoFACode.toString().length === 6);
-  };
+  const formValidation = (parseInt(twoFACode.value) && twoFACode.value.toString().length === 6);
+  const formValid = useFormValidation(formValidation);
 
   return (
     <div>
@@ -36,18 +33,19 @@ const Settings = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="form-layout form-layout-7">
+
                   <div className="row no-gutters">
-                    <div className="col-5 col-sm-4 align-items-start">
+                    <div className="col-5 col-sm-4 align-items-start pd-t-15-force">
                       2 Factor Authentication
                     </div>
                     <div className="col-7 col-sm-8 wallet-address">
                       Your two-factor authentication is currently&nbsp;
                       <strong className={userSettings.twoFAEnabled ? 'text-success' : 'text-danger'}>
                         {userSettings.twoFAEnabled ? 'ENABLED' : 'DISABLED' }
-                      </strong>.
+                      </strong>.&nbsp;
 
                       <button
-                        className="btn btn-primary"
+                        className={`btn btn-2fa ${userSettings.twoFAEnabled ? 'btn-outline-danger' : 'btn-outline-success' }`}
                         onClick={() => {
                           toggle2FADialog(!twoFADialogOpened);
                           if (layout.qrCodeUrl === '') userActions.getQRCode();
@@ -66,7 +64,7 @@ const Settings = () => {
                           <p>
                             Enter the passcode from your authenticator app to disable two-factor authentication.
                           </p>
-                          <form onSubmit={(e) => userActions.update2FA(e, twoFACode, false)}>
+                          <form onSubmit={(e) => userActions.update2FA(e, twoFACode.value, false)}>
                             <div className="form-layout form-layout-7">
                               <div className="row no-gutters">
                                 <div className="col-5 col-sm-4">
@@ -74,14 +72,13 @@ const Settings = () => {
                                 </div>
                                 <div className="col-7 col-sm-8 wallet-address">
                                   <input
+                                    {...twoFACode}
                                     placeholder="2 Factor Authentication Key"
                                     type="number"
                                     name="twoFACode"
                                     className="form-control"
-                                    value={twoFACode}
                                     minLength={6}
                                     maxLength={6}
-                                    onChange={handleTwoFACodeChange}
                                   />
                                 </div>
                               </div>
@@ -105,7 +102,7 @@ const Settings = () => {
                           <div>
                             <img src={layout.qrCodeUrl} alt="QR Code" />
 
-                            <form onSubmit={(e) => userActions.update2FA(e, twoFACode, true)}>
+                            <form onSubmit={(e) => userActions.update2FA(e, twoFACode.value, true)}>
                               <div className="form-layout form-layout-7">
                                 <div className="row no-gutters">
                                   <div className="col-5 col-sm-4">
@@ -113,14 +110,13 @@ const Settings = () => {
                                   </div>
                                   <div className="col-7 col-sm-8 wallet-address">
                                     <input
+                                      {...twoFACode}
                                       placeholder="2 Factor Authentication Key"
                                       type="number"
                                       name="twoFACode"
                                       className="form-control"
-                                      value={twoFACode}
                                       minLength={6}
                                       maxLength={6}
-                                      onChange={handleTwoFACodeChange}
                                     />
                                   </div>
                                 </div>
@@ -140,6 +136,34 @@ const Settings = () => {
                       }
                     </div>
                   </div>
+
+                  <div className="row no-gutters">
+                    <div className="col-5 col-sm-4 align-items-start">
+                      User Name
+                    </div>
+                    <div className="col-7 col-sm-8 wallet-address">
+                      {user.name}
+                    </div>
+                  </div>
+
+                  <div className="row no-gutters">
+                    <div className="col-5 col-sm-4 align-items-start">
+                      Email
+                    </div>
+                    <div className="col-7 col-sm-8 wallet-address">
+                      {user.email}
+                    </div>
+                  </div>
+
+                  <div className="row no-gutters">
+                    <div className="col-5 col-sm-4 align-items-start">
+                      Avatar
+                    </div>
+                    <div className="col-7 col-sm-8 wallet-address">
+                      {user.avatar}
+                    </div>
+                  </div>
+
                 </div>
 
               </div>

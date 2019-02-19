@@ -19,18 +19,13 @@ const NavBar = () => {
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink to="/profile" className="nav-link hot_link" activeClassName="active">
-              <FontAwesomeIcon icon="user" fixedWidth /> <span>Profile</span>
-            </NavLink>
-          </li>
-          <li className="nav-item">
             <NavLink to="/settings" className="nav-link hot_link" activeClassName="active">
               <FontAwesomeIcon icon="cog" fixedWidth /> <span>Settings</span>
             </NavLink>
           </li>
           <li className="nav-item with-sub">
             <button className="nav-link hot_link" data-toggle="dropdown">
-              <FontAwesomeIcon icon="globe" fixedWidth /> <span>Ecosystem</span>
+              <FontAwesomeIcon icon="network-wired" fixedWidth /> <span>Ecosystem</span>
             </button>
             <div className="sub-item">
               <ul>
@@ -47,6 +42,20 @@ const NavBar = () => {
                 <li>
                   <a href={appSettings.poolURL} className="hot_link" target="_blank" rel="noopener noreferrer">
                     <FontAwesomeIcon icon="hashtag" fixedWidth /> <span>Mining Pool</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li className="nav-item with-sub">
+            <button className="nav-link hot_link" data-toggle="dropdown">
+              <FontAwesomeIcon icon="globe" fixedWidth /> <span>Links</span>
+            </button>
+            <div className="sub-item">
+              <ul>
+                <li>
+                  <a href={appSettings.homePage} className="hot_link" target="_blank" rel="noopener noreferrer">
+                    <FontAwesomeIcon icon={['fab', 'discord']} /> <span>Discord Support Channel</span>
                   </a>
                 </li>
               </ul>

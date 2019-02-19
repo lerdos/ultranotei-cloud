@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
-// import { fab } from '@fortawesome/free-brands-svg-icons';
+import { fab } from '@fortawesome/free-brands-svg-icons';
 import {
   faCheck,
 } from '@fortawesome/free-solid-svg-icons';
@@ -17,25 +17,25 @@ import {
   faKey,
   faLink,
   faListAlt,
+  faNetworkWired,
   faSignOutAlt,
-  faUser,
 } from '@fortawesome/free-solid-svg-icons';
 
 import AppContextProvider from './ContextProvider';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import ResetPassword from './pages/ResetPassword';
+import Terms from './pages/Terms';
 import PrivateRoute from './PrivateRoute';
-import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Dashboard from './pages/Dashboard';
-import Terms from './pages/Terms';
 
 import '../static/css/slim.css';
 import '../static/css/slim.one.css';
 
 
 library.add(
+  fab,
   faArrowUp,
   faArrowDown,
   faCheck,
@@ -48,8 +48,8 @@ library.add(
   faKey,
   faLink,
   faListAlt,
+  faNetworkWired,
   faSignOutAlt,
-  faUser,
 );
 
 const App = () => (
@@ -62,7 +62,6 @@ const App = () => (
       <Route exact path="/reset_password/:token" component={ResetPassword} />
       <Route exact path="/terms" component={Terms} />
 
-      <PrivateRoute exact path="/profile" component={Profile} />
       <PrivateRoute exact path="/settings" component={Settings} />
       <PrivateRoute exact path="/" component={Dashboard} />
 

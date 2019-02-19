@@ -1255,3 +1255,12 @@ hr {
 .modal-keys {
   min-width: 600px;
 }
+
+.btn-2fa {
+  padding: 0 0.6rem;
+  transition: background-color .3s, box-shadow .3s, color .3s;
+}
+
+.btn-2fa:hover {
+  transition: background-color .3s, box-shadow .3s, color .3s;
+}
