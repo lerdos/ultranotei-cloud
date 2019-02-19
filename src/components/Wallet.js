@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { AppContext } from './ContextProvider';
@@ -35,35 +36,46 @@ const Wallet = (props) => {
           <span>Transactions out: {txOut.length}</span>
         </div>
         <div className="btn-group" role="group">
-          <button
-            className={`btn btn-outline-dark ${balance === 0 ? 'disabled' : ''}`}
-            onClick={() => toggleSendModal(!sendModalOpen)}
-            disabled={balance === 0}
-          >
-            <FontAwesomeIcon icon="arrow-up" fixedWidth />
-          </button>
-          <button
-            className="btn btn-outline-dark"
-            onClick={() => toggleReceiveModal(!receiveModalOpen)}
-          >
-            <FontAwesomeIcon icon="arrow-down" fixedWidth />
-          </button>
-          <button
-            className={`btn btn-outline-dark ${txs.length === 0 ? 'disabled' : ''}`}
-            onClick={() => toggleDetailsModal(!detailsModalOpen)}
-            disabled={txs.length === 0}
-          >
-            <FontAwesomeIcon icon="list-alt" fixedWidth />
-          </button>
-          <button
-            className="btn btn-outline-dark"
-            onClick={() => {
-              toggleKeysModal(!keysModalOpen);
-              walletActions.getWalletKeys(props.address);
-            }}
-          >
-            <FontAwesomeIcon icon="key" fixedWidth />
-          </button>
+          <OverlayTrigger overlay={<Tooltip id={`${props.address}-send`} trigger={['hover']}>Send CCX</Tooltip>}>
+            <button
+              {...props}
+              className={`btn btn-outline-dark ${balance === 0 ? 'disabled' : ''}`}
+              onClick={() => toggleSendModal(!sendModalOpen)}
+              disabled={balance === 0}
+            >
+              <FontAwesomeIcon icon="arrow-up" fixedWidth />
+            </button>
+          </OverlayTrigger>
+          <OverlayTrigger overlay={<Tooltip id={`${props.address}-receive`} trigger={['hover']}>Receive CCX</Tooltip>}>
+            <button
+              className="btn btn-outline-dark"
+              onClick={() => toggleReceiveModal(!receiveModalOpen)}
+            >
+              <FontAwesomeIcon icon="arrow-down" fixedWidth />
+            </button>
+          </OverlayTrigger>
+
+          <OverlayTrigger overlay={<Tooltip id={`${props.address}-txs`} trigger={['hover']}>Transactions</Tooltip>}>
+            <button
+              className={`btn btn-outline-dark ${txs.length === 0 ? 'disabled' : ''}`}
+              onClick={() => toggleDetailsModal(!detailsModalOpen)}
+              disabled={txs.length === 0}
+            >
+              <FontAwesomeIcon icon="list-alt" fixedWidth />
+            </button>
+          </OverlayTrigger>
+
+          <OverlayTrigger overlay={<Tooltip id={`${props.address}-keys`} trigger={['hover']}>Export Keys</Tooltip>}>
+            <button
+              className="btn btn-outline-dark"
+              onClick={() => {
+                toggleKeysModal(!keysModalOpen);
+                walletActions.getWalletKeys(props.address);
+              }}
+            >
+              <FontAwesomeIcon icon="key" fixedWidth />
+            </button>
+          </OverlayTrigger>
         </div>
 
         <SendModal

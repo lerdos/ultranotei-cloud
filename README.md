@@ -65,4 +65,8 @@ npm run deploy
  - [ ] Add deposits
  - [ ] Add investments
  - [ ] Finish CSS
- - [ ] Handle errors in ContextProvider
+ - [ ] Handle API responses in ContextProvider
+ - [ ] Add "get CCX" card
+ - [ ] Add pool suggestion card
+ - [ ] Address book
+ - [ ] Add "buy/sell" option via STEX API?

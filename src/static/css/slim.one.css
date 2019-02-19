@@ -1234,3 +1234,24 @@ hr {
   text-align: center;
   font-size: 0.8rem;
 }
+
+.btn-outline-dark,
+.btn-outline-success {
+  transition: color 0.2s, background-color 0.2s, border-color 0.2s;
+}
+
+.btn-no-focus:focus {
+  box-shadow: none !important;
+}
+
+.btn-no-focus:hover {
+  background: none !important;
+}
+
+.btn-no-focus.btn-outline-success {
+  color: #23BF08;
+}
+
+.modal-keys {
+  min-width: 600px;
+}
