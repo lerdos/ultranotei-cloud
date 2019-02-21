@@ -58,7 +58,7 @@ const SendModal = (props) => {
     if (data) {
       const [prefix, ...rest] = data.split(':');
       console.log(rest);
-      if (prefix === 'ccx') {
+      if (prefix === 'conceal') {
         const addressParams = rest.join(':').split('?');
         address.onChange({ target: { value: addressParams[0] }});
         if (addressParams.length > 1) {
@@ -187,7 +187,7 @@ const SendModal = (props) => {
                     type="number"
                     min={0}
                     max={maxValue}
-                    step={Math.pow(10, -(coinDecimals - 1))}
+                    step={Math.pow(10, -coinDecimals)}
                   />
                   <span className="input-group-btn">
                       <button className="btn btn-outline-secondary btn-max" onClick={calculateMax} type="button">

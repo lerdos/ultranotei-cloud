@@ -27,8 +27,7 @@ const ReceiveModal = (props) => {
     const params = Object.keys(paramsObject).length > 0
       ? `?${Object.keys(paramsObject).map(param => `${param}=${paramsObject[param]}`).join('&')}`
       : '';
-    setQrCodeString(`ccx:${props.address}${params}`);
-    console.log(qrCodeString);
+    setQrCodeString(`conceal:${props.address}${params}`);
   });
 
   const copyClipboard = () => {
