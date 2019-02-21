@@ -1,5 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import Modal from 'react-bootstrap/Modal';
+import QrReader from 'react-qr-reader';
 
 import { AppContext } from '../ContextProvider';
 import { useFormInput, useFormValidation } from '../../helpers/hooks';
@@ -11,6 +12,7 @@ const SendModal = (props) => {
   const { sendTxResponse } = layout;
   const { toggleModal, wallet, ...rest } = props;
 
+  const [qrReaderOpened, setQrReaderOpened] = useState(false);
   const address = useFormInput('');
   const paymentID = useFormInput('');
   const amount = useFormInput('');
@@ -48,8 +50,44 @@ const SendModal = (props) => {
 
   const maxValue = (wallet.balance - defaultFee - (message.value.length * feePerChar));
   const calculateMax = () => {
-    const value = maxValue.toLocaleString(undefined, formatOptions);
+    const value = maxValue > 0 ? maxValue.toLocaleString(undefined, formatOptions) : 0;
     amount.onChange({ target: { value } });
+  };
+
+  const handleScan = data => {
+    if (data) {
+      const [prefix, ...rest] = data.split(':');
+      console.log(rest);
+      if (prefix === 'ccx') {
+        const addressParams = rest.join(':').split('?');
+        address.onChange({ target: { value: addressParams[0] }});
+        if (addressParams.length > 1) {
+          const params = addressParams[1].split('&');
+          params.forEach(param => {
+            const splittedParams = param.split('=');
+            const value = splittedParams[1];
+            switch (splittedParams[0]) {
+              case 'tx_amount':
+                amount.onChange({ target: { value }});
+                break;
+              case 'tx_payment_id':
+                paymentID.onChange({ target: { value }});
+                break;
+              case 'tx_message':
+                message.onChange({ target: { value }});
+                break;
+              default:
+                break;
+            }
+          })
+        }
+      }
+      setQrReaderOpened(false);
+    }
+  };
+
+  const handleError = err => {
+    console.error(err)
   };
 
   return (
@@ -62,6 +100,18 @@ const SendModal = (props) => {
         <Modal.Title>Send CCX</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+
+        {qrReaderOpened &&
+          <div className="width-100 mg-b-10">
+            <QrReader
+              className="qr-reader"
+              delay={500}
+              onError={handleError}
+              onScan={handleScan}
+            />
+          </div>
+        }
+
         <form
           onSubmit={(e) => walletActions.sendTx({
             e,
@@ -221,6 +271,13 @@ const SendModal = (props) => {
               className={`btn btn-send ${formValid ? 'btn-outline-success' : 'btn-outline-danger'}`}
             >
               SEND
+            </button>
+            <button
+              type="button"
+              className="btn btn-outline-dark"
+              onClick={() => setQrReaderOpened(!qrReaderOpened)}
+            >
+              SCAN QR CODE
             </button>
             <span className="tx-right">
                 <h2>

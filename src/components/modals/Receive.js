@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import QRCode from'qrcode.react';
 import Modal from 'react-bootstrap/Modal';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -13,10 +13,23 @@ const ReceiveModal = (props) => {
   const { appSettings } = useContext(AppContext);
 
   const [addressCopied, setAddressCopied] = useState(false);
+  const [qrCodeString, setQrCodeString] = useState(`ccx:${props.address}`);
   const amount = useFormInput('');
+  const paymentID = useFormInput('');
+  const message = useFormInput('');
 
   // ccx:ADDRESS?tx_payment_id=PAYMENT_ID&tx_amount=AMOUNT&recipient_name=NAME&tx_description=DESCRIPTION
-  const qrCodeString = `ccx:${props.address}${(amount.value !== '' && parseFloat(amount.value) && `&tx_amount=${amount.value}`)}`;
+  useEffect(() => {
+    const paramsObject = {};
+    if (amount.value !== '' && parseFloat(amount.value)) paramsObject.tx_amount = amount.value;
+    if (paymentID.value !== '') paramsObject.tx_payment_id = paymentID.value;
+    if (message.value !== '') paramsObject.tx_message = message.value;
+    const params = Object.keys(paramsObject).length > 0
+      ? `?${Object.keys(paramsObject).map(param => `${param}=${paramsObject[param]}`).join('&')}`
+      : '';
+    setQrCodeString(`ccx:${props.address}${params}`);
+    console.log(qrCodeString);
+  });
 
   const copyClipboard = () => {
     setAddressCopied(true);
@@ -65,7 +78,7 @@ const ReceiveModal = (props) => {
 
           <div className="row no-gutters">
             <div className="col-5 col-sm-4">
-              Value
+              Amount (optional)
             </div>
             <div className="col-7 col-sm-8 wallet-address">
               <input
@@ -82,8 +95,42 @@ const ReceiveModal = (props) => {
           </div>
 
           <div className="row no-gutters">
+            <div className="col-5 col-sm-4">
+              Payment ID (optional)
+            </div>
+            <div className="col-7 col-sm-8 wallet-address">
+              <input
+                {...paymentID}
+                size={6}
+                placeholder="Payment ID"
+                className="form-control"
+                name="paymentID"
+                type="text"
+                minLength={64}
+                maxLength={64}
+              />
+            </div>
+          </div>
+
+          <div className="row no-gutters">
+            <div className="col-5 col-sm-4">
+              Message (optional)
+            </div>
+            <div className="col-7 col-sm-8 wallet-address">
+              <input
+                {...message}
+                size={6}
+                placeholder="Message"
+                className="form-control"
+                name="message"
+                type="text"
+              />
+            </div>
+          </div>
+
+          <div className="row no-gutters">
             <div className="col-12 col-sm-12 justify-content-center">
-              <QRCode value={qrCodeString} size={256} />
+              <QRCode value={qrCodeString} size={256} includeMargin />
             </div>
           </div>
 

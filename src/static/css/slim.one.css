@@ -1269,3 +1269,8 @@ hr {
   font-weight: 600;
   color: rgb(211, 37, 53);
 }
+
+.qr-reader {
+  width: 50%;
+  margin-left: 25%;
+}
