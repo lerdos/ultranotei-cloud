@@ -13,13 +13,11 @@ export default class AuthHelper {
       rememberme: false,
     };
     if (twoFACode && twoFACode !== '') body.code = twoFACode;
-    return this.fetch(`${this.domain}/auth`, {
-      method: 'POST',
-      body: JSON.stringify(body),
-    }).then(res => {
-      if (res.message.token) this.setToken(res.message.token);
-      return Promise.resolve(res);
-    });
+    return this.fetch(`${this.domain}/auth`, { method: 'POST', body: JSON.stringify(body) })
+      .then(res => {
+        if (res.message.token) this.setToken(res.message.token);
+        return Promise.resolve(res);
+      });
   };
 
   loggedIn = () => {

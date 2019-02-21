@@ -102,18 +102,18 @@ const KeysModal = (props) => {
                   className="form-control"
                 />
                 <span className="input-group-btn">
-                    <CopyToClipboard
-                      text={wallet.keys ? wallet.keys.viewSecretKey : ''}
-                      onCopy={() => copyClipboard('viewSecretKey')}
+                  <CopyToClipboard
+                    text={wallet.keys ? wallet.keys.viewSecretKey : ''}
+                    onCopy={() => copyClipboard('viewSecretKey')}
+                  >
+                    <button
+                      className={`btn btn-no-focus ${viewSecretKeyCopied ? 'btn-outline-success' : 'btn-outline-dark'}`}
+                      type="button"
                     >
-                      <button
-                        className={`btn btn-no-focus ${viewSecretKeyCopied ? 'btn-outline-success' : 'btn-outline-dark'}`}
-                        type="button"
-                      >
-                        <FontAwesomeIcon icon={viewSecretKeyCopied ? 'check' : 'copy'} fixedWidth />
-                      </button>
-                    </CopyToClipboard>
-                  </span>
+                      <FontAwesomeIcon icon={viewSecretKeyCopied ? 'check' : 'copy'} fixedWidth />
+                    </button>
+                  </CopyToClipboard>
+                </span>
               </div>
             </div>
           </div>

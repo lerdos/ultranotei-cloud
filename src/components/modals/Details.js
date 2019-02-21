@@ -27,8 +27,8 @@ const DetailsModal = (props) => {
                 <div className="media">
                   <div className="d-flex mg-r-10 wd-50">
                     {tx.type === 'received'
-                      ? <FontAwesomeIcon icon="arrow-up" className="text-danger tx-icon" />
-                      : <FontAwesomeIcon icon="arrow-down" className="text-success tx-icon" />
+                      ? <FontAwesomeIcon icon="arrow-down" className="text-success tx-icon" />
+                      : <FontAwesomeIcon icon="arrow-up" className="text-danger tx-icon" />
                     }
                   </div>
                   <div className="media-body">
@@ -39,13 +39,18 @@ const DetailsModal = (props) => {
                     </p>
                     <p className="mg-b-5">
                       <a
-                        href={`${appSettings.explorerURL}/?hash=${tx.hash}#blockchain_transaction`}
+                        href={`${appSettings.explorerURL}/index.html?hash=${tx.hash}#blockchain_transaction`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
                         {tx.hash} <FontAwesomeIcon icon="external-link-alt" className="tx-link-icon" />
                       </a>
                     </p>
+                    {tx.status === 'pending' &&
+                      <p className="tx-pending">
+                        [PENDING]
+                      </p>
+                    }
                   </div>
                 </div>
               </div>

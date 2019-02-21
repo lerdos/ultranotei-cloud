@@ -216,10 +216,11 @@ class AppContextProvider extends React.Component {
       }
     };
 
-    this.sendTx = (e, wallet, address, paymentID, amount, message) => {
+    this.sendTx = (options) => {
+      const { e, wallet, address, paymentID, amount, message, twoFACode, password } = options;
       e.preventDefault();
       const { layout } = this.state;
-      this.Api.sendTx(wallet, address, paymentID, amount, message)
+      this.Api.sendTx(wallet, address, paymentID, amount, message, twoFACode, password)
         .then(res => {
           if (res.result === 'error' || res.message.error) {
             layout.sendTxResponse = {

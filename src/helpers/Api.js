@@ -74,15 +74,17 @@ export default class Api {
       .then(res => Promise.resolve(res));
   };
 
-  sendTx = (wallet, address, paymentID, amount, message) => {
-    const body = JSON.stringify({
+  sendTx = (wallet, address, paymentID, amount, message, twoFACode, password) => {
+    const body = {
       address,  // destination
       amount: parseFloat(amount),
       message,
       paymentID,
       wallet,  // origin
-    });
-    return this.fetch(`${this.apiURL}/wallet`, { method: 'PUT', body })
+    };
+    if (twoFACode && twoFACode !== '') body.code = twoFACode;
+    if (password && password !== '') body.password = password;
+    return this.fetch(`${this.apiURL}/wallet`, { method: 'PUT', body: JSON.stringify(body) })
       .then(res => Promise.resolve(res));
   };
 

@@ -70,3 +70,6 @@ npm run deploy
  - [ ] Add pool suggestion card
  - [ ] Address book
  - [ ] Add "buy/sell" option via STEX API?
+ - [ ] Add pagination to details table
+ - [ ] Clear up forms and response messages
+ - [ ] Change user name, email and avatar in settings

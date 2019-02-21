@@ -1264,3 +1264,8 @@ hr {
 .btn-2fa:hover {
   transition: background-color .3s, box-shadow .3s, color .3s;
 }
+
+.tx-pending {
+  font-weight: 600;
+  color: rgb(211, 37, 53);
+}

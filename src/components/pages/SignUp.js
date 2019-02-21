@@ -16,6 +16,7 @@ const SignUp = () => {
   const formValidation = (
     email.value !== '' &&
     password.value !== '' &&
+    password.value.length >= 8 &&
     userName.value !== ''
   );
   const formValid = useFormValidation(formValidation);

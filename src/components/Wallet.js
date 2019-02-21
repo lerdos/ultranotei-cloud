@@ -24,87 +24,91 @@ const Wallet = (props) => {
   const txs = wallet.transactions || [];
   const txIn = txs.length > 0 ? wallet.transactions.filter(t => t.type === 'received') : [];
   const txOut = txs.length > 0 ? wallet.transactions.filter(t => t.type === 'sent') : [];
-  const balance = wallet.balance || 0;
+  const locked = wallet.locked || 0;
+  const balanceTotal = wallet.total || 0;
 
   return (
     <div className="list-group-item">
-      <>
-        <div className="user-name-address">
-          <p>{maskAddress(props.address)}</p>
-          <span>Available Balance: {balance.toFixed(coinDecimals)} CCX</span>
-          <span>Transactions in: {txIn.length}</span>
-          <span>Transactions out: {txOut.length}</span>
-        </div>
-        <div className="btn-group" role="group">
-          <OverlayTrigger overlay={<Tooltip id={`${props.address}-send`} trigger={['hover']}>Send CCX</Tooltip>}>
-            <button
-              {...props}
-              className={`btn btn-outline-dark ${balance === 0 ? 'disabled' : ''}`}
-              onClick={() => toggleSendModal(!sendModalOpen)}
-              disabled={balance === 0}
-            >
-              <FontAwesomeIcon icon="arrow-up" fixedWidth />
-            </button>
-          </OverlayTrigger>
-          <OverlayTrigger overlay={<Tooltip id={`${props.address}-receive`} trigger={['hover']}>Receive CCX</Tooltip>}>
-            <button
-              className="btn btn-outline-dark"
-              onClick={() => toggleReceiveModal(!receiveModalOpen)}
-            >
-              <FontAwesomeIcon icon="arrow-down" fixedWidth />
-            </button>
-          </OverlayTrigger>
+      <div className="user-name-address">
+        <p>{maskAddress(props.address)}</p>
+        <span>
+          Balance: {balanceTotal.toFixed(coinDecimals)} CCX
+          {locked > 0 &&
+            <span className="tx-pending d-inline-block">&nbsp;(Locked: {locked.toFixed(coinDecimals)})</span>
+          }
+        </span>
+        <span>Transactions in: {txIn.length}</span>
+        <span>Transactions out: {txOut.length}</span>
+      </div>
+      <div className="btn-group" role="group">
+        <OverlayTrigger overlay={<Tooltip id={`${props.address}-send`} trigger={['hover']}>Send CCX</Tooltip>}>
+          <button
+            {...props}
+            className={`btn btn-outline-dark ${balanceTotal === 0 ? 'disabled' : ''}`}
+            onClick={() => toggleSendModal(!sendModalOpen)}
+            disabled={balanceTotal === 0}
+          >
+            <FontAwesomeIcon icon="arrow-up" fixedWidth />
+          </button>
+        </OverlayTrigger>
+        <OverlayTrigger overlay={<Tooltip id={`${props.address}-receive`} trigger={['hover']}>Receive CCX</Tooltip>}>
+          <button
+            className="btn btn-outline-dark"
+            onClick={() => toggleReceiveModal(!receiveModalOpen)}
+          >
+            <FontAwesomeIcon icon="arrow-down" fixedWidth />
+          </button>
+        </OverlayTrigger>
 
-          <OverlayTrigger overlay={<Tooltip id={`${props.address}-txs`} trigger={['hover']}>Transactions</Tooltip>}>
-            <button
-              className={`btn btn-outline-dark ${txs.length === 0 ? 'disabled' : ''}`}
-              onClick={() => toggleDetailsModal(!detailsModalOpen)}
-              disabled={txs.length === 0}
-            >
-              <FontAwesomeIcon icon="list-alt" fixedWidth />
-            </button>
-          </OverlayTrigger>
+        <OverlayTrigger overlay={<Tooltip id={`${props.address}-txs`} trigger={['hover']}>Transactions</Tooltip>}>
+          <button
+            className={`btn btn-outline-dark ${txs.length === 0 ? 'disabled' : ''}`}
+            onClick={() => toggleDetailsModal(!detailsModalOpen)}
+            disabled={txs.length === 0}
+          >
+            <FontAwesomeIcon icon="list-alt" fixedWidth />
+          </button>
+        </OverlayTrigger>
 
-          <OverlayTrigger overlay={<Tooltip id={`${props.address}-keys`} trigger={['hover']}>Export Keys</Tooltip>}>
-            <button
-              className="btn btn-outline-dark"
-              onClick={() => {
-                toggleKeysModal(!keysModalOpen);
-                walletActions.getWalletKeys(props.address);
-              }}
-            >
-              <FontAwesomeIcon icon="key" fixedWidth />
-            </button>
-          </OverlayTrigger>
-        </div>
+        <OverlayTrigger overlay={<Tooltip id={`${props.address}-keys`} trigger={['hover']}>Export Keys</Tooltip>}>
+          <button
+            className="btn btn-outline-dark"
+            onClick={() => {
+              toggleKeysModal(!keysModalOpen);
+              walletActions.getWalletKeys(props.address);
+            }}
+          >
+            <FontAwesomeIcon icon="key" fixedWidth />
+          </button>
+        </OverlayTrigger>
+      </div>
 
-        <SendModal
-          {...props}
-          show={sendModalOpen}
-          toggleModal={() => toggleSendModal(!sendModalOpen)}
-          wallet={wallet}
-        />
+      <SendModal
+        {...props}
+        show={sendModalOpen}
+        toggleModal={() => toggleSendModal(!sendModalOpen)}
+        wallet={wallet}
+      />
 
-        <ReceiveModal
-          {...props}
-          show={receiveModalOpen}
-          toggleModal={() => toggleReceiveModal(!receiveModalOpen)}
-        />
+      <ReceiveModal
+        {...props}
+        show={receiveModalOpen}
+        toggleModal={() => toggleReceiveModal(!receiveModalOpen)}
+      />
 
-        <DetailsModal
-          {...props}
-          show={detailsModalOpen}
-          toggleModal={() => toggleDetailsModal(!detailsModalOpen)}
-          wallet={wallet}
-        />
+      <DetailsModal
+        {...props}
+        show={detailsModalOpen}
+        toggleModal={() => toggleDetailsModal(!detailsModalOpen)}
+        wallet={wallet}
+      />
 
-        <KeysModal
-          {...props}
-          show={keysModalOpen}
-          toggleModal={() => toggleKeysModal(!keysModalOpen)}
-          wallet={wallet}
-        />
-      </>
+      <KeysModal
+        {...props}
+        show={keysModalOpen}
+        toggleModal={() => toggleKeysModal(!keysModalOpen)}
+        wallet={wallet}
+      />
     </div>
   )
 };

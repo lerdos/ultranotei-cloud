@@ -54,7 +54,7 @@ const Dashboard = () => {
                   }
                   {(walletsKeys.length < appSettings.maxWallets || walletsKeys.length === 0) &&
                     <button className="btn btn-primary btn-block" onClick={walletActions.createWallet}>
-                      Create New Wallet
+                      CREATE NEW WALLET
                     </button>
                   }
                 </>

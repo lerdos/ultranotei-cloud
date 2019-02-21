@@ -6,7 +6,7 @@ import { useFormInput, useFormValidation } from '../../helpers/hooks';
 
 
 const SendModal = (props) => {
-  const { appSettings, layout, walletActions } = useContext(AppContext);
+  const { appSettings, layout, userSettings, walletActions } = useContext(AppContext);
   const { coinDecimals, defaultFee, feePerChar } = appSettings;
   const { sendTxResponse } = layout;
   const { toggleModal, wallet, ...rest } = props;
@@ -15,23 +15,30 @@ const SendModal = (props) => {
   const paymentID = useFormInput('');
   const amount = useFormInput('');
   const message = useFormInput('');
+  const twoFACode = useFormInput('');
+  const password = useFormInput('');
 
   const formValidation = (
     address.value !== props.address &&
     address.value.length === 98 &&
     address.value.startsWith('ccx7') &&
-    parseFloat(amount.value) > 0 &&
+    parseFloat(amount.value) >= feePerChar &&
+    amount.value.toString().length <= 7 &&
     wallet.balance &&
     (parseFloat(amount.value) + defaultFee) + (message.value.length * feePerChar) <= wallet.balance &&
-    (paymentID.value === '' || paymentID.value.length === 64)
+    (paymentID.value === '' || paymentID.value.length === 64) &&
+    (userSettings.twoFAEnabled
+      ? (parseInt(twoFACode.value) && twoFACode.value.toString().length === 6)
+      : (password.value !== '' && password.value.length >= 8)
+    )
   );
   const formValid = useFormValidation(formValidation);
 
-  let totalAmount = 0;
+  let totalAmount = (parseFloat(amount.value) > 0) ? parseFloat(amount.value) : 0;
   if (message.value.length > 0) {
-    totalAmount = parseFloat(amount.value) + (message.value.length * feePerChar);
-  } else {
-    if (parseFloat(amount.value) > 0) totalAmount = parseFloat(amount.value);
+    totalAmount = (parseFloat(amount.value) > 0)
+      ? parseFloat(amount.value) + (message.value.length * feePerChar)
+      : (message.value.length * feePerChar);
   }
 
   const formatOptions = {
@@ -56,10 +63,20 @@ const SendModal = (props) => {
       </Modal.Header>
       <Modal.Body>
         <form
-          onSubmit={(e) => walletActions.sendTx(e, props.address, address.value, paymentID.value, amount.value, message.value)}
+          onSubmit={(e) => walletActions.sendTx({
+            e,
+            wallet: props.address,
+            address: address.value,
+            paymentID: paymentID.value,
+            amount: amount.value,
+            message: message.value,
+            twoFACode: twoFACode.value,
+            password: password.value,
+          })}
           className="send-form"
         >
           <div className="form-layout form-layout-7">
+
             <div className="row no-gutters">
               <div className="col-5 col-sm-4">
                 From
@@ -68,6 +85,7 @@ const SendModal = (props) => {
                 {props.address}
               </div>
             </div>
+
             <div className="row no-gutters">
               <div className="col-5 col-sm-4">
                 To
@@ -85,6 +103,7 @@ const SendModal = (props) => {
                 />
               </div>
             </div>
+
             <div className="row no-gutters">
               <div className="col-5 col-sm-4">
                 Payment ID (optional)
@@ -102,6 +121,7 @@ const SendModal = (props) => {
                 />
               </div>
             </div>
+
             <div className="row no-gutters">
               <div className="col-5 col-sm-4">
                 Amount
@@ -117,7 +137,7 @@ const SendModal = (props) => {
                     type="number"
                     min={0}
                     max={maxValue}
-                    step={Math.pow(10, -coinDecimals)}
+                    step={Math.pow(10, -(coinDecimals - 1))}
                   />
                   <span className="input-group-btn">
                       <button className="btn btn-outline-secondary btn-max" onClick={calculateMax} type="button">
@@ -127,6 +147,7 @@ const SendModal = (props) => {
                 </div>
               </div>
             </div>
+
             <div className="row no-gutters">
               <div className="col-5 col-sm-4">
                 Message (optional)
@@ -153,6 +174,42 @@ const SendModal = (props) => {
                 </div>
               </div>
             </div>
+
+            {userSettings.twoFAEnabled
+              ? <div className="row no-gutters">
+                  <div className="col-5 col-sm-4">
+                    2 Factor Authentication
+                  </div>
+                  <div className="col-7 col-sm-8">
+                    <input
+                      {...twoFACode}
+                      size={6}
+                      placeholder="2 Factor Authentication"
+                      className="form-control"
+                      name="twoFACode"
+                      type="number"
+                      minLength={6}
+                      maxLength={6}
+                    />
+                  </div>
+                </div>
+              : <div className="row no-gutters">
+                  <div className="col-5 col-sm-4">
+                    Password
+                  </div>
+                  <div className="col-7 col-sm-8">
+                    <input
+                      {...password}
+                      size={6}
+                      placeholder="Password"
+                      className="form-control"
+                      name="password"
+                      type="password"
+                      minLength={8}
+                    />
+                  </div>
+                </div>
+            }
           </div>
 
           <hr />
