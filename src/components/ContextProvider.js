@@ -271,6 +271,13 @@ class AppContextProvider extends React.Component {
         explorerURL: 'https://explorer.conceal.network',
         poolURL: 'https://pool.conceal.network',
         coingeckoAPI: 'https://api.coingecko.com/api/v3',
+        discord: 'https://discord.gg/QY4ksas',
+        twitter: 'https://twitter.com/ConcealNetwork',
+        reddit: 'https://www.reddit.com/r/ConcealNetwork',
+        telegram: 'https://t.me/concealnetworkusers',
+        medium: 'https://medium.com/@ConcealNetwork',
+        coinGecko: 'https://coingecko.com/en/coins/conceal',
+        coinMarketCap: 'https://coinmarketcap.com/currencies/conceal',
         updateBlockchainHeightInterval: 15,  // seconds
         updateMarketPricesInterval: 30,  // seconds
         maxWallets: 10,
