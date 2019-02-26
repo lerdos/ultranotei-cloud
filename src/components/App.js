@@ -29,6 +29,8 @@ import Terms from './pages/Terms';
 import PrivateRoute from './PrivateRoute';
 import Settings from './pages/Settings';
 import Dashboard from './pages/Dashboard';
+import GettingStarted from './pages/GettingStarted';
+import UpcomingFeatures from './pages/UpcomingFeatures';
 
 import '../static/css/slim.css';
 import '../static/css/slim.one.css';
@@ -62,8 +64,10 @@ const App = () => (
       <Route exact path="/reset_password/:token" component={ResetPassword} />
       <Route exact path="/terms" component={Terms} />
 
-      <PrivateRoute exact path="/settings" component={Settings} />
       <PrivateRoute exact path="/" component={Dashboard} />
+      <PrivateRoute exact path="/settings" component={Settings} />
+      <PrivateRoute exact path="/getting_started" component={GettingStarted} />
+      <PrivateRoute exact path="/upcoming_features" component={UpcomingFeatures} />
 
     </AppContextProvider>
   </Router>
