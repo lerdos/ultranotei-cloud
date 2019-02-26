@@ -12,11 +12,13 @@ const SignUp = () => {
   const userName = useFormInput('');
   const email = useFormInput('');
   const password = useFormInput('');
+  const inviteCode = useFormInput('');
 
   const formValidation = (
     userName.value !== '' && userName.value.length >= 3 &&
     email.value !== '' && email.value.length >= 3 &&
-    password.value !== '' && password.value.length >= userSettings.minimumPasswordLength
+    password.value !== '' && password.value.length >= userSettings.minimumPasswordLength &&
+    inviteCode !== '' && inviteCode.value.length === 32
   );
   const formValid = useFormValidation(formValidation);
 
@@ -29,7 +31,7 @@ const SignUp = () => {
         <h2 className="slim-logo"><a href="/">Conceal</a> <span className="beta-header">BETA</span></h2>
         <h3 className="signin-title-secondary">Sign Up</h3>
 
-        <form onSubmit={(e) => userActions.signUpUser(e, userName.value, email.value, password.value)}>
+        <form onSubmit={(e) => userActions.signUpUser(e, userName.value, email.value, password.value, inviteCode.value)}>
           <div className="form-group">
             <input
               {...userName}
@@ -50,7 +52,7 @@ const SignUp = () => {
               minLength={3}
             />
           </div>
-          <div className="form-group mg-b-50">
+          <div className="form-group">
             <input
               {...password}
               placeholder="Password"
@@ -58,6 +60,17 @@ const SignUp = () => {
               name="password"
               className="form-control"
               minLength={8}
+            />
+          </div>
+          <div className="form-group mg-b-50">
+            <input
+              {...inviteCode}
+              placeholder="Invite Code"
+              type="text"
+              name="inviteCode"
+              className="form-control"
+              minLength={32}
+              maxLength={32}
             />
           </div>
 

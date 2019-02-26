@@ -38,13 +38,13 @@ class AppContextProvider extends React.Component {
         });
     };
 
-    this.signUpUser = (e, userName, email, password) => {
+    this.signUpUser = (e, userName, email, password, inviteCode) => {
       e.preventDefault();
       const { layout } = this.state;
       layout.formSubmitted = true;
       layout.message = null;
       this.setState({ layout });
-      this.Api.signUpUser(userName, email, password)
+      this.Api.signUpUser(userName, email, password, inviteCode)
         .then(res => {
           if (res.result === 'success') return props.history.replace('/login');
           layout.message = res.message[0];
@@ -239,6 +239,7 @@ class AppContextProvider extends React.Component {
             message: res.message.result,
           };
           this.setState({ layout });
+          e.target.reset();
         })
         .catch(e => console.error(e));
     };
