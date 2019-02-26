@@ -1311,3 +1311,7 @@ hr {
 	display: flex;
 	flex-direction: column;
 }
+
+.btn-send {
+	margin-bottom: 10px;
+}
