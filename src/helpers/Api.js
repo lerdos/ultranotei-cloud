@@ -28,6 +28,21 @@ export default class Api {
       .then(res => Promise.resolve(res));
   };
 
+  updateUser = ({ name, email, file }) => {
+    const body = {};
+    if (name) body.name = name;
+    if (email) body.email = email;
+
+    const options = {
+      method: file ? 'POST' : 'PATCH',
+      body: file || JSON.stringify(body),
+    };
+    if (file) options.headers = {};
+    
+    return this.fetch(`${this.apiURL}/user/${file ? 'avatar' : ''}`, options)
+      .then(res => Promise.resolve(res));
+  };
+
   getUser = () => {
     return this.fetch(`${this.apiURL}/user`, { method: 'GET' })
       .then(res => Promise.resolve(res));
@@ -102,7 +117,7 @@ export default class Api {
   };
 
   fetch = (url, options) => {
-    const headers = {
+    const headers = options.headers || {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     };

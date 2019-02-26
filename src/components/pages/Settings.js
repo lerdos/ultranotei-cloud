@@ -10,10 +10,22 @@ const Settings = () => {
   const { formSubmitted, message } = layout;
 
   const twoFACode = useFormInput('');
+  const userName = useFormInput('');
+  const email = useFormInput('');
+  const [avatar, setAvatar] = useState('');
   const [twoFADialogOpened, toggle2FADialog] = useState(false);
 
   const twoFAFormValidation = (parseInt(twoFACode.value) && twoFACode.value.toString().length === 6);
   const twoFAFormValid = useFormValidation(twoFAFormValidation);
+
+  const userNameValidation = (userName.value.length >= 3);
+  const userNameValid = useFormValidation(userNameValidation);
+
+  const emailValidation = (email.value.length >= 3);
+  const emailValid = useFormValidation(emailValidation);
+
+  const avatarValidation = (avatar);
+  const avatarValid = useFormValidation(avatarValidation);
 
   return (
     <div>
@@ -35,62 +47,112 @@ const Settings = () => {
                 <div className="form-layout form-layout-7">
 
                   <div className="row no-gutters">
-                    <div className="col-5 col-sm-4 align-items-start">
+                    <div className="col-5 col-sm-4">
                       User Name
                     </div>
                     <div className="col-7 col-sm-8 wallet-address">
-						<input
-						  className="form-control"
-						  name="userName"
-						  type="text"
-						  value={user.name}
-						/>                      
+                      <form onSubmit={(e) => userActions.updateUser({ e, userName: userName.value })}>
+                        <div className="input-group">
+                          <input
+                            {...userName}
+                            placeholder={user.name}
+                            type="text"
+                            name="userName"
+                            className="form-control"
+                            minLength={3}
+                          />
+                          <span className="input-group-btn">
+                            <button
+                              className="btn btn-no-focus btn-outline-dark btn-uppercase-sm"
+                              type="submit"
+                              disabled={!userNameValid || formSubmitted}
+                            >
+                              Change User Name
+                            </button>
+                          </span>
+                        </div>
+                      </form>
                     </div>
                   </div>
 
                   <div className="row no-gutters">
-                    <div className="col-5 col-sm-4 align-items-start">
+                    <div className="col-5 col-sm-4">
                       Email
                     </div>
                     <div className="col-7 col-sm-8 wallet-address">
-						<input
-						  className="form-control"
-						  name="userEmail"
-						  type="text"
-						  value={user.email}
-						/>                      
-                      
+                      <form onSubmit={(e) => userActions.updateUser({ e, email: email.value })}>
+                        <div className="input-group">
+                          <input
+                            {...email}
+                            placeholder={user.email}
+                            type="email"
+                            name="email"
+                            className="form-control"
+                            minLength={3}
+                          />
+                          <span className="input-group-btn">
+                            <button
+                              className="btn btn-no-focus btn-outline-dark btn-uppercase-sm"
+                              type="submit"
+                              disabled={!emailValid || formSubmitted}
+                            >
+                              Change E-mail
+                            </button>
+                          </span>
+                        </div>
+                      </form>
                     </div>
                   </div>
 
                   <div className="row no-gutters">
-                    <div className="col-5 col-sm-4 align-items-start">
+                    <div className="col-5 col-sm-4">
                       Avatar
                     </div>
                     <div className="col-7 col-sm-8 wallet-address">
-                      {user.avatar}
+                      <div className="input-group">
+                        <input
+                          type="file"
+                          name="avatar"
+                          className="form-control"
+                          onChange={(e) => setAvatar(e.target.files[0])}
+                        />
+                        <span className="input-group-btn">
+                          <button
+                            className="btn btn-no-focus btn-outline-dark btn-uppercase-sm"
+                            type="submit"
+                            disabled={!avatarValid || formSubmitted}
+                            onClick={(e) => {
+                              const data = new FormData();
+                              data.append('file', avatar, avatar.name);
+                              userActions.updateUser({ e, avatar: data });
+                            }}
+                          >
+                            Change Avatar
+                          </button>
+                        </span>
+                      </div>
                     </div>
                   </div>
 
                   <div className="row no-gutters">
-                    <div className="col-5 col-sm-4 align-items-start">
+                    <div className="col-5 col-sm-4">
                       Password
                     </div>
                     <div className="col-7 col-sm-8 wallet-address">
                       Click on the button to send reset password link to {user.email}&nbsp;
                       <button
-                        className="btn btn-2fa btn-outline-primary"
+                        className="btn btn-outline-primary btn-uppercase-sm"
                         onClick={(e) =>
                           window.confirm('Send reset password email? You will be logged out!') &&
                           userActions.resetPassword(e, user.email)}
                       >
-                        RESET PASSWORD
+                        Reset Password
                       </button>
                     </div>
                   </div>
 
                   <div className="row no-gutters">
-                    <div className="col-5 col-sm-4 align-items-start pd-t-15-force">
+                    <div className="col-5 col-sm-4 align-items-start pd-t-25-force">
                       2 Factor Authentication
                     </div>
                     <div className="col-7 col-sm-8 wallet-address">
@@ -100,13 +162,13 @@ const Settings = () => {
                       </strong>.&nbsp;
 
                       <button
-                        className={`btn btn-2fa ${userSettings.twoFAEnabled ? 'btn-outline-danger' : 'btn-outline-success' }`}
+                        className={`btn btn-uppercase-sm ${userSettings.twoFAEnabled ? 'btn-outline-danger' : 'btn-outline-success' }`}
                         onClick={() => {
                           toggle2FADialog(!twoFADialogOpened);
                           if (layout.qrCodeUrl === '') userActions.getQRCode();
                         }}
                       >
-                        {userSettings.twoFAEnabled ? 'DISABLE' : 'ENABLE' }
+                        {userSettings.twoFAEnabled ? 'Disable' : 'Enable' }
                       </button>
 
                       {twoFADialogOpened &&

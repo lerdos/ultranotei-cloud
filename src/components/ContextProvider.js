@@ -108,6 +108,25 @@ class AppContextProvider extends React.Component {
       props.history.replace('/login');
     };
 
+    this.updateUser = ({ e, userName, email, avatar }) => {
+      e.preventDefault();
+      const { layout } = this.state;
+      layout.formSubmitted = true;
+      layout.message = null;
+      this.setState({ layout });
+      this.Api.updateUser({ name: userName, email, file: avatar })
+        .then(res => {
+          layout.message = res.message[0];
+        })
+        .catch(err => {
+          layout.message = `ERROR ${err}`;
+        })
+        .finally(() => {
+          layout.formSubmitted = false;
+          this.setState({ layout });
+        });
+    };
+
     this.getUser = () => {
       this.Api.getUser()
         .then(res => this.setState({ user: res.message }))
@@ -350,6 +369,7 @@ class AppContextProvider extends React.Component {
         check2FA: this.check2FA,
         update2FA: this.update2FA,
         getQRCode: this.getQRCode,
+        updateUser: this.updateUser,
       },
       walletActions: {
         createWallet: this.createWallet,
