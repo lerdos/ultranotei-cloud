@@ -8,7 +8,7 @@ import { useFormInput, useFormValidation } from '../../helpers/hooks';
 
 const SendModal = (props) => {
   const { appSettings, layout, userSettings, walletActions } = useContext(AppContext);
-  const { coinDecimals, defaultFee, feePerChar } = appSettings;
+  const { coinDecimals, defaultFee, messageFee, feePerChar } = appSettings;
   const { sendTxResponse } = layout;
   const { toggleModal, wallet, ...rest } = props;
 
@@ -20,14 +20,25 @@ const SendModal = (props) => {
   const twoFACode = useFormInput('');
   const password = useFormInput('');
 
+  const parsedAmount = !Number.isNaN(parseFloat(amount.value)) ? parseFloat(amount.value) : 0;
+  const totalMessageFee = message.value.length > 0 ? messageFee + message.value.length * feePerChar : 0;
+  const txFee = parsedAmount > 0 || amount.value !== '' ? defaultFee : 0;
+  const totalTxFee = txFee + totalMessageFee;
+  const totalAmount = parsedAmount > 0 ? (parsedAmount + totalTxFee).toFixed(coinDecimals) : totalTxFee;
+  const maxValue = totalTxFee > 0
+    ? (wallet.balance - totalTxFee).toFixed(coinDecimals)
+    : (wallet.balance - defaultFee).toFixed(coinDecimals);
+
+  const walletBalanceValid = totalAmount <= wallet.balance;
+  const messageAmountValid = totalMessageFee > 0 && totalTxFee.toFixed(coinDecimals) <= wallet.balance;
+  const totalAmountValid = (parsedAmount.toFixed(coinDecimals) >= defaultFee && totalAmount > 0) || messageAmountValid;
+
   const formValidation = (
     address.value !== props.address &&
     address.value.length === 98 &&
     address.value.startsWith('ccx7') &&
-    parseFloat(amount.value) >= feePerChar &&
-    amount.value.toString().length <= 7 &&
-    wallet.balance &&
-    (parseFloat(amount.value) + defaultFee) + (message.value.length * feePerChar) <= wallet.balance &&
+    walletBalanceValid &&
+    totalAmountValid && amount.value.toString().length <= 7 &&
     (paymentID.value === '' || paymentID.value.length === 64) &&
     (userSettings.twoFAEnabled
       ? (parseInt(twoFACode.value) && twoFACode.value.toString().length === 6)
@@ -36,28 +47,14 @@ const SendModal = (props) => {
   );
   const formValid = useFormValidation(formValidation);
 
-  let totalAmount = (parseFloat(amount.value) > 0) ? parseFloat(amount.value) : 0;
-  if (message.value.length > 0) {
-    totalAmount = (parseFloat(amount.value) > 0)
-      ? parseFloat(amount.value) + (message.value.length * feePerChar)
-      : (message.value.length * feePerChar);
-  }
-
-  const formatOptions = {
-    minimumFractionDigits: coinDecimals,
-    maximumFractionDigits: coinDecimals,
-  };
-
-  const maxValue = (wallet.balance - defaultFee - (message.value.length * feePerChar));
   const calculateMax = () => {
-    const value = maxValue > 0 ? maxValue.toLocaleString(undefined, formatOptions) : 0;
+    const value = maxValue > 0 ? maxValue : 0;
     amount.onChange({ target: { value } });
   };
 
   const handleScan = data => {
     if (data) {
       const [prefix, ...rest] = data.split(':');
-      console.log(rest);
       if (prefix === 'conceal') {
         const addressParams = rest.join(':').split('?');
         address.onChange({ target: { value: addressParams[0] }});
@@ -88,6 +85,11 @@ const SendModal = (props) => {
 
   const handleError = err => {
     console.error(err)
+  };
+
+  const formatOptions = {
+    minimumFractionDigits: coinDecimals,
+    maximumFractionDigits: coinDecimals,
   };
 
   return (
@@ -156,24 +158,6 @@ const SendModal = (props) => {
 
             <div className="row no-gutters">
               <div className="col-5 col-sm-4">
-                Payment ID (optional)
-              </div>
-              <div className="col-7 col-sm-8">
-                <input
-                  {...paymentID}
-                  size={6}
-                  placeholder="Payment ID"
-                  className="form-control"
-                  name="paymentID"
-                  type="text"
-                  minLength={64}
-                  maxLength={64}
-                />
-              </div>
-            </div>
-
-            <div className="row no-gutters">
-              <div className="col-5 col-sm-4">
                 Amount
               </div>
               <div className="col-7 col-sm-8">
@@ -200,6 +184,24 @@ const SendModal = (props) => {
 
             <div className="row no-gutters">
               <div className="col-5 col-sm-4">
+                Payment ID (optional)
+              </div>
+              <div className="col-7 col-sm-8">
+                <input
+                  {...paymentID}
+                  size={6}
+                  placeholder="Payment ID"
+                  className="form-control"
+                  name="paymentID"
+                  type="text"
+                  minLength={64}
+                  maxLength={64}
+                />
+              </div>
+            </div>
+
+            <div className="row no-gutters">
+              <div className="col-5 col-sm-4">
                 Message (optional)
               </div>
               <div className="col-7 col-sm-8">
@@ -216,7 +218,7 @@ const SendModal = (props) => {
                       <span className="input-group-text">
                         <small>
                           <strong>
-                            MESSAGE FEE: {(message.value.length * feePerChar).toLocaleString(undefined, formatOptions)} CCX
+                            MESSAGE FEE: {(totalMessageFee).toLocaleString(undefined, formatOptions)} CCX
                           </strong>
                         </small>
                       </span>
@@ -291,6 +293,9 @@ const SendModal = (props) => {
                   <strong>
                     {wallet.balance && wallet.balance.toLocaleString(undefined, formatOptions)}
                   </strong> CCX
+                </div>
+                <div className="tx-default-fee-text">
+                    MESSAGE FEE: {totalMessageFee.toLocaleString(undefined, formatOptions)} CCX
                 </div>
                 <div className="tx-default-fee-text">
                     TRANSACTION FEE: {defaultFee.toLocaleString(undefined, formatOptions)} CCX
