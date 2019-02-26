@@ -64,7 +64,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="row row-sm mg-t-20">
+        <div className="row row-sm mg-t-20 flex-stretch-vertical">
           <div className="col-lg-4"><GettingStarted /></div>
           <div className="col-lg-4 mg-t-20 mg-lg-t-0"><UpcomingFeatures /></div>
           <div className="col-lg-4 mg-t-20 mg-lg-t-0"><Market /></div>

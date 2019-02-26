@@ -1274,3 +1274,40 @@ hr {
   width: 50%;
   margin-left: 25%;
 }
+
+/******************** MARGIN FOR NAV ICONS *********************/
+
+.nav-link span {
+	margin-left: 10px;
+}
+
+/******************** STRETCH ALL CHILDREN 100% VERTICAL *********************/
+
+.flex-stretch-vertical {
+	flex-direction: row;
+	height: 100%;
+}
+
+.flex-stretch-vertical .card {
+	height: 100%;
+}
+
+/******************** dialogs widths should be larger *********************/
+
+#dlgReceiveCoins, #dlgSendCoins {
+	width: 80%;
+	max-width: 1100px;
+	border: 1px solid #343a40;
+}
+
+#dlgExportKeys {
+	width: 80%;
+	max-width: 900px;
+	border: 1px solid #343a40;
+}
+
+/******************** the send dialog buttons *********************/
+.tx-total-btns {
+	display: flex;
+	flex-direction: column;
+}

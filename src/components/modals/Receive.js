@@ -39,6 +39,7 @@ const ReceiveModal = (props) => {
     <Modal
       { ...rest }
       size="lg"
+	  id="dlgReceiveCoins"
       onHide={() => toggleModal('receive')}
     >
       <Modal.Header closeButton>
@@ -48,10 +49,10 @@ const ReceiveModal = (props) => {
         <div className="form-layout form-layout-7">
 
           <div className="row no-gutters">
-            <div className="col-5 col-sm-4">
+            <div className="col-5 col-sm-3">
               Address
             </div>
-            <div className="col-7 col-sm-8 wallet-address">
+            <div className="col-7 col-sm-9 wallet-address">
               <div className="input-group">
                 <input
                   value={props.address}
@@ -76,10 +77,10 @@ const ReceiveModal = (props) => {
           </div>
 
           <div className="row no-gutters">
-            <div className="col-5 col-sm-4">
+            <div className="col-5 col-sm-3">
               Amount (optional)
             </div>
-            <div className="col-7 col-sm-8 wallet-address">
+            <div className="col-7 col-sm-9 wallet-address">
               <input
                 {...amount}
                 size={2}
@@ -94,10 +95,10 @@ const ReceiveModal = (props) => {
           </div>
 
           <div className="row no-gutters">
-            <div className="col-5 col-sm-4">
+            <div className="col-5 col-sm-3">
               Payment ID (optional)
             </div>
-            <div className="col-7 col-sm-8 wallet-address">
+            <div className="col-7 col-sm-9 wallet-address">
               <input
                 {...paymentID}
                 size={6}
@@ -112,10 +113,10 @@ const ReceiveModal = (props) => {
           </div>
 
           <div className="row no-gutters">
-            <div className="col-5 col-sm-4">
+            <div className="col-5 col-sm-3">
               Message (optional)
             </div>
-            <div className="col-7 col-sm-8 wallet-address">
+            <div className="col-7 col-sm-9 wallet-address">
               <input
                 {...message}
                 size={6}

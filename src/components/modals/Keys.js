@@ -26,6 +26,7 @@ const KeysModal = (props) => {
     <Modal
       { ...rest }
       size="lg"
+ 	  id="dlgExportKeys"
       onHide={() => toggleModal('receive')}
     >
       <Modal.Header closeButton>
@@ -35,10 +36,10 @@ const KeysModal = (props) => {
         <div className="form-layout form-layout-7">
 
           <div className="row no-gutters">
-            <div className="col-5 col-sm-4">
+            <div className="col-5 col-sm-3">
               Public Spend Key
             </div>
-            <div className="col-7 col-sm-8 wallet-address">
+            <div className="col-7 col-sm-9 wallet-address">
               <div className="input-group">
                 <input
                   value={wallet.keys ? wallet.keys.spendPublicKey : ''}
@@ -63,10 +64,10 @@ const KeysModal = (props) => {
           </div>
 
           <div className="row no-gutters">
-            <div className="col-5 col-sm-4">
+            <div className="col-5 col-sm-3">
               Secret Spend Key
             </div>
-            <div className="col-7 col-sm-8 wallet-address">
+            <div className="col-7 col-sm-9 wallet-address">
               <div className="input-group">
                 <input
                   value={wallet.keys ? wallet.keys.spendSecretKey : ''}
@@ -91,10 +92,10 @@ const KeysModal = (props) => {
           </div>
 
           <div className="row no-gutters">
-            <div className="col-5 col-sm-4">
+            <div className="col-5 col-sm-3">
               Private View Key
             </div>
-            <div className="col-7 col-sm-8 wallet-address">
+            <div className="col-7 col-sm-9 wallet-address">
               <div className="input-group">
                 <input
                   value={wallet.keys ? wallet.keys.viewSecretKey : ''}

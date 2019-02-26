@@ -5,7 +5,6 @@ import QrReader from 'react-qr-reader';
 import { AppContext } from '../ContextProvider';
 import { useFormInput, useFormValidation } from '../../helpers/hooks';
 
-
 const SendModal = (props) => {
   const { appSettings, layout, userSettings, walletActions } = useContext(AppContext);
   const { coinDecimals, defaultFee, messageFee, feePerChar } = appSettings;
@@ -96,6 +95,7 @@ const SendModal = (props) => {
     <Modal
       { ...rest }
       size="lg"
+	  id="dlgSendCoins"
       onHide={() => toggleModal('send')}
     >
       <Modal.Header closeButton>
@@ -130,19 +130,19 @@ const SendModal = (props) => {
           <div className="form-layout form-layout-7">
 
             <div className="row no-gutters">
-              <div className="col-5 col-sm-4">
+              <div className="col-5 col-sm-3">
                 From
               </div>
-              <div className="col-7 col-sm-8 wallet-address">
+              <div className="col-7 col-sm-9 wallet-address">
                 {props.address}
               </div>
             </div>
 
             <div className="row no-gutters">
-              <div className="col-5 col-sm-4">
+              <div className="col-5 col-sm-3">
                 To
               </div>
-              <div className="col-7 col-sm-8">
+              <div className="col-7 col-sm-9">
                 <input
                   {...address}
                   size={8}
@@ -157,10 +157,10 @@ const SendModal = (props) => {
             </div>
 
             <div className="row no-gutters">
-              <div className="col-5 col-sm-4">
+              <div className="col-5 col-sm-3">
                 Amount
               </div>
-              <div className="col-7 col-sm-8">
+              <div className="col-7 col-sm-9">
                 <div className="input-group">
                   <input
                     {...amount}
@@ -183,10 +183,10 @@ const SendModal = (props) => {
             </div>
 
             <div className="row no-gutters">
-              <div className="col-5 col-sm-4">
+              <div className="col-5 col-sm-3">
                 Payment ID (optional)
               </div>
-              <div className="col-7 col-sm-8">
+              <div className="col-7 col-sm-9">
                 <input
                   {...paymentID}
                   size={6}
@@ -201,10 +201,10 @@ const SendModal = (props) => {
             </div>
 
             <div className="row no-gutters">
-              <div className="col-5 col-sm-4">
+              <div className="col-5 col-sm-3">
                 Message (optional)
               </div>
-              <div className="col-7 col-sm-8">
+              <div className="col-7 col-sm-9">
                 <div className="input-group">
                   <input
                     {...message}
@@ -229,10 +229,10 @@ const SendModal = (props) => {
 
             {userSettings.twoFAEnabled
               ? <div className="row no-gutters">
-                  <div className="col-5 col-sm-4">
+                  <div className="col-5 col-sm-3">
                     2 Factor Authentication
                   </div>
-                  <div className="col-7 col-sm-8">
+                  <div className="col-7 col-sm-9">
                     <input
                       {...twoFACode}
                       size={6}
@@ -246,10 +246,10 @@ const SendModal = (props) => {
                   </div>
                 </div>
               : <div className="row no-gutters">
-                  <div className="col-5 col-sm-4">
+                  <div className="col-5 col-sm-3">
                     Password
                   </div>
-                  <div className="col-7 col-sm-8">
+                  <div className="col-7 col-sm-9">
                     <input
                       {...password}
                       size={6}
@@ -267,20 +267,22 @@ const SendModal = (props) => {
           <hr />
 
           <div className="tx-total">
-            <button
-              type="submit"
-              disabled={!formValid}
-              className={`btn btn-send ${formValid ? 'btn-outline-success' : 'btn-outline-danger'}`}
-            >
-              SEND
-            </button>
-            <button
-              type="button"
-              className="btn btn-outline-dark"
-              onClick={() => setQrReaderOpened(!qrReaderOpened)}
-            >
-              SCAN QR CODE
-            </button>
+			<div className="tx-total-btns">
+				<button
+				  type="submit"
+				  disabled={!formValid}
+				  className={`btn btn-send ${formValid ? 'btn-outline-success' : 'btn-outline-danger'}`}
+				>
+				  SEND
+				</button>
+				<button
+				  type="button"
+				  className="btn btn-outline-dark"
+				  onClick={() => setQrReaderOpened(!qrReaderOpened)}
+				>
+				  SCAN QR CODE
+				</button>
+			</div>
             <span className="tx-right">
                 <h2>
                   <span className="tx-total-text">TOTAL</span>&nbsp;
