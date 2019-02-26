@@ -52,7 +52,7 @@ const ReceiveModal = (props) => {
             <div className="col-5 col-sm-3">
               Address
             </div>
-            <div className="col-7 col-sm-9 wallet-address">
+            <div className="col-7 col-sm-9 wallet-address receive-address">
               <div className="input-group">
                 <input
                   value={props.address}

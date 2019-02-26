@@ -39,7 +39,12 @@ const Settings = () => {
                       User Name
                     </div>
                     <div className="col-7 col-sm-8 wallet-address">
-                      {user.name}
+						<input
+						  className="form-control"
+						  name="userName"
+						  type="text"
+						  value={user.name}
+						/>                      
                     </div>
                   </div>
 
@@ -48,7 +53,13 @@ const Settings = () => {
                       Email
                     </div>
                     <div className="col-7 col-sm-8 wallet-address">
-                      {user.email}
+						<input
+						  className="form-control"
+						  name="userEmail"
+						  type="text"
+						  value={user.email}
+						/>                      
+                      
                     </div>
                   </div>
 

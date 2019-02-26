@@ -1304,6 +1304,7 @@ hr {
 	width: 80%;
 	max-width: 900px;
 	border: 1px solid #343a40;
+	border: 1px solid #343a40;
 }
 
 /******************** the send dialog buttons *********************/
@@ -1319,18 +1320,18 @@ hr {
 
 /******************** wallet address in receive *********************/
 
-#dlgReceiveCoins .wallet-address {
-	padding: 5px 20px !important;
+#dlgReceiveCoins .receive-address {
+	padding: 5px 8px 5px 20px !important;
 }
 
-#dlgReceiveCoins .wallet-address input {
+#dlgReceiveCoins .receive-address input {
 	background-color: #212529 !important;
 }
 
 /******************** export keys background and padding *********************/
 
 #dlgExportKeys .wallet-address {
-	padding: 5px 20px !important;
+	padding: 5px 8px 5px 20px !important;
 }
 
 #dlgExportKeys .wallet-address input {
