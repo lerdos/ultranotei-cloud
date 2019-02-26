@@ -1304,7 +1304,6 @@ hr {
 	width: 80%;
 	max-width: 900px;
 	border: 1px solid #343a40;
-	border: 1px solid #343a40;
 }
 
 /******************** the send dialog buttons *********************/
@@ -1355,6 +1354,10 @@ hr {
 }
 
 /******************** mobile related dialog fixes *********************/
+
+#dlgTxDetails {
+	border: 1px solid #343a40;
+}
 
 #dlgTxDetails .media {
 	overflow: hidden;
