@@ -16,7 +16,7 @@ const Login = (props) => {
   const formValidation = (
     email.value !== '' && email.value.length >= 3 &&
     password.value !== '' && password.value.length >= userSettings.minimumPasswordLength &&
-    (twoFACode.value !== '' && twoFACode.value.length === 6 && parseInt(twoFACode.value))
+    (twoFACode.value !== '' ? (twoFACode.value.length === 6 && parseInt(twoFACode.value)) : true)
   );
   const formValid = useFormValidation(formValidation);
 
