@@ -1337,3 +1337,17 @@ hr {
 #dlgExportKeys .wallet-address input {
 	background-color: #212529 !important;
 }
+
+@media (max-width: 900px) {
+	.modal-dialog {
+		width: 90% !important;
+		margin: 0px !important;
+	}
+}
+
+@media (max-width: 600px) {
+	.modal-dialog {
+		width: 100% !important;
+		margin: 0px !important;
+	}
+}
