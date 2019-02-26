@@ -93,7 +93,7 @@ const NavBar = () => {
           </li>
           <li className="nav-item">
             <button className="nav-link hot_link" onClick={userActions.logoutUser}>
-              <FontAwesomeIcon icon="sign-out-alt" fixedWidth /> Sign Out
+              <FontAwesomeIcon icon="sign-out-alt" fixedWidth /> <span>Sign Out</span>
             </button>
           </li>
         </ul>
