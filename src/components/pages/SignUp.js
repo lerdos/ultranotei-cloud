@@ -6,7 +6,7 @@ import { useFormInput, useFormValidation } from '../../helpers/hooks';
 
 
 const SignUp = () => {
-  const { layout, user, userActions } = useContext(AppContext);
+  const { layout, user, userSettings, userActions } = useContext(AppContext);
   const { formSubmitted, message } = layout;
 
   const userName = useFormInput('');
@@ -14,10 +14,9 @@ const SignUp = () => {
   const password = useFormInput('');
 
   const formValidation = (
-    email.value !== '' &&
-    password.value !== '' &&
-    password.value.length >= 8 &&
-    userName.value !== ''
+    userName.value !== '' && userName.value.length >= 3 &&
+    email.value !== '' && email.value.length >= 3 &&
+    password.value !== '' && password.value.length >= userSettings.minimumPasswordLength
   );
   const formValid = useFormValidation(formValidation);
 
@@ -38,7 +37,7 @@ const SignUp = () => {
               type="text"
               name="userName"
               className="form-control"
-              minLength={4}
+              minLength={3}
             />
           </div>
           <div className="form-group">
@@ -48,6 +47,7 @@ const SignUp = () => {
               type="email"
               name="email"
               className="form-control"
+              minLength={3}
             />
           </div>
           <div className="form-group mg-b-50">

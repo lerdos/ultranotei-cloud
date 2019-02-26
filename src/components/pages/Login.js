@@ -6,14 +6,18 @@ import { useFormInput, useFormValidation } from '../../helpers/hooks';
 
 
 const Login = (props) => {
-  const { layout, user, userActions } = useContext(AppContext);
+  const { layout, user, userSettings, userActions } = useContext(AppContext);
   const { redirectToReferrer, formSubmitted, message } = layout;
 
   const email = useFormInput('');
   const password = useFormInput('');
   const twoFACode = useFormInput('');
 
-  const formValidation = (email.value !== '' && password.value !== '');
+  const formValidation = (
+    email.value !== '' && email.value.length >= 3 &&
+    password.value !== '' && password.value.length >= userSettings.minimumPasswordLength &&
+    (twoFACode.value !== '' && twoFACode.value.length === 6 && parseInt(twoFACode.value))
+  );
   const formValid = useFormValidation(formValidation);
 
   if (user.loggedIn) return <Redirect to="/" />;
@@ -39,7 +43,7 @@ const Login = (props) => {
               type="email"
               name="email"
               className="form-control"
-              minLength={4}
+              minLength={3}
             />
           </div>
 
@@ -61,8 +65,7 @@ const Login = (props) => {
               type="number"
               name="twoFA"
               className="form-control"
-              minLength={6}
-              maxLength={6}
+              max={999999}
             />
           </div>
 

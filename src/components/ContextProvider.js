@@ -30,7 +30,7 @@ class AppContextProvider extends React.Component {
           layout.message = res.message[0];
         })
         .catch(err => {
-          layout.message = `ERROR ${err.response.status}`;
+          layout.message = `ERROR ${err}`;
         })
         .finally(() => {
           layout.formSubmitted = false;
@@ -50,7 +50,7 @@ class AppContextProvider extends React.Component {
           layout.message = res.message[0];
         })
         .catch(err => {
-          layout.message = `ERROR ${err.response.status}`;
+          layout.message = `ERROR ${err}`;
         })
         .finally(() => {
           layout.formSubmitted = false;
@@ -66,11 +66,15 @@ class AppContextProvider extends React.Component {
       this.setState({ layout });
       this.Api.resetPassword(email)
         .then(res => {
-          if (res.result === 'success') return props.history.replace('/login');
-          layout.message = res.message[0];
+          layout.message = 'Please check your email and follow instructions to reset password.';
+          if (res.result === 'success') {
+            this.Auth.logout();
+            this.clearApp();
+            return props.history.replace('/login');
+          }
         })
         .catch(err => {
-          layout.message = `ERROR ${err.response.status}`;
+          layout.message = `ERROR ${err}`;
         })
         .finally(() => {
           layout.formSubmitted = false;
@@ -90,7 +94,7 @@ class AppContextProvider extends React.Component {
           layout.message = res.message[0];
         })
         .catch(err => {
-          layout.message = `ERROR ${err.response.status}`;
+          layout.message = `ERROR ${err}`;
         })
         .finally(() => {
           layout.formSubmitted = false;
@@ -311,6 +315,7 @@ class AppContextProvider extends React.Component {
         qrCodeURL: '',
         twoFACode: '',
         twoFAEnabled: false,
+        minimumPasswordLength: 8,
       },
       wallets: {},
       network: {

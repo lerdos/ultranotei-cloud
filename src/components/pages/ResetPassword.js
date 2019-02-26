@@ -6,7 +6,7 @@ import { useFormInput, useFormValidation } from '../../helpers/hooks';
 
 
 const ResetPassword = (props) => {
-  const { layout, user, userActions } = useContext(AppContext);
+  const { layout, user, userSettings, userActions } = useContext(AppContext);
   const { formSubmitted, message } = layout;
 
   const email = useFormInput('');
@@ -15,8 +15,10 @@ const ResetPassword = (props) => {
 
   const formValidation = (
     props.match.params.token
-      ? password.value !== '' && passwordConfirm.value !== '' && password.value === passwordConfirm.value
-      : email.value !== ''
+      ? password.value !== '' && password.value.length >= userSettings.minimumPasswordLength &&
+        passwordConfirm.value !== '' && passwordConfirm.value.length >= userSettings.minimumPasswordLength &&
+        password.value === passwordConfirm.value
+      : email.value !== '' && email.value.length >= 3
   );
   const formValid = useFormValidation(formValidation);
 
@@ -72,7 +74,7 @@ const ResetPassword = (props) => {
                 type="email"
                 name="email"
                 className="form-control"
-                minLength={4}
+                minLength={3}
               />
             </div>
 

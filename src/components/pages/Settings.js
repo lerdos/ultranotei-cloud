@@ -12,8 +12,8 @@ const Settings = () => {
   const twoFACode = useFormInput('');
   const [twoFADialogOpened, toggle2FADialog] = useState(false);
 
-  const formValidation = (parseInt(twoFACode.value) && twoFACode.value.toString().length === 6);
-  const formValid = useFormValidation(formValidation);
+  const twoFAFormValidation = (parseInt(twoFACode.value) && twoFACode.value.toString().length === 6);
+  const twoFAFormValid = useFormValidation(twoFAFormValidation);
 
   return (
     <div>
@@ -33,6 +33,50 @@ const Settings = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="form-layout form-layout-7">
+
+                  <div className="row no-gutters">
+                    <div className="col-5 col-sm-4 align-items-start">
+                      User Name
+                    </div>
+                    <div className="col-7 col-sm-8 wallet-address">
+                      {user.name}
+                    </div>
+                  </div>
+
+                  <div className="row no-gutters">
+                    <div className="col-5 col-sm-4 align-items-start">
+                      Email
+                    </div>
+                    <div className="col-7 col-sm-8 wallet-address">
+                      {user.email}
+                    </div>
+                  </div>
+
+                  <div className="row no-gutters">
+                    <div className="col-5 col-sm-4 align-items-start">
+                      Avatar
+                    </div>
+                    <div className="col-7 col-sm-8 wallet-address">
+                      {user.avatar}
+                    </div>
+                  </div>
+
+                  <div className="row no-gutters">
+                    <div className="col-5 col-sm-4 align-items-start">
+                      Password
+                    </div>
+                    <div className="col-7 col-sm-8 wallet-address">
+                      Click on the button to send reset password link to {user.email}&nbsp;
+                      <button
+                        className="btn btn-2fa btn-outline-primary"
+                        onClick={(e) =>
+                          window.confirm('Send reset password email? You will be logged out!') &&
+                          userActions.resetPassword(e, user.email)}
+                      >
+                        RESET PASSWORD
+                      </button>
+                    </div>
+                  </div>
 
                   <div className="row no-gutters">
                     <div className="col-5 col-sm-4 align-items-start pd-t-15-force">
@@ -57,7 +101,7 @@ const Settings = () => {
                       {twoFADialogOpened &&
                       <>
                         {message &&
-                          <div className="text-danger text-center">{message}</div>
+                        <div className="text-danger text-center">{message}</div>
                         }
                         {userSettings.twoFAEnabled &&
                         <>
@@ -84,7 +128,7 @@ const Settings = () => {
                               </div>
                               <button
                                 type="submit"
-                                disabled={formSubmitted || !formValid}
+                                disabled={formSubmitted || !twoFAFormValid}
                                 className="btn btn-primary btn-block btn-signin"
                               >
                                 {formSubmitted ? 'Please wait...' : 'Disable'}
@@ -122,7 +166,7 @@ const Settings = () => {
                                 </div>
                                 <button
                                   type="submit"
-                                  disabled={formSubmitted || !formValid}
+                                  disabled={formSubmitted || !twoFAFormValid}
                                   className="btn btn-primary btn-block btn-signin"
                                 >
                                   {formSubmitted ? 'Please wait...' : 'Enable'}
@@ -134,33 +178,6 @@ const Settings = () => {
                         }
                       </>
                       }
-                    </div>
-                  </div>
-
-                  <div className="row no-gutters">
-                    <div className="col-5 col-sm-4 align-items-start">
-                      User Name
-                    </div>
-                    <div className="col-7 col-sm-8 wallet-address">
-                      {user.name}
-                    </div>
-                  </div>
-
-                  <div className="row no-gutters">
-                    <div className="col-5 col-sm-4 align-items-start">
-                      Email
-                    </div>
-                    <div className="col-7 col-sm-8 wallet-address">
-                      {user.email}
-                    </div>
-                  </div>
-
-                  <div className="row no-gutters">
-                    <div className="col-5 col-sm-4 align-items-start">
-                      Avatar
-                    </div>
-                    <div className="col-7 col-sm-8 wallet-address">
-                      {user.avatar}
                     </div>
                   </div>
 
