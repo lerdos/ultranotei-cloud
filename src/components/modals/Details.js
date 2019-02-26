@@ -13,6 +13,7 @@ const DetailsModal = (props) => {
     <Modal
       { ...rest }
       size="lg"
+	  id="dlgTxDetails"
       onHide={() => toggleModal('details')}
     >
       <Modal.Header closeButton>

@@ -1338,6 +1338,8 @@ hr {
 	background-color: #212529 !important;
 }
 
+/******************** mobile related dialog fixes *********************/
+
 @media (max-width: 900px) {
 	.modal-dialog {
 		width: 90% !important;
@@ -1350,4 +1352,10 @@ hr {
 		width: 100% !important;
 		margin: 0px !important;
 	}
+}
+
+/******************** mobile related dialog fixes *********************/
+
+#dlgTxDetails .media {
+	overflow: hidden;
 }
