@@ -1307,6 +1307,7 @@ hr {
 }
 
 /******************** the send dialog buttons *********************/
+
 .tx-total-btns {
 	display: flex;
 	flex-direction: column;
@@ -1314,4 +1315,24 @@ hr {
 
 .btn-send {
 	margin-bottom: 10px;
+}
+
+/******************** wallet address in receive *********************/
+
+#dlgReceiveCoins .wallet-address {
+	padding: 5px 20px !important;
+}
+
+#dlgReceiveCoins .wallet-address input {
+	background-color: #212529 !important;
+}
+
+/******************** export keys background and padding *********************/
+
+#dlgExportKeys .wallet-address {
+	padding: 5px 20px !important;
+}
+
+#dlgExportKeys .wallet-address input {
+	background-color: #212529 !important;
 }

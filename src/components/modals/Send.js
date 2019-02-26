@@ -277,7 +277,7 @@ const SendModal = (props) => {
 				</button>
 				<button
 				  type="button"
-				  className="btn btn-outline-dark"
+				  className="btn btn-outline-secondary"
 				  onClick={() => setQrReaderOpened(!qrReaderOpened)}
 				>
 				  SCAN QR CODE
