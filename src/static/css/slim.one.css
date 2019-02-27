@@ -1362,3 +1362,11 @@ hr {
 #dlgTxDetails .media {
 	overflow: hidden;
 }
+
+/******************** settings buttons *********************/
+
+.row-text-button {
+	display: flex; 
+	align-items: center;
+    justify-content: space-between;
+}

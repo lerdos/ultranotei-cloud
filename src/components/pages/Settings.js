@@ -138,16 +138,18 @@ const Settings = () => {
                     <div className="col-5 col-sm-4">
                       Password
                     </div>
-                    <div className="col-7 col-sm-8 wallet-address">
-                      Click on the button to send reset password link to {user.email}&nbsp;
-                      <button
-                        className="btn btn-outline-primary btn-uppercase-sm"
-                        onClick={(e) =>
-                          window.confirm('Send reset password email? You will be logged out!') &&
-                          userActions.resetPassword(e, user.email)}
-                      >
-                        Reset Password
-                      </button>
+                    <div className="col-7 col-sm-8 wallet-address row-text-button">
+						<div className="settingsText">Click on the button to send reset password link to {user.email}&nbsp;</div>
+						<div className="settingsButton">
+							<button
+								className="btn btn-outline-primary btn-uppercase-sm"
+								onClick={(e) =>
+								  window.confirm('Send reset password email? You will be logged out!') &&
+								  userActions.resetPassword(e, user.email)}
+							  >
+								Reset Password
+							</button>
+						</div>
                     </div>
                   </div>
 
@@ -155,21 +157,24 @@ const Settings = () => {
                     <div className="col-5 col-sm-4 align-items-start pd-t-25-force">
                       2 Factor Authentication
                     </div>
-                    <div className="col-7 col-sm-8 wallet-address">
-                      Your two-factor authentication is currently&nbsp;
-                      <strong className={userSettings.twoFAEnabled ? 'text-success' : 'text-danger'}>
-                        {userSettings.twoFAEnabled ? 'ENABLED' : 'DISABLED' }
-                      </strong>.&nbsp;
-
-                      <button
-                        className={`btn btn-uppercase-sm ${userSettings.twoFAEnabled ? 'btn-outline-danger' : 'btn-outline-success' }`}
-                        onClick={() => {
-                          toggle2FADialog(!twoFADialogOpened);
-                          if (layout.qrCodeUrl === '') userActions.getQRCode();
-                        }}
-                      >
-                        {userSettings.twoFAEnabled ? 'Disable' : 'Enable' }
-                      </button>
+                    <div className="col-7 col-sm-8 wallet-address row-text-button">
+                      <div className="settingsText">
+						Your two-factor authentication is currently&nbsp;
+						<strong className={userSettings.twoFAEnabled ? 'text-success' : 'text-danger'}>
+							{userSettings.twoFAEnabled ? 'ENABLED' : 'DISABLED' }
+						</strong>.&nbsp;
+					  </div>
+  					  <div className="settingsButton">
+						  <button
+							className={`btn btn-uppercase-sm ${userSettings.twoFAEnabled ? 'btn-outline-danger' : 'btn-outline-success' }`}
+							onClick={() => {
+							  toggle2FADialog(!twoFADialogOpened);
+							  if (layout.qrCodeUrl === '') userActions.getQRCode();
+							}}
+						  >
+							{userSettings.twoFAEnabled ? 'Disable' : 'Enable' }
+						  </button>
+					  </div>
 
                       {twoFADialogOpened &&
                       <>
