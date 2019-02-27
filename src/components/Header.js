@@ -11,9 +11,12 @@ const Header = () => (
         <img src={logo} alt="Logo" />
         <div className="logoText">
           <h2 className="slim-logo">
-            <Link to="/"><span>WALLET</span> <span className="beta-header">BETA</span></Link>
+            <Link to="/"><span>CLOUD Wallet</span></Link>
           </h2>
         </div>
+      </div>
+      <div className="slim-header-right">
+        <span className="beta-header">BETA</span>
       </div>
     </div>
   </div>

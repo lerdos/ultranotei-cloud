@@ -1191,8 +1191,9 @@ hr {
   padding-left: 10px;
 }
 
-.slim-logo span.beta-header {
+.beta-header {
   color: rgb(265, 165, 0);
+  font-size: 1.2rem;
 }
 
 .wallet-address {
