@@ -46,8 +46,8 @@ class AppContextProvider extends React.Component {
       this.setState({ layout });
       this.Api.signUpUser(userName, email, password, inviteCode)
         .then(res => {
-          if (res.result === 'success') return props.history.replace('/login');
           layout.message = res.message[0];
+          if (res.result === 'success') return props.history.replace('/login');
         })
         .catch(err => {
           layout.message = `ERROR ${err}`;
@@ -66,7 +66,6 @@ class AppContextProvider extends React.Component {
       this.setState({ layout });
       this.Api.resetPassword(email)
         .then(res => {
-          layout.message = 'Please check your email and follow instructions to reset password.';
           if (res.result === 'success') {
             this.Auth.logout();
             this.clearApp();
@@ -77,6 +76,7 @@ class AppContextProvider extends React.Component {
           layout.message = `ERROR ${err}`;
         })
         .finally(() => {
+          layout.message = 'Please check your email and follow instructions to reset password.';
           layout.formSubmitted = false;
           this.setState({ layout });
         });
@@ -319,9 +319,6 @@ class AppContextProvider extends React.Component {
         redirectToReferrer: false,
         formSubmitted: false,
         message: null,
-        twoFADialogOpened: false,
-        twoFAFormSubmitted: false,
-        twoFAFormValid: false,
         walletsLoaded: false,
         sendTxResponse: null,
         qrCodeUrl: '',
@@ -393,6 +390,16 @@ class AppContextProvider extends React.Component {
   componentDidMount() {
     // console.log('PROVIDER MOUNTED.');
     if (this.state.user.loggedIn) this.initApp();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.location !== prevProps.location) this.onRouteChanged();
+  }
+
+  onRouteChanged() {
+    const { layout } = this.state;
+    layout.message = null;
+    this.setState({ layout });
   }
 
   componentWillUnmount() {

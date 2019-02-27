@@ -38,7 +38,7 @@ export default class Api {
       body: file || JSON.stringify(body),
     };
     if (file) options.headers = {};
-    
+
     return this.fetch(`${this.apiURL}/user/${file ? 'avatar' : ''}`, options)
       .then(res => Promise.resolve(res));
   };

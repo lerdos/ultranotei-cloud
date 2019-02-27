@@ -9,23 +9,20 @@ const Settings = () => {
   const { layout, user, userActions, userSettings } = useContext(AppContext);
   const { formSubmitted, message } = layout;
 
-  const twoFACode = useFormInput('');
   const userName = useFormInput('');
   const email = useFormInput('');
   const [avatar, setAvatar] = useState('');
+  const twoFACode = useFormInput('');
   const [twoFADialogOpened, toggle2FADialog] = useState(false);
 
-  const twoFAFormValidation = (parseInt(twoFACode.value) && twoFACode.value.toString().length === 6);
-  const twoFAFormValid = useFormValidation(twoFAFormValidation);
+  const userNameValidation = (userName.value !== user.name && userName.value.length >= 3);
+  const emailValidation = (email.value !== user.email && email.value.length >= 3);
+  const twoFAFormValidation = (parseInt(twoFACode.value) && twoFACode.value.length === 6);
 
-  const userNameValidation = (userName.value.length >= 3);
   const userNameValid = useFormValidation(userNameValidation);
-
-  const emailValidation = (email.value.length >= 3);
   const emailValid = useFormValidation(emailValidation);
-
-  const avatarValidation = (avatar);
-  const avatarValid = useFormValidation(avatarValidation);
+  const avatarValid = useFormValidation(avatar);
+  const twoFAFormValid = useFormValidation(twoFAFormValidation);
 
   return (
     <div>
@@ -131,6 +128,9 @@ const Settings = () => {
                           </button>
                         </span>
                       </div>
+                      {avatar &&
+                        <img src={user.avatar} alt="avatar" />
+                      }
                     </div>
                   </div>
 
@@ -232,8 +232,7 @@ const Settings = () => {
                                       type="number"
                                       name="twoFACode"
                                       className="form-control"
-                                      minLength={6}
-                                      maxLength={6}
+                                      max={999999}
                                     />
                                   </div>
                                 </div>
