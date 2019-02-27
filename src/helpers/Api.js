@@ -28,9 +28,8 @@ export default class Api {
       .then(res => Promise.resolve(res));
   };
 
-  updateUser = ({ name, email, file }) => {
+  updateUser = ({ email, file }) => {
     const body = {};
-    if (name) body.name = name;
     if (email) body.email = email;
 
     const options = {

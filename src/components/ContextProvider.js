@@ -108,13 +108,13 @@ class AppContextProvider extends React.Component {
       props.history.replace('/login');
     };
 
-    this.updateUser = ({ e, userName, email, avatar }) => {
+    this.updateUser = ({ e, email, avatar }) => {
       e.preventDefault();
       const { layout } = this.state;
       layout.formSubmitted = true;
       layout.message = null;
       this.setState({ layout });
-      this.Api.updateUser({ name: userName, email, file: avatar })
+      this.Api.updateUser({ email, file: avatar })
         .then(res => {
           layout.message = res.message[0];
         })
@@ -124,6 +124,7 @@ class AppContextProvider extends React.Component {
         .finally(() => {
           layout.formSubmitted = false;
           this.setState({ layout });
+          this.getUser();
         });
     };
 

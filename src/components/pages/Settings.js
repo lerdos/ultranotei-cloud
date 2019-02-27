@@ -9,17 +9,17 @@ const Settings = () => {
   const { layout, user, userActions, userSettings } = useContext(AppContext);
   const { formSubmitted, message } = layout;
 
-  const userName = useFormInput('');
+  // const userName = useFormInput('');
   const email = useFormInput('');
-  const [avatar, setAvatar] = useState('');
+  const [avatar, setAvatar] = useState(user.avatar);
   const twoFACode = useFormInput('');
   const [twoFADialogOpened, toggle2FADialog] = useState(false);
 
-  const userNameValidation = (userName.value !== user.name && userName.value.length >= 3);
+  // const userNameValidation = (userName.value !== user.name && userName.value.length >= 3);
   const emailValidation = (email.value !== user.email && email.value.length >= 3);
   const twoFAFormValidation = (parseInt(twoFACode.value) && twoFACode.value.length === 6);
 
-  const userNameValid = useFormValidation(userNameValidation);
+  // const userNameValid = useFormValidation(userNameValidation);
   const emailValid = useFormValidation(emailValidation);
   const avatarValid = useFormValidation(avatar);
   const twoFAFormValid = useFormValidation(twoFAFormValidation);
@@ -48,15 +48,18 @@ const Settings = () => {
                       User Name
                     </div>
                     <div className="col-7 col-sm-8 wallet-address">
+                      {user.name}
+                      {/*
                       <form onSubmit={(e) => userActions.updateUser({ e, userName: userName.value })}>
                         <div className="input-group">
                           <input
-                            {...userName}
+                            value={user.name}
                             placeholder={user.name}
                             type="text"
                             name="userName"
                             className="form-control"
                             minLength={3}
+                            readOnly={}
                           />
                           <span className="input-group-btn">
                             <button
@@ -69,6 +72,7 @@ const Settings = () => {
                           </span>
                         </div>
                       </form>
+                      */}
                     </div>
                   </div>
 
@@ -102,7 +106,7 @@ const Settings = () => {
                   </div>
 
                   <div className="row no-gutters">
-                    <div className="col-5 col-sm-4">
+                    <div className="col-5 col-sm-4 align-items-start pd-t-25-force">
                       Avatar
                     </div>
                     <div className="col-7 col-sm-8 wallet-address">
@@ -128,7 +132,7 @@ const Settings = () => {
                           </button>
                         </span>
                       </div>
-                      {avatar &&
+                      {user.avatar &&
                         <img src={user.avatar} alt="avatar" />
                       }
                     </div>
@@ -263,7 +267,6 @@ const Settings = () => {
                   </div>
 
                 </div>
-
               </div>
             </div>
           </div>
