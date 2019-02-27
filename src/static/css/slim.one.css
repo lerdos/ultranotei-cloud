@@ -1366,7 +1366,13 @@ hr {
 /******************** settings buttons *********************/
 
 .row-text-button {
-	display: flex; 
+	display: flex;
 	align-items: center;
-    justify-content: space-between;
+  justify-content: space-between;
+}
+
+/******************** 2FA dialog *********************/
+
+.twofa-dialog {
+  margin-top: 20px;
 }
