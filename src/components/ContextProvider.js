@@ -26,8 +26,9 @@ class AppContextProvider extends React.Component {
           if (res.result === 'success') {
             layout.redirectToReferrer = true;
             this.initApp();
+          } else {
+            layout.message = res.message;
           }
-          layout.message = res.message[0];
         })
         .catch(err => {
           layout.message = `ERROR ${err}`;
@@ -44,17 +45,19 @@ class AppContextProvider extends React.Component {
       layout.formSubmitted = true;
       layout.message = null;
       this.setState({ layout });
-      let apiResponse;
       this.Api.signUpUser(userName, email, password)
         .then(res => {
-          apiResponse = res;
-          if (res.result === 'success') return props.history.replace('/login');
+          if (res.result === 'success') {
+            layout.message = 'Please check your email and follow the instructions to activate your account.';
+            return props.history.replace('/login');
+          } else {
+            layout.message = res.message;
+          }
         })
         .catch(err => {
           layout.message = `ERROR ${err}`;
         })
         .finally(() => {
-          layout.message = apiResponse.message[0];
           layout.formSubmitted = false;
           this.setState({ layout });
         });
@@ -71,14 +74,18 @@ class AppContextProvider extends React.Component {
           if (res.result === 'success') {
             this.Auth.logout();
             this.clearApp();
+            layout.message = 'Please check your email and follow instructions to reset password.';
+            this.setState({ layout });
             return props.history.replace('/login');
+          } else {
+            layout.message = res.message;
           }
         })
         .catch(err => {
           layout.message = `ERROR ${err}`;
         })
         .finally(() => {
-          layout.message = 'Please check your email and follow instructions to reset password.';
+          // layout.message = 'Please check your email and follow instructions to reset password.';
           layout.formSubmitted = false;
           this.setState({ layout });
         });
@@ -92,8 +99,13 @@ class AppContextProvider extends React.Component {
       this.setState({ layout });
       this.Api.resetPasswordConfirm(password, token)
         .then(res => {
-          if (res.result === 'success') return props.history.replace('/login');
-          layout.message = res.message[0];
+          if (res.result === 'success') {
+            layout.message = (<>Password successfully changed.<br />Please log in.</>);
+            this.setState({ layout });
+            return props.history.replace('/login');
+          } else {
+            layout.message = res.message;
+          }
         })
         .catch(err => {
           layout.message = `ERROR ${err}`;
@@ -290,6 +302,16 @@ class AppContextProvider extends React.Component {
         .catch(e => console.error(e));
     };
 
+    this.onRouteChanged = (prevProps) => {
+      const { location } = prevProps;
+      const isRedirect = this.props.history.action === 'REPLACE';
+      if ((location.pathname !== '/signup' && !location.pathname.startsWith('/reset_password')) || !isRedirect) {
+        const { layout } = this.state;
+        layout.message = null;
+        this.setState({ layout });
+      }
+    };
+
     this.state = {
       appSettings: {
         appVersion: process.env.REACT_APP_VERSION,
@@ -392,17 +414,17 @@ class AppContextProvider extends React.Component {
 
   componentDidMount() {
     // console.log('PROVIDER MOUNTED.');
-    if (this.state.user.loggedIn) this.initApp();
+    const { layout, user } = this.state;
+    const { location } = this.props;
+    if (location.pathname === '/login' && location.search === '?activated') {
+      layout.message = (<>Account successfully activated.<br />Please log in.</>);
+      this.setState({ layout });
+    }
+    if (user.loggedIn) this.initApp();
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.location !== prevProps.location) this.onRouteChanged();
-  }
-
-  onRouteChanged() {
-    const { layout } = this.state;
-    layout.message = null;
-    this.setState({ layout });
+    if (this.props.location !== prevProps.location) this.onRouteChanged(prevProps);
   }
 
   componentWillUnmount() {

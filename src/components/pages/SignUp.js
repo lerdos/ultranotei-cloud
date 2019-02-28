@@ -29,6 +29,10 @@ const SignUp = () => {
         <h2 className="slim-logo"><a href="/">Conceal</a> <span className="beta-header">BETA</span></h2>
         <h3 className="signin-title-secondary">Sign Up</h3>
 
+        {message &&
+          <div className="alert alert-outline alert-danger text-center">{message}</div>
+        }
+
         <form onSubmit={(e) => userActions.signUpUser(e, userName.value, email.value, password.value)}>
           <div className="form-group">
             <input
@@ -50,7 +54,7 @@ const SignUp = () => {
               minLength={3}
             />
           </div>
-          <div className="form-group">
+          <div className="form-group mg-b-50">
             <input
               {...password}
               placeholder="Password"
@@ -60,10 +64,6 @@ const SignUp = () => {
               minLength={8}
             />
           </div>
-
-          {message &&
-            <div className="text-danger text-center">{message}</div>
-          }
 
           <button
             type="submit"

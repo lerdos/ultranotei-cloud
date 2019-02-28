@@ -71,6 +71,6 @@ npm run deploy
  - [ ] Address book
  - [ ] Add "buy/sell" option via STEX API?
  - [ ] Add pagination to details table
- - [ ] Clear up forms and response messages
+ - [x] Clear up forms and response messages
  - [X] Change user name, email and avatar in settings
  - [x] Fix mobile CSS

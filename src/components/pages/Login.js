@@ -35,6 +35,10 @@ const Login = (props) => {
         <h2 className="signin-title-primary">Welcome back!</h2>
         <h3 className="signin-title-secondary">Sign in to continue.</h3>
 
+        {message &&
+          <div className="alert alert-outline alert-danger text-center">{message}</div>
+        }
+
         <form onSubmit={(e) => userActions.loginUser(e, email.value, password.value, twoFACode.value)}>
           <div className="form-group">
             <input
@@ -68,10 +72,6 @@ const Login = (props) => {
               max={999999}
             />
           </div>
-
-          {message &&
-            <div className="text-danger text-center">{message}</div>
-          }
 
           <button
             type="submit"

@@ -31,6 +31,10 @@ const ResetPassword = (props) => {
         <h2 className="slim-logo"><a href="/">Conceal</a> <span className="beta-header">BETA</span></h2>
         <h3 className="signin-title-secondary">Reset Password</h3>
 
+        {message &&
+          <div className="alert alert-outline alert-danger text-center">{message}</div>
+        }
+
         {props.match.params.token
           ? <form onSubmit={(e) => userActions.resetPasswordConfirm(e, password.value, props.match.params.token)}>
               <div className="form-group">
@@ -77,10 +81,6 @@ const ResetPassword = (props) => {
                 minLength={3}
               />
             </div>
-
-            {message &&
-              <div className="text-danger text-center">{message}</div>
-            }
 
             <button
               type="submit"
