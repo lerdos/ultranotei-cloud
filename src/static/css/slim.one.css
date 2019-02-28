@@ -1398,3 +1398,21 @@ hr {
 		width: 100% !important;
 	}
 }
+
+/******************** mobile send form  *********************/
+
+@media (max-width: 600px) {
+	.sendSummary h2 {
+		font-size: 1.4rem;
+	}	
+}
+
+@media (max-width: 400px) {
+	.sendSection {
+		display: block !important;
+	}
+
+	.sendSummary {
+		padding: 20px;
+	}
+}

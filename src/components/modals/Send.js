@@ -266,7 +266,7 @@ const SendModal = (props) => {
 
           <hr />
 
-          <div className="tx-total">
+          <div className="tx-total sendSection">
 			<div className="tx-total-btns">
 				<button
 				  type="submit"
@@ -283,7 +283,7 @@ const SendModal = (props) => {
 				  SCAN QR CODE
 				</button>
 			</div>
-            <span className="tx-right">
+            <span className="tx-right sendSummary">
                 <h2>
                   <span className="tx-total-text">TOTAL</span>&nbsp;
                   <span className={`${totalAmount > wallet.balance ? 'text-danger' : ''}`}>
