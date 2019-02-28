@@ -64,7 +64,7 @@ npm run deploy
  - [ ] Decide how to handle tx secret key
  - [ ] Add deposits
  - [ ] Add investments
- - [ ] Finish CSS
+ - [X] Finish CSS
  - [ ] Handle API responses in ContextProvider
  - [ ] Add "get CCX" card
  - [ ] Add pool suggestion card
@@ -72,4 +72,5 @@ npm run deploy
  - [ ] Add "buy/sell" option via STEX API?
  - [ ] Add pagination to details table
  - [ ] Clear up forms and response messages
- - [ ] Change user name, email and avatar in settings
+ - [X] Change user name, email and avatar in settings
+ - [ ] Fix mobile CSS

@@ -17,11 +17,12 @@ const Settings = () => {
 
   // const userNameValidation = (userName.value !== user.name && userName.value.length >= 3);
   const emailValidation = (email.value !== user.email && email.value.length >= 3);
+  const avatarValidation = (avatar && avatar.name);
   const twoFAFormValidation = (parseInt(twoFACode.value) && twoFACode.value.length === 6);
 
   // const userNameValid = useFormValidation(userNameValidation);
   const emailValid = useFormValidation(emailValidation);
-  const avatarValid = useFormValidation(avatar);
+  const avatarValid = useFormValidation(avatarValidation);
   const twoFAFormValid = useFormValidation(twoFAFormValidation);
 
   return (

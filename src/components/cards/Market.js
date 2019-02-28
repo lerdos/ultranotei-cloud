@@ -7,7 +7,7 @@ const Market = () => {
   const { markets } = useContext(AppContext);
 
   const btcFormatOptions = { minimumFractionDigits: 8, maximumFractionDigits: 8 };
-  const volumeFormatOptions = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
+  const volumeFormatOptions = { minimumFractionDigits: 4, maximumFractionDigits: 4 };
 
   return (
     <div className="card card-sales">
@@ -32,6 +32,7 @@ const Market = () => {
           </div>
         </React.Fragment>
       )}
+      <small className="text-right">All values in BTC.</small>
     </div>
   )
 };

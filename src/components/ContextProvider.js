@@ -269,9 +269,9 @@ class AppContextProvider extends React.Component {
       Object.keys(markets).forEach(market => {
         this.Api.getMarketPrices(markets[market].apiURL)
           .then(res => {
-            markets[market].ask = parseFloat(market === 'graviex' ? res.sell : res.message[0].ask);
-            markets[market].bid = parseFloat(market === 'graviex' ? res.buy : res.message[0].bid);
-            markets[market].volume = parseFloat(market === 'graviex' ? res.volume : res.message[0].vol);
+            markets[market].ask = parseFloat(market === 'tradeogre' ? res.ask : res.message[0].ask);
+            markets[market].bid = parseFloat(market === 'tradeogre' ? res.bid : res.message[0].bid);
+            markets[market].volume = parseFloat(market === 'tradeogre' ? res.volume : res.message[0].vol_market);
             this.setState({ markets });
           })
           .catch(e => console.error(e));
@@ -344,14 +344,14 @@ class AppContextProvider extends React.Component {
         priceCCXBTC: 0,
       },
       markets: {
-        graviex: {
-          apiURL: 'https://graviex.net/api/v3/tickers/ccxbtc.json',
+        stex: {
+          apiURL: 'https://api.wallet.conceal.network/api/stex/status',
           ask: 0,
           bid: 0,
           volume: 0,
         },
-        stex: {
-          apiURL: 'https://api.wallet.conceal.network/api/stex/status',
+        tradeogre: {
+          apiURL: 'https://tradeogre.com/api/v1/ticker/BTC-CCX',
           ask: 0,
           bid: 0,
           volume: 0,
