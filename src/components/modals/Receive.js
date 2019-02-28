@@ -39,7 +39,7 @@ const ReceiveModal = (props) => {
     <Modal
       { ...rest }
       size="lg"
-	  id="dlgReceiveCoins"
+	    id="dlgReceiveCoins"
       onHide={() => toggleModal('receive')}
     >
       <Modal.Header closeButton>

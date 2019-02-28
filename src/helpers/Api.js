@@ -4,13 +4,12 @@ export default class Api {
     this.auth = options.auth;
   }
 
-  signUpUser = (userName, email, password, inviteCode) => {
+  signUpUser = (userName, email, password) => {
     const body = {
       email,
       name: userName,
       password,
     };
-    if (inviteCode && inviteCode !== '') body["invite-code"] = inviteCode;
     return this.fetch(`${this.apiURL}/user`, { method: 'POST', body: JSON.stringify(body) })
       .then(res => Promise.resolve(res));
   };

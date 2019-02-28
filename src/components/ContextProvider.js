@@ -38,21 +38,23 @@ class AppContextProvider extends React.Component {
         });
     };
 
-    this.signUpUser = (e, userName, email, password, inviteCode) => {
+    this.signUpUser = (e, userName, email, password) => {
       e.preventDefault();
       const { layout } = this.state;
       layout.formSubmitted = true;
       layout.message = null;
       this.setState({ layout });
-      this.Api.signUpUser(userName, email, password, inviteCode)
+      let apiResponse;
+      this.Api.signUpUser(userName, email, password)
         .then(res => {
-          layout.message = res.message[0];
+          apiResponse = res;
           if (res.result === 'success') return props.history.replace('/login');
         })
         .catch(err => {
           layout.message = `ERROR ${err}`;
         })
         .finally(() => {
+          layout.message = apiResponse.message[0];
           layout.formSubmitted = false;
           this.setState({ layout });
         });

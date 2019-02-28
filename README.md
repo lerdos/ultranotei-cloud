@@ -73,4 +73,4 @@ npm run deploy
  - [ ] Add pagination to details table
  - [ ] Clear up forms and response messages
  - [X] Change user name, email and avatar in settings
- - [ ] Fix mobile CSS
+ - [x] Fix mobile CSS
