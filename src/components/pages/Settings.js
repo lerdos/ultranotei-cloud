@@ -37,9 +37,11 @@ const Settings = () => {
             </ol>
             <h6 className="slim-pagetitle">Settings</h6>
           </div>
-
           <div className="section-wrapper mg-t-20">
             <label className="section-title">Settings</label>
+		    {message &&
+			  <div className="text-danger mg-b-20">{message}</div>
+  		    }
             <div className="row">
               <div className="col-lg-12">
                 <div className="form-layout form-layout-7">
@@ -94,7 +96,7 @@ const Settings = () => {
                           />
                           <span className="input-group-btn">
                             <button
-                              className="btn btn-no-focus btn-outline-dark btn-uppercase-sm"
+                              className="btn btn-no-focus btn-outline-secondary btn-uppercase-sm"
                               type="submit"
                               disabled={!emailValid || formSubmitted}
                             >
@@ -115,12 +117,12 @@ const Settings = () => {
                         <input
                           type="file"
                           name="avatar"
-                          className="form-control"
+                          className="form-control custom-file-input"
                           onChange={(e) => setAvatar(e.target.files[0])}
                         />
                         <span className="input-group-btn">
                           <button
-                            className="btn btn-no-focus btn-outline-dark btn-uppercase-sm"
+                            className="btn btn-no-focus btn-outline-secondary btn-uppercase-sm"
                             type="submit"
                             disabled={!avatarValid || formSubmitted}
                             onClick={(e) => {
@@ -134,7 +136,7 @@ const Settings = () => {
                         </span>
                       </div>
                       {user.avatar &&
-                        <img src={user.avatar} alt="avatar" />
+                        <img src={user.avatar} alt="avatar" className="mg-t-20" />
                       }
                     </div>
                   </div>
@@ -187,9 +189,6 @@ const Settings = () => {
 
                       {twoFADialogOpened &&
                         <div className="twofa-dialog">
-                          {message &&
-                            <div className="text-danger text-center">{message}</div>
-                          }
                           {userSettings.twoFAEnabled &&
                           <>
                             <p>

@@ -1377,3 +1377,9 @@ hr {
 .twofa-dialog {
   margin-top: 20px;
 }
+
+/******************** file select *********************/
+
+.custom-file-input {
+	opacity: 1 !important;
+}
