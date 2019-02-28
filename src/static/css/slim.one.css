@@ -1383,3 +1383,18 @@ hr {
 .custom-file-input {
 	opacity: 1 !important;
 }
+
+/******************** mobile forms  *********************/
+
+@media (max-width: 700px) {
+	.form-layout .row {
+		display: block !important;
+	}
+	
+	.form-layout .row .col-5,
+	.form-layout .row .col-7 {
+		max-width: 100% !important;
+		display: block !important;
+		width: 100% !important;
+	}
+}
