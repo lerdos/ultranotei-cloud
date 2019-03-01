@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import logo from '../static/img/conceal-small.png';
-
+import { ReactComponent as Logo } from '../static/img/logo.svg';
 
 const Header = () => (
   <div className="slim-header">
     <div className="container">
       <div className="slim-header-left">
-        <img src={logo} alt="Logo" />
+        {/*<img src={logo} alt="Logo" />*/}
+        <Logo className="logo" />
         <div className="logoText">
           <h2 className="slim-logo">
             <Link to="/"><span>CLOUD Wallet</span></Link>
