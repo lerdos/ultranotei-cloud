@@ -58,7 +58,7 @@ npm run deploy
 
 ### TODO:
 
- - [ ] Resend verification email
+ - [x] Resend verification email
  - [ ] Limit number of wallets (server side)
  - [ ] Export mnemonic seed
  - [ ] Decide how to handle tx secret key

@@ -39,9 +39,9 @@ const Settings = () => {
           </div>
           <div className="section-wrapper mg-t-20">
             <label className="section-title">Settings</label>
-		    {message &&
-			  <div className="text-danger mg-b-20">{message}</div>
-  		    }
+            {message &&
+              <div className="text-danger mg-b-20">{message}</div>
+            }
             <div className="row">
               <div className="col-lg-12">
                 <div className="form-layout form-layout-7">

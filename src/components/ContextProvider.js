@@ -221,7 +221,7 @@ class AppContextProvider extends React.Component {
         });
     };
 
-    this.getWalletDetails = (address) => {
+    this.getWalletDetails = address => {
       this.Api.getWalletDetails(address)
         .then(res => res)
         .catch(e => console.error(e));
@@ -244,15 +244,27 @@ class AppContextProvider extends React.Component {
         .catch(e => console.error(e));
     };
 
-    this.getWalletKeys = (address) => {
-      const { wallets } = this.state;
+    this.getWalletKeys = (e, address, code) => {
+      e.preventDefault();
+      const { layout, wallets } = this.state;
+      layout.formSubmitted = true;
+      layout.message = null;
+      this.setState({ layout });
       if (!wallets[address].keys) {
-        this.Api.getWalletKeys(address)
+        this.Api.getWalletKeys(address, code)
           .then(res => {
-            wallets[address].keys = res.message;
-            this.setState({ wallets });
+            if (res.result === 'success') {
+              wallets[address].keys = res.message;
+              this.setState({ wallets });
+            } else {
+              layout.message = res.message;
+            }
           })
-          .catch(e => console.error(e));
+          .catch(e => console.error(e))
+          .finally(() => {
+            layout.formSubmitted = false;
+            this.setState({ layout });
+          });
       }
     };
 

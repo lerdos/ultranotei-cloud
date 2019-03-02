@@ -83,10 +83,7 @@ const Wallet = (props) => {
         <OverlayTrigger overlay={<Tooltip id={`${props.address}-keys`} trigger={['hover']}>Export Keys</Tooltip>}>
           <button
             className={`btn btn-outline-dark ${!wallet.loaded ? 'disabled' : ''}`}
-            onClick={() => {
-              toggleKeysModal(!keysModalOpen);
-              walletActions.getWalletKeys(props.address);
-            }}
+            onClick={() => toggleKeysModal(!keysModalOpen)}
             disabled={!wallet.loaded}
           >
             <FontAwesomeIcon icon="key" fixedWidth />

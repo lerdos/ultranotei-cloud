@@ -14,7 +14,7 @@ export default class Api {
       .then(res => Promise.resolve(res));
   };
 
-  resetPassword = (email) => {
+  resetPassword = email => {
     const body = JSON.stringify({ email });
     return this.fetch(`${this.apiURL}/auth/`, { method: 'PUT', body })
       .then(res => Promise.resolve(res));
@@ -73,7 +73,7 @@ export default class Api {
       .then(res => Promise.resolve(res));
   };
 
-  getWalletDetails = (address) => {
+  getWalletDetails = address => {
     return this.fetch(`${this.apiURL}/wallet/get/address/${address}`, { method: 'GET' })
       .then(res => Promise.resolve(res));
   };
@@ -83,8 +83,8 @@ export default class Api {
       .then(res => Promise.resolve(res));
   };
 
-  getWalletKeys = (address) => {
-    return this.fetch(`${this.apiURL}/wallet/keys?address=${address}`, { method: 'GET' })
+  getWalletKeys = (address, code) => {
+    return this.fetch(`${this.apiURL}/wallet/keys?address=${address}&code=${code}`, { method: 'GET' })
       .then(res => Promise.resolve(res));
   };
 
@@ -107,13 +107,13 @@ export default class Api {
       .then(res => Promise.resolve(res));
   };
 
-  getPrices = (pricesURL) => {
+  getPrices = pricesURL => {
     return fetch(`${pricesURL}/simple/price?ids=conceal&vs_currencies=btc&include_last_updated_at=true`)
       .then(r => r.json())
       .then(res => Promise.resolve(res));
   };
 
-  getMarketPrices = (marketApiURL) => {
+  getMarketPrices = marketApiURL => {
     return fetch(marketApiURL)
       .then(r => r.json())
       .then(res => Promise.resolve(res));
