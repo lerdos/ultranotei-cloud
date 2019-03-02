@@ -19,6 +19,7 @@ import {
   faListAlt,
   faNetworkWired,
   faSignOutAlt,
+  faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
 
 import AppContextProvider from './ContextProvider';
@@ -52,6 +53,7 @@ library.add(
   faListAlt,
   faNetworkWired,
   faSignOutAlt,
+  faTrashAlt,
 );
 
 const App = () => (

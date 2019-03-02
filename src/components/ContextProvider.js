@@ -199,17 +199,19 @@ class AppContextProvider extends React.Component {
       this.Api.getWalletList()
         .then(res => {
           res.message.addresses && res.message.addresses.forEach(address => {
-            if (!wallets.hasOwnProperty(address)) {
-              wallets[address] = {};
-              this.setState({ wallets });
-            }
+            if (address in wallets === false) wallets[address] = {};
             this.Api.getWalletDetails(address)
               .then(res => {
-                wallets[address] = { ...wallets[address], ...res.message };
-                appSettings.lastUpdate = new Date();
-                this.setState({ appSettings, wallets });
+                if (res.result === 'success') {
+                  wallets[address] = { ...wallets[address], ...res.message };
+                  appSettings.lastUpdate = new Date();
+                }
               })
-              .catch(e => console.error(e));
+              .catch(e => console.error(e))
+              .finally(() => {
+                wallets[address].loaded = true;
+                this.setState({ appSettings, wallets });
+              });
           });
         })
         .catch(e => console.error(e))
@@ -274,6 +276,18 @@ class AppContextProvider extends React.Component {
           };
           this.setState({ layout });
           e.target.reset();
+        })
+        .catch(e => console.error(e));
+    };
+
+    this.deleteWallet = (address) => {
+      const { wallets } = this.state;
+      this.Api.deleteWallet(address)
+        .then(res => {
+          if (res.result === 'success') {
+            delete wallets[address];
+            this.setState({ wallets });
+          }
         })
         .catch(e => console.error(e));
     };
@@ -399,6 +413,7 @@ class AppContextProvider extends React.Component {
         getWalletDetails: this.getWalletDetails,
         getWalletKeys: this.getWalletKeys,
         sendTx: this.sendTx,
+        deleteWallet: this.deleteWallet,
       },
       networkActions: {
         getBlockchainHeight: this.getBlockchainHeight,

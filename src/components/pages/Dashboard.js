@@ -39,7 +39,20 @@ const Dashboard = () => {
         </div>
 
         <div className="section-wrapper mg-t-20">
-          <label className="section-title">Your Wallets</label>
+          <div className="d-flex flex-row width-100 justify-content-between mg-b-10">
+            <label className="section-title d-inline-block">Your Wallets</label>
+            {(walletsKeys.length < appSettings.maxWallets || walletsKeys.length === 0) &&
+              <button
+                className="btn btn-primary btn-sm"
+                onClick={() => {
+                  window.confirm('You are about to create a new wallet. Proceed?') &&
+                  walletActions.createWallet()
+                }}
+              >
+                CREATE NEW WALLET
+              </button>
+            }
+          </div>
           <div className="row">
             <div className="col-lg-12">
               <div className="list-group list-group-user">
@@ -51,11 +64,6 @@ const Dashboard = () => {
                   }
                   {walletsKeys.length === 0 &&
                     <div className="section-title text-center">You don't have any wallets. Please create one</div>
-                  }
-                  {(walletsKeys.length < appSettings.maxWallets || walletsKeys.length === 0) &&
-                    <button className="btn btn-primary btn-block" onClick={walletActions.createWallet}>
-                      CREATE NEW WALLET
-                    </button>
                   }
                 </>
                 }

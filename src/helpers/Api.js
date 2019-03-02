@@ -102,6 +102,11 @@ export default class Api {
       .then(res => Promise.resolve(res));
   };
 
+  deleteWallet = address => {
+    return this.fetch(`${this.apiURL}/wallet?address=${address}`, { method: 'DELETE' })
+      .then(res => Promise.resolve(res));
+  };
+
   getPrices = (pricesURL) => {
     return fetch(`${pricesURL}/simple/price?ids=conceal&vs_currencies=btc&include_last_updated_at=true`)
       .then(r => r.json())
