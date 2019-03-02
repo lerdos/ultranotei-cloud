@@ -12,7 +12,6 @@ import KeysModal from './modals/Keys';
 
 const Wallet = (props) => {
   const { appSettings, walletActions, wallets } = useContext(AppContext);
-  const { coinDecimals } = appSettings;
 
   const [sendModalOpen, toggleSendModal] = useState(false);
   const [receiveModalOpen, toggleReceiveModal] = useState(false);
@@ -27,14 +26,21 @@ const Wallet = (props) => {
   const locked = wallet.locked || 0;
   const balanceTotal = wallet.total || 0;
 
+  const formatOptions = {
+    minimumFractionDigits: appSettings.coinDecimals,
+    maximumFractionDigits: appSettings.coinDecimals,
+  };
+
   return (
     <div className="list-group-item">
       <div className="user-name-address">
         <p>{maskAddress(props.address)}</p>
         <span>
-          Balance: {balanceTotal.toFixed(coinDecimals)} CCX
+          Balance: {balanceTotal.toLocaleString(undefined, formatOptions)} CCX&nbsp;
           {locked > 0 &&
-            <span className="tx-pending d-inline-block">&nbsp;(Locked: {locked.toFixed(coinDecimals)})</span>
+            <span className="tx-pending d-inline-block">
+              (Locked: {locked.toLocaleString(undefined, formatOptions)})
+            </span>
           }
         </span>
         <span>Transactions in: {txIn.length}</span>

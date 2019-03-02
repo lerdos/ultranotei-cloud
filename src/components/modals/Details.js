@@ -9,11 +9,16 @@ const DetailsModal = (props) => {
   const { toggleModal, wallet, ...rest } = props;
   const { appSettings } = useContext(AppContext);
 
+  const formatOptions = {
+    minimumFractionDigits: appSettings.coinDecimals,
+    maximumFractionDigits: appSettings.coinDecimals,
+  };
+
   return (
     <Modal
       { ...rest }
       size="lg"
-	  id="dlgTxDetails"
+      id="dlgTxDetails"
       onHide={() => toggleModal('details')}
     >
       <Modal.Header closeButton>
@@ -35,8 +40,8 @@ const DetailsModal = (props) => {
                   <div className="media-body">
                     <small className="mg-b-10 tx-timestamp">{tx.timestamp}</small>
                     <p className="mg-b-5">
-                      <span className="tx-amount">{tx.amount.toFixed(appSettings.coinDecimals)} CCX</span>&nbsp;
-                      <small className="tx-fee">FEE: {tx.fee.toFixed(appSettings.coinDecimals)}</small>
+                      <span className="tx-amount">{tx.amount.toLocaleString(undefined, formatOptions)} CCX</span>&nbsp;
+                      <small className="tx-fee">FEE: {tx.fee.toLocaleString(undefined, formatOptions)}</small>
                     </p>
                     <p className="mg-b-5">
                       <a
