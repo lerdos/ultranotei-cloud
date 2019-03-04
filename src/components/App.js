@@ -6,6 +6,7 @@ import {
   faCheck,
 } from '@fortawesome/free-solid-svg-icons';
 import {
+  faAddressBook,
   faArrowUp,
   faArrowDown,
   faCopy,
@@ -20,6 +21,7 @@ import {
   faNetworkWired,
   faSignOutAlt,
   faTrashAlt,
+  faUserEdit,
 } from '@fortawesome/free-solid-svg-icons';
 
 import AppContextProvider from './ContextProvider';
@@ -28,8 +30,9 @@ import SignUp from './pages/SignUp';
 import ResetPassword from './pages/ResetPassword';
 import Terms from './pages/Terms';
 import PrivateRoute from './PrivateRoute';
-import Settings from './pages/Settings';
 import Dashboard from './pages/Dashboard';
+import AddressBook from './pages/AddressBook';
+import Settings from './pages/Settings';
 import GettingStarted from './pages/GettingStarted';
 import UpcomingFeatures from './pages/UpcomingFeatures';
 
@@ -39,6 +42,7 @@ import '../static/css/slim.one.css';
 
 library.add(
   fab,
+  faAddressBook,
   faArrowUp,
   faArrowDown,
   faCheck,
@@ -54,6 +58,7 @@ library.add(
   faNetworkWired,
   faSignOutAlt,
   faTrashAlt,
+  faUserEdit,
 );
 
 const App = () => (
@@ -67,6 +72,7 @@ const App = () => (
       <Route exact path="/terms" component={Terms} />
 
       <PrivateRoute exact path="/" component={Dashboard} />
+      <PrivateRoute exact path="/address_book" component={AddressBook} />
       <PrivateRoute exact path="/settings" component={Settings} />
       <PrivateRoute exact path="/getting_started" component={GettingStarted} />
       <PrivateRoute exact path="/upcoming_features" component={UpcomingFeatures} />

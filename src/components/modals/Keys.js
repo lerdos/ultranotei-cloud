@@ -8,7 +8,7 @@ import { AppContext } from '../ContextProvider';
 import { useFormInput, useFormValidation } from '../../helpers/hooks';
 
 
-const KeysModal = (props) => {
+const KeysModal = props => {
   const { toggleModal, wallet, ...rest } = props;
   const { layout, userSettings, walletActions } = useContext(AppContext);
   const { formSubmitted, message } = layout;
@@ -21,7 +21,7 @@ const KeysModal = (props) => {
   const twoFAFormValidation = (parseInt(twoFACode.value) && twoFACode.value.length === 6);
   const twoFAFormValid = useFormValidation(twoFAFormValidation);
 
-  const copyClipboard = (elem) => {
+  const copyClipboard = elem => {
     if (elem === 'spendPublicKey') setSpendPublicKeyCopied(true);
     if (elem === 'spendSecretKey') setSpendSecretKeyCopied(true);
     if (elem === 'viewSecretKey') setViewSecretKeyCopied(true);
@@ -144,7 +144,7 @@ const KeysModal = (props) => {
                   <h5 className="text-center">
                     Please confirm with your 2-Factor Authentication code.
                   </h5>
-                  <form onSubmit={(e) => walletActions.getWalletKeys(e, props.address, twoFACode.value)}>
+                  <form onSubmit={e => walletActions.getWalletKeys(e, props.address, twoFACode.value)}>
                     <div className="form-layout form-layout-7">
                       <div className="row no-gutters">
                         <div className="col-5 col-sm-4">

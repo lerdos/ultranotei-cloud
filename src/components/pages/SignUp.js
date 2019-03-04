@@ -33,7 +33,7 @@ const SignUp = () => {
           <div className="alert alert-outline alert-danger text-center">{message}</div>
         }
 
-        <form onSubmit={(e) => userActions.signUpUser(e, userName.value, email.value, password.value)}>
+        <form onSubmit={e => userActions.signUpUser(e, userName.value, email.value, password.value)}>
           <div className="form-group">
             <input
               {...userName}

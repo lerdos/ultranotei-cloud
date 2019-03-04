@@ -5,7 +5,7 @@ import QrReader from 'react-qr-reader';
 import { AppContext } from '../ContextProvider';
 import { useFormInput, useFormValidation } from '../../helpers/hooks';
 
-const SendModal = (props) => {
+const SendModal = props => {
   const { appSettings, layout, userSettings, walletActions } = useContext(AppContext);
   const { coinDecimals, defaultFee, messageFee, feePerChar } = appSettings;
   const { sendTxResponse } = layout;
@@ -95,7 +95,7 @@ const SendModal = (props) => {
     <Modal
       { ...rest }
       size="lg"
-	  id="dlgSendCoins"
+      id="dlgSendCoins"
       onHide={() => toggleModal('send')}
     >
       <Modal.Header closeButton>
@@ -115,7 +115,7 @@ const SendModal = (props) => {
         }
 
         <form
-          onSubmit={(e) => walletActions.sendTx({
+          onSubmit={e => walletActions.sendTx({
             e,
             wallet: props.address,
             address: address.value,

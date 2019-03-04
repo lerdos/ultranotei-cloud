@@ -10,7 +10,7 @@ import DetailsModal from './modals/Details';
 import KeysModal from './modals/Keys';
 
 
-const Wallet = (props) => {
+const Wallet = props => {
   const { appSettings, walletActions, wallets } = useContext(AppContext);
 
   const [sendModalOpen, toggleSendModal] = useState(false);
@@ -60,6 +60,7 @@ const Wallet = (props) => {
             <FontAwesomeIcon icon="arrow-up" fixedWidth />
           </button>
         </OverlayTrigger>
+
         <OverlayTrigger overlay={<Tooltip id={`${props.address}-receive`} trigger={['hover']}>Receive CCX</Tooltip>}>
           <button
             className={`btn btn-outline-dark ${!wallet.loaded ? 'disabled' : ''}`}
@@ -103,6 +104,7 @@ const Wallet = (props) => {
           </button>
         </OverlayTrigger>
       </div>
+
       <SendModal
         {...props}
         show={sendModalOpen}

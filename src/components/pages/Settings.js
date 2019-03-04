@@ -53,7 +53,7 @@ const Settings = () => {
                     <div className="col-7 col-sm-8 wallet-address">
                       {user.name}
                       {/*
-                      <form onSubmit={(e) => userActions.updateUser({ e, userName: userName.value })}>
+                      <form onSubmit={e => userActions.updateUser({ e, userName: userName.value })}>
                         <div className="input-group">
                           <input
                             value={user.name}
@@ -84,7 +84,7 @@ const Settings = () => {
                       Email
                     </div>
                     <div className="col-7 col-sm-8 wallet-address">
-                      <form onSubmit={(e) => userActions.updateUser({ e, email: email.value })}>
+                      <form onSubmit={e => userActions.updateUser({ e, email: email.value })}>
                         <div className="input-group">
                           <input
                             {...email}
@@ -118,14 +118,14 @@ const Settings = () => {
                           type="file"
                           name="avatar"
                           className="form-control custom-file-input"
-                          onChange={(e) => setAvatar(e.target.files[0])}
+                          onChange={e => setAvatar(e.target.files[0])}
                         />
                         <span className="input-group-btn">
                           <button
                             className="btn btn-no-focus btn-outline-secondary btn-uppercase-sm"
                             type="submit"
                             disabled={!avatarValid || formSubmitted}
-                            onClick={(e) => {
+                            onClick={e => {
                               const data = new FormData();
                               data.append('file', avatar, avatar.name);
                               userActions.updateUser({ e, avatar: data });
@@ -152,7 +152,7 @@ const Settings = () => {
                       <div className="settingsButton">
                         <button
                           className="btn btn-outline-primary btn-uppercase-sm"
-                          onClick={(e) =>
+                          onClick={e =>
                             window.confirm('Send reset password email? You will be logged out!') &&
                             userActions.resetPassword(e, user.email)}
                           >
@@ -194,7 +194,7 @@ const Settings = () => {
                             <p>
                               Enter the passcode from your authenticator app to disable two-factor authentication.
                             </p>
-                            <form onSubmit={(e) => userActions.update2FA(e, twoFACode.value, false)}>
+                            <form onSubmit={e => userActions.update2FA(e, twoFACode.value, false)}>
                               <div className="form-layout form-layout-7">
                                 <div className="row no-gutters">
                                   <div className="col-5 col-sm-4">
@@ -232,7 +232,7 @@ const Settings = () => {
                               <div>
                                 <img src={layout.qrCodeUrl} alt="QR Code" />
 
-                                <form onSubmit={(e) => userActions.update2FA(e, twoFACode.value, true)}>
+                                <form onSubmit={e => userActions.update2FA(e, twoFACode.value, true)}>
                                   <div className="form-layout form-layout-7">
                                     <div className="row no-gutters">
                                       <div className="col-5 col-sm-4">

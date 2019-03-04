@@ -143,9 +143,46 @@ class AppContextProvider extends React.Component {
     };
 
     this.getUser = () => {
+      const { user } = this.state;
       this.Api.getUser()
-        .then(res => this.setState({ user: res.message }))
+        .then(res => this.setState({ user: {...user, ...res.message} }))
         .catch(e => console.error(e));
+    };
+
+    this.addContact = contact => {
+      const { e, label, address, paymentID, edit, editingContact } = contact;
+      const { user } = this.state;
+      e.preventDefault();
+      if (edit) {
+        let currentContact = user.addressBook.findIndex(contact =>
+          contact.label === editingContact.label &&
+          contact.address === editingContact.address &&
+          contact.paymentID === editingContact.paymentID
+        );
+        user.addressBook[currentContact] = { label, address, paymentID };
+      } else {
+        const existingContact = user.addressBook.find(contact =>
+          contact.label === label &&
+          contact.address === address &&
+          contact.paymentID === paymentID
+        );
+        if (!existingContact) {
+          user.addressBook.push({ address, label, paymentID });
+        }
+      }
+      this.setState({ user });
+    };
+
+    this.deleteContact = contact => {
+      const { label, address, paymentID } = contact;
+      const { user } = this.state;
+      let currentContact = user.addressBook.findIndex(contact =>
+        contact.label === label &&
+        contact.address === address &&
+        contact.paymentID === paymentID
+      );
+      user.addressBook.splice(currentContact, 1);
+      this.setState({ user });
     };
 
     this.check2FA = () => {
@@ -373,10 +410,15 @@ class AppContextProvider extends React.Component {
         walletsLoaded: false,
         sendTxResponse: null,
         qrCodeUrl: '',
+        editContactData: {},
       },
       user: {
         userName: '',
         loggedIn: this.Auth.loggedIn(),
+        addressBook: [
+          { address: 'ccx7777xxx123456', label: 'My first contact' },
+          { address: 'ccx7777yyyabcdef', label: 'someone, whatevs', paymentID: 'abc' },
+        ],
       },
       userSettings: {
         updateWalletsInterval: 10,  // seconds
@@ -418,6 +460,9 @@ class AppContextProvider extends React.Component {
         update2FA: this.update2FA,
         getQRCode: this.getQRCode,
         updateUser: this.updateUser,
+        addContact: this.addContact,
+        editContact: this.editContact,
+        deleteContact: this.deleteContact,
       },
       walletActions: {
         createWallet: this.createWallet,

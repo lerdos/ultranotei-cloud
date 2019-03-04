@@ -5,7 +5,7 @@ import { AppContext } from '../ContextProvider';
 import { useFormInput, useFormValidation } from '../../helpers/hooks';
 
 
-const Login = (props) => {
+const Login = props => {
   const { layout, user, userSettings, userActions } = useContext(AppContext);
   const { redirectToReferrer, formSubmitted, message } = layout;
 
@@ -39,7 +39,7 @@ const Login = (props) => {
           <div className="alert alert-outline alert-danger text-center">{message}</div>
         }
 
-        <form onSubmit={(e) => userActions.loginUser(e, email.value, password.value, twoFACode.value)}>
+        <form onSubmit={e => userActions.loginUser(e, email.value, password.value, twoFACode.value)}>
           <div className="form-group">
             <input
               {...email}
