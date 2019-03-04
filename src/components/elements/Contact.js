@@ -3,9 +3,9 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-import { AppContext } from './ContextProvider';
-import ContactModal from './modals/Contact';
-import { maskAddress } from '../helpers/utils';
+import { AppContext } from '../ContextProvider';
+import ContactModal from '../modals/Contact';
+import { maskAddress } from '../../helpers/utils';
 
 
 const Contact = props => {

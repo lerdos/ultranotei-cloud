@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { AppContext } from '../ContextProvider';
 import ContactModal from '../modals/Contact';
-import Contact from '../Contact';
+import Contact from '../elements/Contact';
 
 
 const AddressBook = props => {

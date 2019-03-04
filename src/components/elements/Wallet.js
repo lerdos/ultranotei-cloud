@@ -2,12 +2,12 @@ import React, { useState, useContext } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { AppContext } from './ContextProvider';
-import { maskAddress } from '../helpers/utils';
-import SendModal from './modals/Send';
-import ReceiveModal from './modals/Receive';
-import DetailsModal from './modals/Details';
-import KeysModal from './modals/Keys';
+import { AppContext } from '../ContextProvider';
+import { maskAddress } from '../../helpers/utils';
+import SendModal from '../modals/Send';
+import ReceiveModal from '../modals/Receive';
+import DetailsModal from '../modals/Details';
+import KeysModal from '../modals/Keys';
 
 
 const Wallet = props => {
