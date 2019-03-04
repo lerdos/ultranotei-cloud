@@ -1,23 +1,29 @@
 import React, { useState, useContext } from 'react';
 import Modal from 'react-bootstrap/Modal';
+import { Typeahead } from 'react-bootstrap-typeahead';
 import QrReader from 'react-qr-reader';
 
 import { AppContext } from '../ContextProvider';
-import { useFormInput, useFormValidation } from '../../helpers/hooks';
+import { useFormInput, useFormValidation, useTypeaheadInput } from '../../helpers/hooks';
+import { maskAddress } from '../../helpers/utils';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
+
 
 const SendModal = props => {
-  const { appSettings, layout, userSettings, walletActions } = useContext(AppContext);
+  const { appSettings, layout, user, userSettings, walletActions } = useContext(AppContext);
   const { coinDecimals, defaultFee, messageFee, feePerChar } = appSettings;
   const { sendTxResponse } = layout;
   const { toggleModal, wallet, ...rest } = props;
 
   const [qrReaderOpened, setQrReaderOpened] = useState(false);
-  const address = useFormInput('');
+  const address = useTypeaheadInput('');
   const paymentID = useFormInput('');
   const amount = useFormInput('');
   const message = useFormInput('');
   const twoFACode = useFormInput('');
   const password = useFormInput('');
+  const label = useFormInput('');
 
   const parsedAmount = !Number.isNaN(parseFloat(amount.value)) ? parseFloat(amount.value) : 0;
   const totalMessageFee = message.value.length > 0 ? messageFee + message.value.length * feePerChar : 0;
@@ -118,12 +124,13 @@ const SendModal = props => {
           onSubmit={e => walletActions.sendTx({
             e,
             wallet: props.address,
-            address: address.value,
-            paymentID: paymentID.value,
-            amount: amount.value,
-            message: message.value,
-            twoFACode: twoFACode.value,
-            password: password.value,
+            address,
+            paymentID,
+            amount,
+            message,
+            twoFACode,
+            password,
+            label,
           })}
           className="send-form"
         >
@@ -143,15 +150,31 @@ const SendModal = props => {
                 To
               </div>
               <div className="col-7 col-sm-9">
-                <input
+                <Typeahead
                   {...address}
-                  size={8}
+                  id="address"
+                  labelKey="address"
+                  options={user.addressBook}
                   placeholder="Address"
-                  className="form-control"
-                  name="address"
-                  type="text"
-                  minLength={98}
-                  maxLength={98}
+                  emptyLabel="No records in Address Book"
+                  highlightOnlyResult
+                  selectHintOnEnter
+                  minLength={1}
+                  renderMenuItemChildren={option => {
+                    return [
+                      <strong key="name">
+                        {option.label}
+                      </strong>,
+                      <div key="address">
+                        <small>
+                          Address: <code>{maskAddress(option.address)}</code>
+                          {option.paymentID &&
+                            <span> Payment ID: <code>{maskAddress(option.paymentID)}</code></span>
+                          }
+                        </small>
+                      </div>,
+                    ];
+                  }}
                 />
               </div>
             </div>
@@ -227,6 +250,23 @@ const SendModal = props => {
               </div>
             </div>
 
+            <div className="row no-gutters">
+              <div className="col-5 col-sm-3">
+                Label (optional)
+              </div>
+              <div className="col-7 col-sm-9">
+                <input
+                  {...label}
+                  size={6}
+                  placeholder="Label"
+                  className="form-control"
+                  name="label"
+                  type="text"
+                  minLength={1}
+                />
+              </div>
+            </div>
+
             {userSettings.twoFAEnabled
               ? <div className="row no-gutters">
                   <div className="col-5 col-sm-3">
@@ -267,22 +307,22 @@ const SendModal = props => {
           <hr />
 
           <div className="tx-total sendSection">
-			<div className="tx-total-btns">
-				<button
-				  type="submit"
-				  disabled={!formValid}
-				  className={`btn btn-send ${formValid ? 'btn-outline-success' : 'btn-outline-danger'}`}
-				>
-				  SEND
-				</button>
-				<button
-				  type="button"
-				  className="btn btn-outline-secondary"
-				  onClick={() => setQrReaderOpened(!qrReaderOpened)}
-				>
-				  SCAN QR CODE
-				</button>
-			</div>
+            <div className="tx-total-btns">
+              <button
+                type="submit"
+                disabled={!formValid}
+                className={`btn btn-send ${formValid ? 'btn-outline-success' : 'btn-outline-danger'}`}
+              >
+                SEND
+              </button>
+              <button
+                type="button"
+                className="btn btn-outline-secondary"
+                onClick={() => setQrReaderOpened(!qrReaderOpened)}
+              >
+                SCAN QR CODE
+              </button>
+            </div>
             <span className="tx-right sendSummary">
                 <h2>
                   <span className="tx-total-text">TOTAL</span>&nbsp;

@@ -55,7 +55,7 @@ const Wallet = props => {
             {...props}
             className={`btn btn-outline-dark ${!wallet.loaded || balanceTotal === 0 ? 'disabled' : ''}`}
             onClick={() => toggleSendModal(!sendModalOpen)}
-            disabled={!wallet.loaded || balanceTotal === 0}
+            disabled={!wallet.loaded || balanceTotal === 0 || (balanceTotal === locked)}
           >
             <FontAwesomeIcon icon="arrow-up" fixedWidth />
           </button>

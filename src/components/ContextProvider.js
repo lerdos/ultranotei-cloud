@@ -152,7 +152,7 @@ class AppContextProvider extends React.Component {
     this.addContact = contact => {
       const { e, label, address, paymentID, edit, editingContact } = contact;
       const { user } = this.state;
-      e.preventDefault();
+      if (e) e.preventDefault();
       if (edit) {
         let currentContact = user.addressBook.findIndex(contact =>
           contact.label === editingContact.label &&
@@ -305,11 +305,11 @@ class AppContextProvider extends React.Component {
       }
     };
 
-    this.sendTx = (options) => {
-      const { e, wallet, address, paymentID, amount, message, twoFACode, password } = options;
+    this.sendTx = options => {
+      const { e, wallet, address, paymentID, amount, message, twoFACode, password, label } = options;
       e.preventDefault();
       const { layout } = this.state;
-      this.Api.sendTx(wallet, address, paymentID, amount, message, twoFACode, password)
+      this.Api.sendTx(wallet, address.value, paymentID.value, amount.value, message.value, twoFACode.value, password.value)
         .then(res => {
           if (res.result === 'error' || res.message.error) {
             layout.sendTxResponse = {
@@ -324,7 +324,9 @@ class AppContextProvider extends React.Component {
             message: res.message.result,
           };
           this.setState({ layout });
-          e.target.reset();
+          if (label && label.value !== '' && address.value !== '') {
+            this.addContact({ label: label.value, address: address.value, paymentID: paymentID.value });
+          }
         })
         .catch(e => console.error(e));
     };
@@ -416,8 +418,15 @@ class AppContextProvider extends React.Component {
         userName: '',
         loggedIn: this.Auth.loggedIn(),
         addressBook: [
-          { address: 'ccx7777xxx123456', label: 'My first contact' },
-          { address: 'ccx7777yyyabcdef', label: 'someone, whatevs', paymentID: 'abc' },
+          {
+            address: 'ccx7BnTqX4eAbU7NQPJ6ieAHLyNcRApFiMZVR35fiZzfeoh5HwxGxZZXtznxBsofFP8JB32YYBmtwLdoEirjAbYo4DBZhzjXXX',
+            label: 'My first contact',
+          },
+          {
+            address: 'ccx7BnTqX4eAbU7NQPJ6ieAHLyNcRApFiMZVR35fiZzfeoh5HwxGxZZXtznxBsofFP8JB32YYBmtwLdoEirjAbYo4DBZhzjYYY',
+            label: 'Second one',
+            paymentID: 'X4eAbU7NQPJ6ieAHLyNcRApFiMZVR35fiZzfeoh5HwxGxZZXtznxBsofaswwBnTq',
+          },
         ],
       },
       userSettings: {
