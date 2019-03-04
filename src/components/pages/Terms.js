@@ -10,16 +10,16 @@ const Terms = () => (
         <div className="slim-pageheader">
           <ol className="breadcrumb slim-breadcrumb">
             <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-            <li className="breadcrumb-item active" aria-current="page">Terms and Conditions</li>
+            <li className="breadcrumb-item active" aria-current="page">Terms &amp; Conditions</li>
           </ol>
-          <h6 className="slim-pagetitle">Terms and Conditions</h6>
+          <h6 className="slim-pagetitle">Terms &amp; Conditions</h6>
         </div>
 
         <div className="section-wrapper mg-t-20">
-          <label className="section-title">Terms and Conditions</label>
+          <label className="section-title">Terms &amp; Conditions</label>
           <div className="row">
             <div className="col-lg-12">
-              <h2>Terms & Conditions</h2>
+              <h2>Terms &amp; Conditions</h2>
               <p>
                 Conceal is an open source community project, which means that there is no company behind it. This project is
                 supported by the community, meaning there is no stable, full-time team and no physical headquarters from which

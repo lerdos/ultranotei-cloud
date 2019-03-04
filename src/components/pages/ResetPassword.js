@@ -28,7 +28,7 @@ const ResetPassword = (props) => {
     <div className="signin-wrapper">
 
       <div className="signin-box">
-        <h2 className="slim-logo"><a href="/">Conceal</a> <span className="beta-header">BETA</span></h2>
+        <h2 className="slim-logo"><a href="/">Conceal Cloud</a> <span className="beta-header">BETA</span></h2>
         <h3 className="signin-title-secondary">Reset Password</h3>
 
         {message &&
@@ -96,7 +96,7 @@ const ResetPassword = (props) => {
         <p className="mg-b-0">Already have an account? <Link to="/login">Sign In</Link></p>
         <hr />
         <p className="mg-b-0 box-footer">
-          Copyright 2019 &copy; All Rights Reserved. Conceal Network<br /><Link to="/terms">Terms and Conditions</Link>
+          Copyright 2019 &copy; All Rights Reserved. Conceal Network<br /><Link to="/terms">Terms &amp; Conditions</Link>
         </p>
       </div>
       ​

@@ -31,7 +31,7 @@ const Login = (props) => {
     <div className="signin-wrapper">
 
       <div className="signin-box">
-        <h2 className="slim-logo"><a href="/">Conceal</a> <span className="beta-header">BETA</span></h2>
+        <h2 className="slim-logo"><a href="/">Conceal Cloud</a> <span className="beta-header">BETA</span></h2>
         <h2 className="signin-title-primary">Welcome back!</h2>
         <h3 className="signin-title-secondary">Sign in to continue.</h3>
 
@@ -86,7 +86,7 @@ const Login = (props) => {
         <p className="mg-b-0">Forgot your password? <Link to="/reset_password">Reset It</Link></p>
         <hr />
         <p className="mg-b-0 box-footer">
-          Copyright 2019 &copy; All Rights Reserved. Conceal Network<br /><Link to="/terms">Terms and Conditions</Link>
+          Copyright 2019 &copy; All Rights Reserved. Conceal Network<br /><Link to="/terms">Terms &amp; Conditions</Link>
         </p>
       </div>
       ​

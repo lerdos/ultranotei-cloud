@@ -11,7 +11,7 @@ const Footer = () => {
     <div className="slim-footer">
       <div className="container">
         <p>
-          Copyright 2019 &copy; All Rights Reserved. Conceal Network | <Link to="/terms">Terms and Conditions</Link>
+          Copyright 2019 &copy; All Rights Reserved. Conceal Network | <Link to="/terms">Terms &amp; Conditions</Link>
         </p>
         <p>Version: {appSettings.appVersion} | Last Update: {appSettings.lastUpdate.toUTCString()}</p>
       </div>
