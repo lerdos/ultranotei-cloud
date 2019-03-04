@@ -1306,9 +1306,15 @@ hr {
 }
 
 #dlgExportKeys {
-	width: 80%;
-	max-width: 900px;
-	border: 1px solid #343a40;
+  width: 80%;
+  max-width: 900px;
+  border: 1px solid #343a40;
+}
+
+#dlgAddContact {
+  width: 80%;
+  max-width: 900px;
+  border: 1px solid #343a40;
 }
 
 /******************** the send dialog buttons *********************/

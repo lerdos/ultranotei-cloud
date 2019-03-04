@@ -12,3 +12,9 @@ export const useFormValidation = (init) => {
   useEffect(() => { setFormValid(init) });
   return formValid;
 };
+
+export const useTypeaheadInput = (init) => {
+  const [defaultInputValue, setDefaultInputValue] = useState(init);
+  const onInputChange = value => setDefaultInputValue(value);
+  return { value: defaultInputValue, defaultInputValue, onInputChange };
+};

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { AppContext } from './ContextProvider';
+import { AppContext } from '../ContextProvider';
 
 
 const Footer = () => {

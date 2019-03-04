@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AppContext } from '../ContextProvider';
 
 
-const DetailsModal = (props) => {
+const DetailsModal = props => {
   const { toggleModal, wallet, ...rest } = props;
   const { appSettings } = useContext(AppContext);
 

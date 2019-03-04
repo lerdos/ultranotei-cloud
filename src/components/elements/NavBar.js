@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { AppContext } from './ContextProvider';
+import { AppContext } from '../ContextProvider';
 
 
 const NavBar = () => {
@@ -16,6 +16,11 @@ const NavBar = () => {
           <li className="nav-item">
             <NavLink exact to="/" className="nav-link hot_link" activeClassName="active">
               <FontAwesomeIcon icon="home" fixedWidth /> <span>Dashboard</span>
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink to="/address_book" className="nav-link hot_link" activeClassName="active">
+              <FontAwesomeIcon icon="address-book" fixedWidth /> <span>Address Book</span>
             </NavLink>
           </li>
           <li className="nav-item">

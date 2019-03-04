@@ -2,15 +2,15 @@ import React, { useState, useContext } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { AppContext } from './ContextProvider';
-import { maskAddress } from '../helpers/utils';
-import SendModal from './modals/Send';
-import ReceiveModal from './modals/Receive';
-import DetailsModal from './modals/Details';
-import KeysModal from './modals/Keys';
+import { AppContext } from '../ContextProvider';
+import { maskAddress } from '../../helpers/utils';
+import SendModal from '../modals/Send';
+import ReceiveModal from '../modals/Receive';
+import DetailsModal from '../modals/Details';
+import KeysModal from '../modals/Keys';
 
 
-const Wallet = (props) => {
+const Wallet = props => {
   const { appSettings, walletActions, wallets } = useContext(AppContext);
 
   const [sendModalOpen, toggleSendModal] = useState(false);
@@ -55,11 +55,12 @@ const Wallet = (props) => {
             {...props}
             className={`btn btn-outline-dark ${!wallet.loaded || balanceTotal === 0 ? 'disabled' : ''}`}
             onClick={() => toggleSendModal(!sendModalOpen)}
-            disabled={!wallet.loaded || balanceTotal === 0}
+            disabled={!wallet.loaded || balanceTotal === 0 || (balanceTotal === locked)}
           >
             <FontAwesomeIcon icon="arrow-up" fixedWidth />
           </button>
         </OverlayTrigger>
+
         <OverlayTrigger overlay={<Tooltip id={`${props.address}-receive`} trigger={['hover']}>Receive CCX</Tooltip>}>
           <button
             className={`btn btn-outline-dark ${!wallet.loaded ? 'disabled' : ''}`}
@@ -103,6 +104,7 @@ const Wallet = (props) => {
           </button>
         </OverlayTrigger>
       </div>
+
       <SendModal
         {...props}
         show={sendModalOpen}

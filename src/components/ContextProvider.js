@@ -143,9 +143,46 @@ class AppContextProvider extends React.Component {
     };
 
     this.getUser = () => {
+      const { user } = this.state;
       this.Api.getUser()
-        .then(res => this.setState({ user: res.message }))
+        .then(res => this.setState({ user: {...user, ...res.message} }))
         .catch(e => console.error(e));
+    };
+
+    this.addContact = contact => {
+      const { e, label, address, paymentID, edit, editingContact } = contact;
+      const { user } = this.state;
+      if (e) e.preventDefault();
+      if (edit) {
+        let currentContact = user.addressBook.findIndex(contact =>
+          contact.label === editingContact.label &&
+          contact.address === editingContact.address &&
+          contact.paymentID === editingContact.paymentID
+        );
+        user.addressBook[currentContact] = { label, address, paymentID };
+      } else {
+        const existingContact = user.addressBook.find(contact =>
+          contact.label === label &&
+          contact.address === address &&
+          contact.paymentID === paymentID
+        );
+        if (!existingContact) {
+          user.addressBook.push({ address, label, paymentID });
+        }
+      }
+      this.setState({ user });
+    };
+
+    this.deleteContact = contact => {
+      const { label, address, paymentID } = contact;
+      const { user } = this.state;
+      let currentContact = user.addressBook.findIndex(contact =>
+        contact.label === label &&
+        contact.address === address &&
+        contact.paymentID === paymentID
+      );
+      user.addressBook.splice(currentContact, 1);
+      this.setState({ user });
     };
 
     this.check2FA = () => {
@@ -268,11 +305,11 @@ class AppContextProvider extends React.Component {
       }
     };
 
-    this.sendTx = (options) => {
-      const { e, wallet, address, paymentID, amount, message, twoFACode, password } = options;
+    this.sendTx = options => {
+      const { e, wallet, address, paymentID, amount, message, twoFACode, password, label } = options;
       e.preventDefault();
       const { layout } = this.state;
-      this.Api.sendTx(wallet, address, paymentID, amount, message, twoFACode, password)
+      this.Api.sendTx(wallet, address.value, paymentID.value, amount.value, message.value, twoFACode.value, password.value)
         .then(res => {
           if (res.result === 'error' || res.message.error) {
             layout.sendTxResponse = {
@@ -287,7 +324,9 @@ class AppContextProvider extends React.Component {
             message: res.message.result,
           };
           this.setState({ layout });
-          e.target.reset();
+          if (label && label.value !== '' && address.value !== '') {
+            this.addContact({ label: label.value, address: address.value, paymentID: paymentID.value });
+          }
         })
         .catch(e => console.error(e));
     };
@@ -373,10 +412,22 @@ class AppContextProvider extends React.Component {
         walletsLoaded: false,
         sendTxResponse: null,
         qrCodeUrl: '',
+        editContactData: {},
       },
       user: {
         userName: '',
         loggedIn: this.Auth.loggedIn(),
+        addressBook: [
+          {
+            address: 'ccx7BnTqX4eAbU7NQPJ6ieAHLyNcRApFiMZVR35fiZzfeoh5HwxGxZZXtznxBsofFP8JB32YYBmtwLdoEirjAbYo4DBZhzjXXX',
+            label: 'My first contact',
+          },
+          {
+            address: 'ccx7BnTqX4eAbU7NQPJ6ieAHLyNcRApFiMZVR35fiZzfeoh5HwxGxZZXtznxBsofFP8JB32YYBmtwLdoEirjAbYo4DBZhzjYYY',
+            label: 'Second one',
+            paymentID: 'X4eAbU7NQPJ6ieAHLyNcRApFiMZVR35fiZzfeoh5HwxGxZZXtznxBsofaswwBnTq',
+          },
+        ],
       },
       userSettings: {
         updateWalletsInterval: 10,  // seconds
@@ -418,6 +469,9 @@ class AppContextProvider extends React.Component {
         update2FA: this.update2FA,
         getQRCode: this.getQRCode,
         updateUser: this.updateUser,
+        addContact: this.addContact,
+        editContact: this.editContact,
+        deleteContact: this.deleteContact,
       },
       walletActions: {
         createWallet: this.createWallet,

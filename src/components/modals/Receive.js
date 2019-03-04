@@ -8,7 +8,7 @@ import { AppContext } from '../ContextProvider';
 import { useFormInput } from '../../helpers/hooks';
 
 
-const ReceiveModal = (props) => {
+const ReceiveModal = props => {
   const { toggleModal, ...rest } = props;
   const { appSettings } = useContext(AppContext);
 
@@ -62,7 +62,7 @@ const ReceiveModal = (props) => {
                 <span className="input-group-btn">
                   <CopyToClipboard
                     text={props.address}
-                    onCopy={() => copyClipboard()}
+                    onCopy={copyClipboard}
                   >
                     <button
                       className={`btn btn-no-focus ${addressCopied ? 'btn-outline-success' : 'btn-outline-dark'}`}
