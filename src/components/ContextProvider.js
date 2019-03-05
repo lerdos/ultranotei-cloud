@@ -273,6 +273,7 @@ class AppContextProvider extends React.Component {
           this.Api.getWalletDetails(address)
             .then(res => {
               wallets[address] = res.message;
+              wallets[address].loaded = true;
               appSettings.lastUpdate = new Date();
               this.setState({ appSettings, wallets });
             })
