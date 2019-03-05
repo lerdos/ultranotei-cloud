@@ -55,22 +55,3 @@ Run production npm script (not available yet):
 ```bash
 npm run deploy
 ```
-
-### TODO:
-
- - [x] Resend verification email
- - [x] Limit number of wallets (server side)
- - [ ] Export mnemonic seed
- - [ ] Decide how to handle tx secret key
- - [ ] Add deposits
- - [ ] Add investments
- - [X] Finish CSS
- - [ ] Handle API responses in ContextProvider
- - [ ] Add "get CCX" card
- - [ ] Add pool suggestion card
- - [ ] Address book
- - [ ] Add "buy/sell" option via STEX API?
- - [ ] Add pagination to details table
- - [x] Clear up forms and response messages
- - [X] Change user name, email and avatar in settings
- - [x] Fix mobile CSS

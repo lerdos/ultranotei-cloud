@@ -9,18 +9,15 @@ const Settings = () => {
   const { layout, user, userActions, userSettings } = useContext(AppContext);
   const { formSubmitted, message } = layout;
 
-  // const userName = useFormInput('');
-  const email = useFormInput('');
+  const { value: email, bind: bindEmail } = useFormInput('');
+  const { value: twoFACode, bind: bindTwoFACode, reset: resetTwoFACode } = useFormInput('');
   const [avatar, setAvatar] = useState(user.avatar);
-  const twoFACode = useFormInput('');
   const [twoFADialogOpened, toggle2FADialog] = useState(false);
 
-  // const userNameValidation = (userName.value !== user.name && userName.value.length >= 3);
-  const emailValidation = (email.value !== user.email && email.value.length >= 3);
+  const emailValidation = (email !== user.email && email.length >= 3);
   const avatarValidation = (avatar && avatar.name);
-  const twoFAFormValidation = (parseInt(twoFACode.value) && twoFACode.value.length === 6);
+  const twoFAFormValidation = (parseInt(twoFACode) && twoFACode.length === 6);
 
-  // const userNameValid = useFormValidation(userNameValidation);
   const emailValid = useFormValidation(emailValidation);
   const avatarValid = useFormValidation(avatarValidation);
   const twoFAFormValid = useFormValidation(twoFAFormValidation);
@@ -52,30 +49,6 @@ const Settings = () => {
                     </div>
                     <div className="col-7 col-sm-8 wallet-address">
                       {user.name}
-                      {/*
-                      <form onSubmit={e => userActions.updateUser({ e, userName: userName.value })}>
-                        <div className="input-group">
-                          <input
-                            value={user.name}
-                            placeholder={user.name}
-                            type="text"
-                            name="userName"
-                            className="form-control"
-                            minLength={3}
-                            readOnly={}
-                          />
-                          <span className="input-group-btn">
-                            <button
-                              className="btn btn-no-focus btn-outline-dark btn-uppercase-sm"
-                              type="submit"
-                              disabled={!userNameValid || formSubmitted}
-                            >
-                              Change User Name
-                            </button>
-                          </span>
-                        </div>
-                      </form>
-                      */}
                     </div>
                   </div>
 
@@ -84,10 +57,10 @@ const Settings = () => {
                       Email
                     </div>
                     <div className="col-7 col-sm-8 wallet-address">
-                      <form onSubmit={e => userActions.updateUser({ e, email: email.value })}>
+                      <form onSubmit={e => userActions.updateUser({ e, email })}>
                         <div className="input-group">
                           <input
-                            {...email}
+                            {...bindEmail}
                             placeholder={user.email}
                             type="email"
                             name="email"
@@ -194,7 +167,21 @@ const Settings = () => {
                             <p>
                               Enter the passcode from your authenticator app to disable two-factor authentication.
                             </p>
-                            <form onSubmit={e => userActions.update2FA(e, twoFACode.value, false)}>
+                            <form
+                              onSubmit={e =>
+                                userActions.update2FA(
+                                  {
+                                    e,
+                                    twoFACode,
+                                    enable: false,
+                                  },
+                                  [
+                                    resetTwoFACode,
+                                    toggle2FADialog,
+                                  ],
+                                )
+                              }
+                            >
                               <div className="form-layout form-layout-7">
                                 <div className="row no-gutters">
                                   <div className="col-5 col-sm-4">
@@ -202,7 +189,7 @@ const Settings = () => {
                                   </div>
                                   <div className="col-7 col-sm-8 wallet-address">
                                     <input
-                                      {...twoFACode}
+                                      {...bindTwoFACode}
                                       placeholder="2 Factor Authentication Key"
                                       type="number"
                                       name="twoFACode"
@@ -232,7 +219,21 @@ const Settings = () => {
                               <div>
                                 <img src={layout.qrCodeUrl} alt="QR Code" />
 
-                                <form onSubmit={e => userActions.update2FA(e, twoFACode.value, true)}>
+                                <form
+                                  onSubmit={e =>
+                                    userActions.update2FA(
+                                      {
+                                        e,
+                                        twoFACode,
+                                        enable: true,
+                                      },
+                                      [
+                                        resetTwoFACode,
+                                        toggle2FADialog,
+                                      ],
+                                    )
+                                  }
+                                >
                                   <div className="form-layout form-layout-7">
                                     <div className="row no-gutters">
                                       <div className="col-5 col-sm-4">
@@ -240,7 +241,7 @@ const Settings = () => {
                                       </div>
                                       <div className="col-7 col-sm-8 wallet-address">
                                         <input
-                                          {...twoFACode}
+                                          {...bindTwoFACode}
                                           placeholder="2 Factor Authentication Key"
                                           type="number"
                                           name="twoFACode"

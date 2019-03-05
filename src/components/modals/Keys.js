@@ -16,9 +16,9 @@ const KeysModal = props => {
   const [spendPublicKeyCopied, setSpendPublicKeyCopied] = useState(false);
   const [spendSecretKeyCopied, setSpendSecretKeyCopied] = useState(false);
   const [viewSecretKeyCopied, setViewSecretKeyCopied] = useState(false);
-  const twoFACode = useFormInput('');
+  const { value: twoFACode, bind: bindTwoFACode } = useFormInput('');
 
-  const twoFAFormValidation = (parseInt(twoFACode.value) && twoFACode.value.length === 6);
+  const twoFAFormValidation = (parseInt(twoFACode) && twoFACode.length === 6);
   const twoFAFormValid = useFormValidation(twoFAFormValidation);
 
   const copyClipboard = elem => {
@@ -34,7 +34,7 @@ const KeysModal = props => {
 
   return (
     <Modal
-      { ...rest }
+      {...rest}
       size="lg"
       id="dlgExportKeys"
       onHide={() => toggleModal('receive')}
@@ -144,7 +144,7 @@ const KeysModal = props => {
                   <h5 className="text-center">
                     Please confirm with your 2-Factor Authentication code.
                   </h5>
-                  <form onSubmit={e => walletActions.getWalletKeys(e, props.address, twoFACode.value)}>
+                  <form onSubmit={e => walletActions.getWalletKeys(e, props.address, twoFACode)}>
                     <div className="form-layout form-layout-7">
                       <div className="row no-gutters">
                         <div className="col-5 col-sm-4">
@@ -152,7 +152,7 @@ const KeysModal = props => {
                         </div>
                         <div className="col-7 col-sm-8 wallet-address">
                           <input
-                            {...twoFACode}
+                            {...bindTwoFACode}
                             placeholder="2 Factor Authentication Key"
                             type="number"
                             name="twoFACode"

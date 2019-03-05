@@ -9,15 +9,15 @@ const ContactModal = props => {
   const { contact, toggleModal, ...rest } = props;
   const { userActions } = useContext(AppContext);
 
-  const label = useFormInput(contact ? contact.label : '');
-  const address = useFormInput(contact ? contact.address : '');
-  const paymentID = useFormInput(contact && contact.paymentID === '' ? contact.paymentID : '');
+  const { value: label, bind: bindLabel, reset: resetLabel } = useFormInput(contact ? contact.label : '');
+  const { value: address, bind: bindAddress, reset: resetAddress } = useFormInput(contact ? contact.address : '');
+  const { value: paymentID, bind: bindPaymentID, reset: resetPaymentID } = useFormInput(contact && contact.paymentID ? contact.paymentID : '');
 
   const formValidation = (
-    label.value.length > 0 &&
-    address.value.length === 98 &&
-    address.value.startsWith('ccx7') &&
-    (paymentID.value === '' || paymentID.value.length === 64)
+    label.length > 0 &&
+    address.length === 98 &&
+    address.startsWith('ccx7') &&
+    (paymentID === '' || paymentID.length === 64)
   );
   const formValid = useFormValidation(formValidation);
 
@@ -29,17 +29,28 @@ const ContactModal = props => {
       onHide={() => toggleModal('contact')}
     >
       <Modal.Header closeButton>
-        <Modal.Title>Add New Contact</Modal.Title>
+        <Modal.Title>{!props.contact ? 'Add New' : 'Edit'} Contact</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <form onSubmit={e => userActions.addContact({
-          e,
-          label: label.value,
-          address: address.value,
-          paymentID: paymentID.value,
-          edit: !!props.contact,
-          editingContact: contact,
-        })}>
+        <form
+          onSubmit={e =>
+            userActions.addContact(
+              {
+                e,
+                label,
+                address,
+                paymentID,
+                edit: !!props.contact,
+                editingContact: contact,
+              },
+              [
+                resetLabel,
+                resetAddress,
+                resetPaymentID,
+              ],
+            )
+          }
+        >
           <div className="form-layout form-layout-7">
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
@@ -47,7 +58,7 @@ const ContactModal = props => {
               </div>
               <div className="col-7 col-sm-9 wallet-address">
                 <input
-                  {...label}
+                  {...bindLabel}
                   size={2}
                   placeholder="Label"
                   className="form-control"
@@ -64,7 +75,7 @@ const ContactModal = props => {
               </div>
               <div className="col-7 col-sm-9 wallet-address receive-address">
                 <input
-                  {...address}
+                  {...bindAddress}
                   size={2}
                   placeholder="Address"
                   className="form-control"
@@ -82,7 +93,7 @@ const ContactModal = props => {
               </div>
               <div className="col-7 col-sm-9 wallet-address">
                 <input
-                  {...paymentID}
+                  {...bindPaymentID}
                   size={6}
                   placeholder="Payment ID"
                   className="form-control"

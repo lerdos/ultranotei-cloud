@@ -149,7 +149,7 @@ class AppContextProvider extends React.Component {
         .catch(e => console.error(e));
     };
 
-    this.addContact = contact => {
+    this.addContact = (contact, extras) => {
       const { e, label, address, paymentID, edit, editingContact } = contact;
       const { user } = this.state;
       if (e) e.preventDefault();
@@ -171,6 +171,7 @@ class AppContextProvider extends React.Component {
         }
       }
       this.setState({ user });
+      extras.forEach(fn => fn());
     };
 
     this.deleteContact = contact => {
@@ -190,25 +191,34 @@ class AppContextProvider extends React.Component {
       this.Api.check2FA()
         .then(res => {
           userSettings.twoFAEnabled = res.message.enabled;
+          if (!userSettings.twoFAEnabled) this.getQRCode();
           this.setState({ userSettings });
         })
         .catch(e => console.error(e));
     };
 
-    this.update2FA = (e, code, enable) => {
+    this.update2FA = (options, extras) => {
+      const { e, twoFACode, enable } = options;
       e.preventDefault();
       const { layout, userSettings } = this.state;
       layout.formSubmitted = true;
       layout.message = null;
       this.setState({ layout });
-      this.Api.update2FA(code, enable)
+      this.Api.update2FA(twoFACode, enable)
         .then(res => {
-          this.check2FA();
-          layout.formSubmitted = false;
-          layout.message = res.message[0];
-          this.setState({ layout, userSettings });
+          if (res.result === 'success') {
+            layout.message = `QR Code ${enable ? 'enabled' : 'disabled'}.`;
+            this.check2FA();
+            extras.forEach(fn => fn());
+          } else {
+            layout.message = res.message;
+          }
         })
-        .catch(e => console.error(e));
+        .catch(e => console.error(e))
+        .finally(() => {
+          layout.formSubmitted = false;
+          this.setState({ layout, userSettings });
+        });
     };
 
     this.getQRCode = () => {
@@ -306,11 +316,11 @@ class AppContextProvider extends React.Component {
       }
     };
 
-    this.sendTx = options => {
+    this.sendTx = (options, extras) => {
       const { e, wallet, address, paymentID, amount, message, twoFACode, password, label } = options;
       e.preventDefault();
       const { layout } = this.state;
-      this.Api.sendTx(wallet, address.value, paymentID.value, amount.value, message.value, twoFACode.value, password.value)
+      this.Api.sendTx(wallet, address, paymentID, amount, message, twoFACode, password)
         .then(res => {
           if (res.result === 'error' || res.message.error) {
             layout.sendTxResponse = {
@@ -328,11 +338,12 @@ class AppContextProvider extends React.Component {
           if (label && label.value !== '' && address.value !== '') {
             this.addContact({ label: label.value, address: address.value, paymentID: paymentID.value });
           }
+          extras.forEach(fn => fn());
         })
         .catch(e => console.error(e));
     };
 
-    this.deleteWallet = (address) => {
+    this.deleteWallet = address => {
       const { wallets } = this.state;
       this.Api.deleteWallet(address)
         .then(res => {
@@ -368,7 +379,7 @@ class AppContextProvider extends React.Component {
         .catch(e => console.error(e));
     };
 
-    this.onRouteChanged = (prevProps) => {
+    this.onRouteChanged = prevProps => {
       const { location } = prevProps;
       const isRedirect = this.props.history.action === 'REPLACE';
       if ((location.pathname !== '/signup' && !location.pathname.startsWith('/reset_password')) || !isRedirect) {
@@ -405,6 +416,7 @@ class AppContextProvider extends React.Component {
         depositFee: 0.001,
         investmentFee: 0.001,
         withdrawalFee: 0.0001,
+        qrCodePrefix: 'conceal',
       },
       layout: {
         redirectToReferrer: false,
@@ -418,17 +430,7 @@ class AppContextProvider extends React.Component {
       user: {
         userName: '',
         loggedIn: this.Auth.loggedIn(),
-        addressBook: [
-          {
-            address: 'ccx7BnTqX4eAbU7NQPJ6ieAHLyNcRApFiMZVR35fiZzfeoh5HwxGxZZXtznxBsofFP8JB32YYBmtwLdoEirjAbYo4DBZhzjXXX',
-            label: 'My first contact',
-          },
-          {
-            address: 'ccx7BnTqX4eAbU7NQPJ6ieAHLyNcRApFiMZVR35fiZzfeoh5HwxGxZZXtznxBsofFP8JB32YYBmtwLdoEirjAbYo4DBZhzjYYY',
-            label: 'Second one',
-            paymentID: 'X4eAbU7NQPJ6ieAHLyNcRApFiMZVR35fiZzfeoh5HwxGxZZXtznxBsofaswwBnTq',
-          },
-        ],
+        addressBook: [],
       },
       userSettings: {
         updateWalletsInterval: 10,  // seconds

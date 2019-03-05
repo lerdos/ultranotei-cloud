@@ -16,7 +16,7 @@ const DetailsModal = props => {
 
   return (
     <Modal
-      { ...rest }
+      {...rest}
       size="lg"
       id="dlgTxDetails"
       onHide={() => toggleModal('details')}

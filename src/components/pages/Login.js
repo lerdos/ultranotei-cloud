@@ -9,14 +9,14 @@ const Login = props => {
   const { layout, user, userSettings, userActions } = useContext(AppContext);
   const { redirectToReferrer, formSubmitted, message } = layout;
 
-  const email = useFormInput('');
-  const password = useFormInput('');
-  const twoFACode = useFormInput('');
+  const { value: email, bind: bindEmail, /*reset: resetEmail*/ } = useFormInput('');
+  const { value: password, bind: bindPassword, /*reset: resetPassword*/ } = useFormInput('');
+  const { value: twoFACode, bind: bindTwoFACode, /*reset: resetTwoFACode*/ } = useFormInput('');
 
   const formValidation = (
-    email.value !== '' && email.value.length >= 3 &&
-    password.value !== '' && password.value.length >= userSettings.minimumPasswordLength &&
-    (twoFACode.value !== '' ? (twoFACode.value.length === 6 && parseInt(twoFACode.value)) : true)
+    email !== '' && email.length >= 3 &&
+    password !== '' && password.length >= userSettings.minimumPasswordLength &&
+    (twoFACode !== '' ? (twoFACode.length === 6 && parseInt(twoFACode)) : true)
   );
   const formValid = useFormValidation(formValidation);
 
@@ -39,10 +39,10 @@ const Login = props => {
           <div className="alert alert-outline alert-danger text-center">{message}</div>
         }
 
-        <form onSubmit={e => userActions.loginUser(e, email.value, password.value, twoFACode.value)}>
+        <form onSubmit={e => userActions.loginUser(e, email, password, twoFACode)}>
           <div className="form-group">
             <input
-              {...email}
+              {...bindEmail}
               placeholder="Enter your email"
               type="email"
               name="email"
@@ -53,7 +53,7 @@ const Login = props => {
 
           <div className="form-group mg-b-50">
             <input
-              {...password}
+              {...bindPassword}
               placeholder="Enter your password"
               type="password"
               name="password"
@@ -64,7 +64,7 @@ const Login = props => {
 
           <div className="form-group mg-b-50">
             <input
-              {...twoFACode}
+              {...bindTwoFACode}
               placeholder="2-Factor Authentication (if enabled)"
               type="number"
               name="twoFA"

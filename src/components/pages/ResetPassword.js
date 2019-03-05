@@ -9,16 +9,16 @@ const ResetPassword = props => {
   const { layout, user, userSettings, userActions } = useContext(AppContext);
   const { formSubmitted, message } = layout;
 
-  const email = useFormInput('');
-  const password = useFormInput('');
-  const passwordConfirm = useFormInput('');
+  const { value: email, bind: bindEmail } = useFormInput('');
+  const { value: password, bind: bindPassword } = useFormInput('');
+  const { value: passwordConfirm, bind: bindPasswordConfirm } = useFormInput('');
 
   const formValidation = (
     props.match.params.token
-      ? password.value !== '' && password.value.length >= userSettings.minimumPasswordLength &&
-        passwordConfirm.value !== '' && passwordConfirm.value.length >= userSettings.minimumPasswordLength &&
-        password.value === passwordConfirm.value
-      : email.value !== '' && email.value.length >= 3
+      ? password !== '' && password.length >= userSettings.minimumPasswordLength &&
+        passwordConfirm !== '' && passwordConfirm.length >= userSettings.minimumPasswordLength &&
+        password === passwordConfirm
+      : email !== '' && email.length >= 3
   );
   const formValid = useFormValidation(formValidation);
 
@@ -36,10 +36,10 @@ const ResetPassword = props => {
         }
 
         {props.match.params.token
-          ? <form onSubmit={e => userActions.resetPasswordConfirm(e, password.value, props.match.params.token)}>
+          ? <form onSubmit={e => userActions.resetPasswordConfirm(e, password, props.match.params.token)}>
               <div className="form-group">
                 <input
-                  {...password}
+                  {...bindPassword}
                   placeholder="New Password"
                   type="password"
                   name="password"
@@ -49,7 +49,7 @@ const ResetPassword = props => {
               </div>
               <div className="form-group mg-b-50">
                 <input
-                  {...passwordConfirm}
+                  {...bindPasswordConfirm}
                   placeholder="Confirm New Password"
                   type="password"
                   name="passwordConfirm"
@@ -70,10 +70,10 @@ const ResetPassword = props => {
                 {formSubmitted ? 'Please wait...' : 'Submit'}
               </button>
             </form>
-          : <form onSubmit={e => userActions.resetPassword(e, email.value)}>
+          : <form onSubmit={e => userActions.resetPassword(e, email)}>
             <div className="form-group mg-b-50">
               <input
-                {...email}
+                {...bindEmail}
                 placeholder="Enter your email"
                 type="email"
                 name="email"

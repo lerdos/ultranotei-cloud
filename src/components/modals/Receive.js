@@ -13,21 +13,20 @@ const ReceiveModal = props => {
   const { appSettings } = useContext(AppContext);
 
   const [addressCopied, setAddressCopied] = useState(false);
-  const [qrCodeString, setQrCodeString] = useState(`ccx:${props.address}`);
-  const amount = useFormInput('');
-  const paymentID = useFormInput('');
-  const message = useFormInput('');
+  const [qrCodeString, setQrCodeString] = useState(`${appSettings.qrCodePrefix}:${props.address}`);
+  const { value: amount, bind: bindAmount } = useFormInput('');
+  const { value: paymentID, bind: bindPaymentID } = useFormInput('');
+  const { value: message, bind: bindMessage } = useFormInput('');
 
-  // ccx:ADDRESS?tx_payment_id=PAYMENT_ID&tx_amount=AMOUNT&recipient_name=NAME&tx_description=DESCRIPTION
   useEffect(() => {
     const paramsObject = {};
-    if (amount.value !== '' && parseFloat(amount.value)) paramsObject.tx_amount = amount.value;
-    if (paymentID.value !== '') paramsObject.tx_payment_id = paymentID.value;
-    if (message.value !== '') paramsObject.tx_message = message.value;
+    if (amount !== '' && parseFloat(amount)) paramsObject.tx_amount = amount;
+    if (paymentID !== '') paramsObject.tx_payment_id = paymentID;
+    if (message !== '') paramsObject.tx_message = message;
     const params = Object.keys(paramsObject).length > 0
       ? `?${Object.keys(paramsObject).map(param => `${param}=${paramsObject[param]}`).join('&')}`
       : '';
-    setQrCodeString(`conceal:${props.address}${params}`);
+    setQrCodeString(`${appSettings.qrCodePrefix}:${props.address}${params}`);
   });
 
   const copyClipboard = () => {
@@ -37,7 +36,7 @@ const ReceiveModal = props => {
 
   return (
     <Modal
-      { ...rest }
+      {...rest}
       size="lg"
 	    id="dlgReceiveCoins"
       onHide={() => toggleModal('receive')}
@@ -82,7 +81,7 @@ const ReceiveModal = props => {
             </div>
             <div className="col-7 col-sm-9 wallet-address">
               <input
-                {...amount}
+                {...bindAmount}
                 size={2}
                 placeholder="Amount"
                 className="form-control"
@@ -100,7 +99,7 @@ const ReceiveModal = props => {
             </div>
             <div className="col-7 col-sm-9 wallet-address">
               <input
-                {...paymentID}
+                {...bindPaymentID}
                 size={6}
                 placeholder="Payment ID"
                 className="form-control"
@@ -118,7 +117,7 @@ const ReceiveModal = props => {
             </div>
             <div className="col-7 col-sm-9 wallet-address">
               <input
-                {...message}
+                {...bindMessage}
                 size={6}
                 placeholder="Message"
                 className="form-control"

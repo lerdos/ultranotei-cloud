@@ -17,17 +17,19 @@ const SendModal = props => {
   const { toggleModal, wallet, ...rest } = props;
 
   const [qrReaderOpened, setQrReaderOpened] = useState(false);
-  const address = useTypeaheadInput('');
-  const paymentID = useFormInput('');
-  const amount = useFormInput('');
-  const message = useFormInput('');
-  const twoFACode = useFormInput('');
-  const password = useFormInput('');
-  const label = useFormInput('');
 
-  const parsedAmount = !Number.isNaN(parseFloat(amount.value)) ? parseFloat(amount.value) : 0;
-  const totalMessageFee = message.value.length > 0 ? messageFee + message.value.length * feePerChar : 0;
-  const txFee = parsedAmount > 0 || amount.value !== '' ? defaultFee : 0;
+  const { value: address, bind: bindAddress, reset: resetAddress } = useTypeaheadInput('');
+  const { value: paymentID, bind: bindPaymentID, setValue: setPaymentIDValue, reset: resetPaymentID } = useFormInput('');
+  const { value: amount, bind: bindAmount, setValue: setAmountValue, reset: resetAmount } = useFormInput('');
+  const { value: message, bind: bindMessage, setValue: setMessageValue, reset: resetMessage } = useFormInput('');
+  const { value: twoFACode, bind: bindTwoFACode, reset: resetTwoFACode } = useFormInput('');
+  const { value: password, bind: bindPassword, reset: resetPassword } = useFormInput('');
+  const { value: label, bind: bindLabel, reset: resetLabel } = useFormInput('');
+
+
+  const parsedAmount = !Number.isNaN(parseFloat(amount)) ? parseFloat(amount) : 0;
+  const totalMessageFee = message.length > 0 ? messageFee + message.length * feePerChar : 0;
+  const txFee = parsedAmount > 0 || amount !== '' ? defaultFee : 0;
   const totalTxFee = txFee + totalMessageFee;
   const totalAmount = parsedAmount > 0 ? (parsedAmount + totalTxFee).toFixed(coinDecimals) : totalTxFee;
   const maxValue = totalTxFee > 0
@@ -39,48 +41,37 @@ const SendModal = props => {
   const totalAmountValid = (parsedAmount.toFixed(coinDecimals) >= defaultFee && totalAmount > 0) || messageAmountValid;
 
   const formValidation = (
-    address.value !== props.address &&
-    address.value.length === 98 &&
-    address.value.startsWith('ccx7') &&
+    address !== props.address &&
+    address.length === 98 &&
+    address.startsWith('ccx7') &&
     walletBalanceValid &&
-    totalAmountValid && amount.value.toString().length <= 7 &&
-    (paymentID.value === '' || paymentID.value.length === 64) &&
+    totalAmountValid && amount.toString().length <= 7 &&
+    (paymentID === '' || paymentID.length === 64) &&
     (userSettings.twoFAEnabled
-      ? (parseInt(twoFACode.value) && twoFACode.value.toString().length === 6)
-      : (password.value !== '' && password.value.length >= 8)
+      ? (parseInt(twoFACode) && twoFACode.toString().length === 6)
+      : (password !== '' && password.length >= 8)
     )
   );
   const formValid = useFormValidation(formValidation);
 
-  const calculateMax = () => {
-    const value = maxValue > 0 ? maxValue : 0;
-    amount.onChange({ target: { value } });
-  };
+  const calculateMax = () => setAmountValue(maxValue > 0 ? maxValue : 0);
 
+  let addressInput = null;
   const handleScan = data => {
     if (data) {
       const [prefix, ...rest] = data.split(':');
-      if (prefix === 'conceal') {
+      if (prefix === appSettings.qrCodePrefix) {
         const addressParams = rest.join(':').split('?');
-        address.onChange({ target: { value: addressParams[0] }});
+        let event = new Event('input', { bubbles: true });
+        addressInput.setState({ text: addressParams[0] });
+        addressInput.props.onInputChange(addressParams[0], event);
         if (addressParams.length > 1) {
           const params = addressParams[1].split('&');
-          params.forEach(param => {
-            const splittedParams = param.split('=');
-            const value = splittedParams[1];
-            switch (splittedParams[0]) {
-              case 'tx_amount':
-                amount.onChange({ target: { value }});
-                break;
-              case 'tx_payment_id':
-                paymentID.onChange({ target: { value }});
-                break;
-              case 'tx_message':
-                message.onChange({ target: { value }});
-                break;
-              default:
-                break;
-            }
+          params.forEach(p => {
+            const param = p.split('=');
+            if (param[0] === 'tx_amount') setAmountValue(param[1]);
+            if (param[0] === 'tx_payment_id') setPaymentIDValue(param[1]);
+            if (param[0] === 'tx_message') setMessageValue(param[1]);
           })
         }
       }
@@ -99,7 +90,7 @@ const SendModal = props => {
 
   return (
     <Modal
-      { ...rest }
+      {...rest}
       size="lg"
       id="dlgSendCoins"
       onHide={() => toggleModal('send')}
@@ -121,18 +112,31 @@ const SendModal = props => {
         }
 
         <form
-          onSubmit={e => walletActions.sendTx({
-            e,
-            wallet: props.address,
-            address,
-            paymentID,
-            amount,
-            message,
-            twoFACode,
-            password,
-            label,
-          })}
           className="send-form"
+          onSubmit={e =>
+            walletActions.sendTx(
+              {
+                e,
+                wallet: props.address,
+                address,
+                paymentID,
+                amount,
+                message,
+                twoFACode,
+                password,
+                label,
+              },
+              [
+                resetAddress,
+                resetPaymentID,
+                resetAmount,
+                resetMessage,
+                resetTwoFACode,
+                resetPassword,
+                resetLabel,
+              ],
+            )
+          }
         >
           <div className="form-layout form-layout-7">
 
@@ -151,7 +155,8 @@ const SendModal = props => {
               </div>
               <div className="col-7 col-sm-9">
                 <Typeahead
-                  {...address}
+                  ref={component => addressInput = component ? component.getInstance() : addressInput}
+                  {...bindAddress}
                   id="address"
                   labelKey="address"
                   options={user.addressBook}
@@ -160,11 +165,11 @@ const SendModal = props => {
                   highlightOnlyResult
                   selectHintOnEnter
                   minLength={1}
-                  renderMenuItemChildren={option => {
-                    return [
+                  renderMenuItemChildren={option =>
+                    <>
                       <strong key="name">
                         {option.label}
-                      </strong>,
+                      </strong>
                       <div key="address">
                         <small>
                           Address: <code>{maskAddress(option.address)}</code>
@@ -172,9 +177,9 @@ const SendModal = props => {
                             <span> Payment ID: <code>{maskAddress(option.paymentID)}</code></span>
                           }
                         </small>
-                      </div>,
-                    ];
-                  }}
+                      </div>
+                    </>
+                  }
                 />
               </div>
             </div>
@@ -186,7 +191,7 @@ const SendModal = props => {
               <div className="col-7 col-sm-9">
                 <div className="input-group">
                   <input
-                    {...amount}
+                    {...bindAmount}
                     size={2}
                     placeholder="Amount"
                     className="form-control"
@@ -211,7 +216,7 @@ const SendModal = props => {
               </div>
               <div className="col-7 col-sm-9">
                 <input
-                  {...paymentID}
+                  {...bindPaymentID}
                   size={6}
                   placeholder="Payment ID"
                   className="form-control"
@@ -230,7 +235,7 @@ const SendModal = props => {
               <div className="col-7 col-sm-9">
                 <div className="input-group">
                   <input
-                    {...message}
+                    {...bindMessage}
                     size={6}
                     placeholder="Message"
                     className="form-control"
@@ -256,7 +261,7 @@ const SendModal = props => {
               </div>
               <div className="col-7 col-sm-9">
                 <input
-                  {...label}
+                  {...bindLabel}
                   size={6}
                   placeholder="Label"
                   className="form-control"
@@ -274,7 +279,7 @@ const SendModal = props => {
                   </div>
                   <div className="col-7 col-sm-9">
                     <input
-                      {...twoFACode}
+                      {...bindTwoFACode}
                       size={6}
                       placeholder="2 Factor Authentication"
                       className="form-control"
@@ -291,7 +296,7 @@ const SendModal = props => {
                   </div>
                   <div className="col-7 col-sm-9">
                     <input
-                      {...password}
+                      {...bindPassword}
                       size={6}
                       placeholder="Password"
                       className="form-control"

@@ -9,14 +9,15 @@ const SignUp = () => {
   const { layout, user, userSettings, userActions } = useContext(AppContext);
   const { formSubmitted, message } = layout;
 
-  const userName = useFormInput('');
-  const email = useFormInput('');
-  const password = useFormInput('');
+
+  const { value: userName, bind: bindUserName, /*reset: reseUserName*/ } = useFormInput('');
+  const { value: email, bind: bindEmail, /*reset: resetEmail*/ } = useFormInput('');
+  const { value: password, bind: bindPassword, /*reset: resetPassword*/ } = useFormInput('');
 
   const formValidation = (
-    userName.value !== '' && userName.value.length >= 3 &&
-    email.value !== '' && email.value.length >= 3 &&
-    password.value !== '' && password.value.length >= userSettings.minimumPasswordLength
+    userName !== '' && userName.length >= 3 &&
+    email !== '' && email.length >= 3 &&
+    password !== '' && password.length >= userSettings.minimumPasswordLength
   );
   const formValid = useFormValidation(formValidation);
 
@@ -33,10 +34,10 @@ const SignUp = () => {
           <div className="alert alert-outline alert-danger text-center">{message}</div>
         }
 
-        <form onSubmit={e => userActions.signUpUser(e, userName.value, email.value, password.value)}>
+        <form onSubmit={e => userActions.signUpUser(e, userName, email, password)}>
           <div className="form-group">
             <input
-              {...userName}
+              {...bindUserName}
               placeholder="User Name"
               type="text"
               name="userName"
@@ -46,7 +47,7 @@ const SignUp = () => {
           </div>
           <div className="form-group">
             <input
-              {...email}
+              {...bindEmail}
               placeholder="E-mail"
               type="email"
               name="email"
@@ -56,7 +57,7 @@ const SignUp = () => {
           </div>
           <div className="form-group mg-b-50">
             <input
-              {...password}
+              {...bindPassword}
               placeholder="Password"
               type="password"
               name="password"
