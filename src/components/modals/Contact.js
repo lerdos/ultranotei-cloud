@@ -117,7 +117,7 @@ const ContactModal = props => {
           <button
             type="submit"
             disabled={!formValid}
-            className="btn btn-outline-primary"
+            className="btn btn-outline-primary btn-uppercase-sm btnSaveContact"
           >
             SAVE
           </button>

@@ -1458,4 +1458,9 @@ body {
   padding-bottom: 75px;
 }
 
-/******************** sticky footer at bottom  *********************/
+/******************** save contact button *********************/
+
+.btnSaveContact {
+	margin-top: 15px;
+}
+	
