@@ -13,16 +13,19 @@ const ReceiveModal = props => {
   const { appSettings } = useContext(AppContext);
 
   const [addressCopied, setAddressCopied] = useState(false);
+  const [qrCodeLarge, setQRCodeLarge] = useState(false);
   const [qrCodeString, setQrCodeString] = useState(`${appSettings.qrCodePrefix}:${props.address}`);
   const { value: amount, bind: bindAmount } = useFormInput('');
   const { value: paymentID, bind: bindPaymentID } = useFormInput('');
   const { value: message, bind: bindMessage } = useFormInput('');
+  const { value: label, bind: bindLabel } = useFormInput('');
 
   useEffect(() => {
     const paramsObject = {};
     if (amount !== '' && parseFloat(amount)) paramsObject.tx_amount = amount;
     if (paymentID !== '') paramsObject.tx_payment_id = paymentID;
     if (message !== '') paramsObject.tx_message = message;
+    if (label !== '') paramsObject.tx_label = label;
     const params = Object.keys(paramsObject).length > 0
       ? `?${Object.keys(paramsObject).map(param => `${param}=${paramsObject[param]}`).join('&')}`
       : '';
@@ -128,8 +131,29 @@ const ReceiveModal = props => {
           </div>
 
           <div className="row no-gutters">
+            <div className="col-5 col-sm-3">
+              Label (optional)
+            </div>
+            <div className="col-7 col-sm-9 wallet-address">
+              <input
+                {...bindLabel}
+                size={6}
+                placeholder="Label"
+                className="form-control"
+                name="label"
+                type="text"
+              />
+            </div>
+          </div>
+
+          <div className="row no-gutters">
             <div className="col-12 col-sm-12 justify-content-center">
-              <QRCode value={qrCodeString} size={256} includeMargin />
+              <QRCode
+                value={qrCodeString}
+                size={qrCodeLarge ? 512 : 256}
+                includeMargin
+                onClick={() => setQRCodeLarge(!qrCodeLarge)}
+              />
             </div>
           </div>
 

@@ -24,7 +24,7 @@ const SendModal = props => {
   const { value: message, bind: bindMessage, setValue: setMessageValue, reset: resetMessage } = useFormInput('');
   const { value: twoFACode, bind: bindTwoFACode, reset: resetTwoFACode } = useFormInput('');
   const { value: password, bind: bindPassword, reset: resetPassword } = useFormInput('');
-  const { value: label, bind: bindLabel, reset: resetLabel } = useFormInput('');
+  const { value: label, bind: bindLabel, setValue: setLabelValue, reset: resetLabel } = useFormInput('');
 
 
   const parsedAmount = !Number.isNaN(parseFloat(amount)) ? parseFloat(amount) : 0;
@@ -72,6 +72,7 @@ const SendModal = props => {
             if (param[0] === 'tx_amount') setAmountValue(param[1]);
             if (param[0] === 'tx_payment_id') setPaymentIDValue(param[1]);
             if (param[0] === 'tx_message') setMessageValue(param[1]);
+            if (param[0] === 'tx_label') setLabelValue(param[1]);
           })
         }
       }
