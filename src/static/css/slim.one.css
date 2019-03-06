@@ -1396,9 +1396,17 @@ hr {
 
 /******************** mobile forms  *********************/
 
+.form-layout .row .col-5 {
+	text-align: right;
+}
+
 @media (max-width: 700px) {
 	.form-layout .row {
 		display: block !important;
+	}
+
+	.form-layout .row .col-5 {
+		text-align: left;
 	}
 
 	.form-layout .row .col-5,
@@ -1449,3 +1457,5 @@ body {
 #root {
   padding-bottom: 75px;
 }
+
+/******************** sticky footer at bottom  *********************/
