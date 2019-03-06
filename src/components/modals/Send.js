@@ -168,14 +168,14 @@ const SendModal = props => {
                   minLength={1}
                   renderMenuItemChildren={option =>
                     <>
-                      <strong key="name">
+                      <strong className="addrDropdownLabel" key="name">
                         {option.label}
                       </strong>
-                      <div key="address">
+                      <div className="addrDropdownLabel" key="address">
                         <small>
-                          Address: <code>{maskAddress(option.address)}</code>
+                          Address: <span className="addrDropdownAddress">{maskAddress(option.address)}</span>
                           {option.paymentID &&
-                            <span> Payment ID: <code>{maskAddress(option.paymentID)}</code></span>
+                            <span> ( Payment ID: <span className="addrDropdownAddress">{maskAddress(option.paymentID)}</span> )</span>
                           }
                         </small>
                       </div>

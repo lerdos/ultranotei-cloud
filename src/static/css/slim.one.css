@@ -1464,3 +1464,21 @@ body {
 	margin-top: 15px;
 }
 	
+/******************** address dropdown menu *********************/
+	
+.addrDropdownLabel {
+	color: #6c757d;
+}
+
+.addrDropdownAddress {
+	color: rgb(255, 255, 255);	
+}
+#address {
+	border: 1px solid #6c757d;
+}
+
+#address .dropdown-item:hover, #address .dropdown-item:focus {
+	color: #16181b;
+	text-decoration: none;
+	background-color: rgb(255, 255, 255, 0.1);	
+}
