@@ -1426,3 +1426,26 @@ hr {
 		padding: 20px;
 	}
 }
+
+/******************** sticky footer at bottom  *********************/
+
+.slim-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+  overflow-x:hidden;
+  width:100vw;
+}
+
+body {
+  height: 100%;
+}
+
+#root {
+  padding-bottom: 75px;
+}
