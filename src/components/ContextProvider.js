@@ -143,47 +143,38 @@ class AppContextProvider extends React.Component {
     };
 
     this.getUser = () => {
-      const { user } = this.state;
+      const { layout, user } = this.state;
       this.Api.getUser()
         .then(res => this.setState({ user: {...user, ...res.message} }))
-        .catch(e => console.error(e));
+        .catch(e => console.error(e))
+        .finally(() => {
+          layout.userLoaded = true;
+          this.setState({ layout });
+        });
     };
 
     this.addContact = (contact, extras) => {
-      const { e, label, address, paymentID, edit, editingContact } = contact;
-      const { user } = this.state;
+      const { e, label, address, paymentID, entryID, edit } = contact;
       if (e) e.preventDefault();
-      if (edit) {
-        let currentContact = user.addressBook.findIndex(contact =>
-          contact.label === editingContact.label &&
-          contact.address === editingContact.address &&
-          contact.paymentID === editingContact.paymentID
-        );
-        user.addressBook[currentContact] = { label, address, paymentID };
-      } else {
-        const existingContact = user.addressBook.find(contact =>
-          contact.label === label &&
-          contact.address === address &&
-          contact.paymentID === paymentID
-        );
-        if (!existingContact) {
-          user.addressBook.push({ address, label, paymentID });
-        }
-      }
-      this.setState({ user });
-      extras.forEach(fn => fn());
+      this.Api.addContact(label, address, paymentID, entryID, edit)
+        .then(res => {
+          if (res.result === 'success') {
+            this.getUser();
+            extras.forEach(fn => fn())
+          }
+        })
+        .catch(e => console.error(e));
     };
 
     this.deleteContact = contact => {
-      const { label, address, paymentID } = contact;
-      const { user } = this.state;
-      let currentContact = user.addressBook.findIndex(contact =>
-        contact.label === label &&
-        contact.address === address &&
-        contact.paymentID === paymentID
-      );
-      user.addressBook.splice(currentContact, 1);
-      this.setState({ user });
+      const { entryID } = contact;
+      this.Api.deleteContact(entryID)
+        .then(res => {
+          if (res.result === 'success') {
+            this.getUser();
+          }
+        })
+        .catch(e => console.error(e));
     };
 
     this.check2FA = () => {
@@ -422,6 +413,7 @@ class AppContextProvider extends React.Component {
         redirectToReferrer: false,
         formSubmitted: false,
         message: null,
+        userLoaded: false,
         walletsLoaded: false,
         sendTxResponse: null,
         qrCodeUrl: '',

@@ -7,7 +7,7 @@ import Contact from '../elements/Contact';
 
 
 const AddressBook = props => {
-  const { user } = useContext(AppContext);
+  const { layout, user } = useContext(AppContext);
 
   const [contactModalOpen, toggleContactModal] = useState(false);
 
@@ -36,7 +36,7 @@ const AddressBook = props => {
             </div>
             <div className="row">
               <div className="col-lg-12">
-                {user.addressBook.length === 0
+                {layout.userLoaded && user.addressBook.length === 0
                   ? <div>
                       You have no contacts saved in your address book.
                       Add one by clicking on the button or when you are sending funds.

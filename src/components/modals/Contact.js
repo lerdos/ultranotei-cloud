@@ -11,14 +11,22 @@ const ContactModal = props => {
 
   const { value: label, bind: bindLabel, reset: resetLabel } = useFormInput(contact ? contact.label : '');
   const { value: address, bind: bindAddress, reset: resetAddress } = useFormInput(contact ? contact.address : '');
-  const { value: paymentID, bind: bindPaymentID, reset: resetPaymentID } = useFormInput(contact && contact.paymentID ? contact.paymentID : '');
+  const { value: paymentID, bind: bindPaymentID, reset: resetPaymentID } = useFormInput(contact ? contact.paymentID : '');
 
-  const formValidation = (
-    label.length > 0 &&
-    address.length === 98 &&
-    address.startsWith('ccx7') &&
-    (paymentID === '' || paymentID.length === 64)
-  );
+  const formValidation = contact
+    ? (
+        label.length > 0 &&
+        address.length === 98 &&
+        address.startsWith('ccx7') &&
+        (paymentID === '' || paymentID.length === 64) &&
+        !(label === contact.label && address === contact.address && paymentID === contact.paymentID)
+      )
+    : (
+        label.length > 0 &&
+        address.length === 98 &&
+        address.startsWith('ccx7') &&
+        (paymentID === '' || paymentID.length === 64)
+      );
   const formValid = useFormValidation(formValidation);
 
   return (
@@ -40,13 +48,14 @@ const ContactModal = props => {
                 label,
                 address,
                 paymentID,
+                entryID: contact ? contact.entryID : null,
                 edit: !!props.contact,
-                editingContact: contact,
               },
               [
                 resetLabel,
                 resetAddress,
                 resetPaymentID,
+                toggleModal,
               ],
             )
           }
