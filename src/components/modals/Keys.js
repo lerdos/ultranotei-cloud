@@ -150,7 +150,7 @@ const KeysModal = props => {
                         <div className="col-5 col-sm-4">
                           2FA Key
                         </div>
-                        <div className="col-7 col-sm-8 wallet-address">
+                        <div className="col-7 col-sm-8">
                           <input
                             {...bindTwoFACode}
                             placeholder="2 Factor Authentication Key"
