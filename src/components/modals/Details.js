@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import Modal from 'react-bootstrap/Modal';
+import Moment from 'react-moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { AppContext } from '../ContextProvider';
@@ -38,7 +39,7 @@ const DetailsModal = props => {
                     }
                   </div>
                   <div className="media-body">
-                    <small className="mg-b-10 tx-timestamp">{tx.timestamp}</small>
+                    <small className="mg-b-10 tx-timestamp"><Moment>{tx.timestamp}</Moment></small>
                     <p className="mg-b-5">
                       <span className="tx-amount">{tx.amount.toLocaleString(undefined, formatOptions)} CCX</span>&nbsp;
                       <small className="tx-fee">FEE: {tx.fee.toLocaleString(undefined, formatOptions)}</small>
