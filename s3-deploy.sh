@@ -15,8 +15,8 @@ if [[ "$3" == "" ]]; then
     exit 1;
 fi
 
-#npm install
-#export REACT_APP_API_ENDPOINT="$3" && npm run-script build
+npm install
+export REACT_APP_API_ENDPOINT="$3" && npm run-script build
 
 if [[ "$1" == "live" ]]; then
     DOMAIN="conceal.cloud"
