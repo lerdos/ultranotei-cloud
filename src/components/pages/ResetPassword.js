@@ -6,7 +6,9 @@ import { useFormInput, useFormValidation } from '../../helpers/hooks';
 
 
 const ResetPassword = props => {
-  const { layout, user, userSettings, userActions } = useContext(AppContext);
+  const { actions, state } = useContext(AppContext);
+  const { resetPassword, resetPasswordConfirm } = actions;
+  const { layout, user, userSettings } = state;
   const { formSubmitted, message } = layout;
 
   const { value: email, bind: bindEmail } = useFormInput('');
@@ -36,7 +38,7 @@ const ResetPassword = props => {
         }
 
         {props.match.params.token
-          ? <form onSubmit={e => userActions.resetPasswordConfirm(e, password, props.match.params.token)}>
+          ? <form onSubmit={e => resetPasswordConfirm(e, password, props.match.params.token)}>
               <div className="form-group">
                 <input
                   {...bindPassword}
@@ -70,7 +72,7 @@ const ResetPassword = props => {
                 {formSubmitted ? 'Please wait...' : 'Submit'}
               </button>
             </form>
-          : <form onSubmit={e => userActions.resetPassword(e, email)}>
+          : <form onSubmit={e => resetPassword(e, email)}>
             <div className="form-group mg-b-50">
               <input
                 {...bindEmail}

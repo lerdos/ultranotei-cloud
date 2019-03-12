@@ -6,12 +6,14 @@ import { useFormInput, useFormValidation } from '../../helpers/hooks';
 
 
 const Login = props => {
-  const { layout, user, userSettings, userActions } = useContext(AppContext);
+  const { actions, state } = useContext(AppContext);
+  const { loginUser } = actions;
+  const { layout, user, userSettings } = state;
   const { redirectToReferrer, formSubmitted, message } = layout;
 
-  const { value: email, bind: bindEmail, /*reset: resetEmail*/ } = useFormInput('');
-  const { value: password, bind: bindPassword, /*reset: resetPassword*/ } = useFormInput('');
-  const { value: twoFACode, bind: bindTwoFACode, /*reset: resetTwoFACode*/ } = useFormInput('');
+  const { value: email, bind: bindEmail } = useFormInput('');
+  const { value: password, bind: bindPassword } = useFormInput('');
+  const { value: twoFACode, bind: bindTwoFACode } = useFormInput('');
 
   const formValidation = (
     email !== '' && email.length >= 3 &&
@@ -23,7 +25,7 @@ const Login = props => {
   if (user.loggedIn) return <Redirect to="/" />;
 
   if (redirectToReferrer) {
-    const { from } = props.location.state || { from: { pathname: '/' } };
+    const { from } = props.location.state;
     return <Redirect to={from} />;
   }
 
@@ -39,7 +41,7 @@ const Login = props => {
           <div className="alert alert-outline alert-danger text-center">{message}</div>
         }
 
-        <form onSubmit={e => userActions.loginUser(e, email, password, twoFACode)}>
+        <form onSubmit={e => loginUser(e, email, password, twoFACode)}>
           <div className="form-group">
             <input
               {...bindEmail}

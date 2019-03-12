@@ -4,7 +4,8 @@ import { AppContext } from '../ContextProvider';
 
 
 const Market = () => {
-  const { markets } = useContext(AppContext);
+  const { state } = useContext(AppContext);
+  const { markets } = state;
 
   const btcFormatOptions = { minimumFractionDigits: 8, maximumFractionDigits: 8 };
   const volumeFormatOptions = { minimumFractionDigits: 4, maximumFractionDigits: 4 };

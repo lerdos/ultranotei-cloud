@@ -4,7 +4,8 @@ import { AppContext } from '../ContextProvider';
 
 
 const Height = () => {
-  const { network } = useContext(AppContext);
+  const { state } = useContext(AppContext);
+  const { network } = state;
 
   return (
     <div className="dash-content">

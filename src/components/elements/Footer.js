@@ -5,7 +5,8 @@ import { AppContext } from '../ContextProvider';
 
 
 const Footer = () => {
-  const { appSettings } = useContext(AppContext);
+  const { state } = useContext(AppContext);
+  const { appSettings, layout } = state;
 
   return (
     <div className="slim-footer">
@@ -13,7 +14,7 @@ const Footer = () => {
         <p>
           Copyright 2019 &copy; All Rights Reserved. Conceal Network | <Link to="/terms">Terms &amp; Conditions</Link>
         </p>
-        <p>Version: {appSettings.appVersion} | Last Update: {appSettings.lastUpdate.toUTCString()}</p>
+        <p>Version: {appSettings.appVersion} | Last Update: {layout.lastUpdate.toUTCString()}</p>
       </div>
     </div>
   )

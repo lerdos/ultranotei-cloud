@@ -4,7 +4,8 @@ import { AppContext } from '../ContextProvider';
 
 
 const Transactions = () => {
-  const { wallets } = useContext(AppContext);
+  const { state } = useContext(AppContext);
+  const { wallets } = state;
 
   const totalTx = Object.keys(wallets).reduce((acc, curr) => wallets[curr].transactions ? acc + wallets[curr].transactions.length : acc, 0);
 

@@ -6,8 +6,9 @@ import ContactModal from '../modals/Contact';
 import Contact from '../elements/Contact';
 
 
-const AddressBook = props => {
-  const { layout, user } = useContext(AppContext);
+const AddressBook = () => {
+  const { state } = useContext(AppContext);
+  const { layout, user } = state;
 
   const [contactModalOpen, toggleContactModal] = useState(false);
 

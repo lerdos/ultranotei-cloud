@@ -13,7 +13,9 @@ import Market from '../cards/Market';
 
 
 const Dashboard = () => {
-  const { appSettings, layout, wallets, walletActions } = useContext(AppContext);
+  const { actions, state } = useContext(AppContext);
+  const { walletActions } = actions;
+  const { appSettings, layout, wallets } = state;
 
   const walletsKeys = Object.keys(wallets);
 

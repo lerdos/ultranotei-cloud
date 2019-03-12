@@ -7,19 +7,17 @@ import NavBar from './elements/NavBar';
 import Footer from './elements/Footer';
 
 
-class PrivateRoute extends React.Component {
+const Auth = new AuthHelper();
 
-  Auth = new AuthHelper();
+const PrivateRoute = props => {
+  const { component: Component, ...rest } = props;
 
-  render() {
-    const { component: Component, ...rest } = this.props;
-
-    return (
-      <Route
-        {...rest}
-        render={props =>
-          this.Auth.loggedIn()
-            ? (
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        Auth.loggedIn()
+          ? (
               <>
                 <Header />
                 <NavBar />
@@ -27,11 +25,12 @@ class PrivateRoute extends React.Component {
                 <Footer />
               </>
             )
-            : (<Redirect to={{ pathname: '/login', state: { from: props.location } }}/>)
-        }
-      />
-    );
-  }
-}
+          : (
+              <Redirect to={{ pathname: '/login', state: { from: props.location } }}/>
+            )
+      }
+    />
+  );
+};
 
 export default PrivateRoute;

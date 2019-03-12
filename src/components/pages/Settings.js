@@ -6,7 +6,9 @@ import { useFormInput, useFormValidation } from '../../helpers/hooks';
 
 
 const Settings = () => {
-  const { layout, user, userActions, userSettings } = useContext(AppContext);
+  const { actions, state } = useContext(AppContext);
+  const { getQRCode, updateUser, resetPassword, update2FA } = actions;
+  const { layout, user, userSettings } = state;
   const { formSubmitted, message } = layout;
 
   const { value: email, bind: bindEmail } = useFormInput('');
@@ -57,7 +59,7 @@ const Settings = () => {
                       Email
                     </div>
                     <div className="col-7 col-sm-8 wallet-address">
-                      <form onSubmit={e => userActions.updateUser({ e, email })}>
+                      <form onSubmit={e => updateUser({ e, email })}>
                         <div className="input-group">
                           <input
                             {...bindEmail}
@@ -101,7 +103,7 @@ const Settings = () => {
                             onClick={e => {
                               const data = new FormData();
                               data.append('file', avatar, avatar.name);
-                              userActions.updateUser({ e, avatar: data });
+                              updateUser({ e, avatar: data });
                             }}
                           >
                             Change Avatar
@@ -127,7 +129,7 @@ const Settings = () => {
                           className="btn btn-outline-primary btn-uppercase-sm"
                           onClick={e =>
                             window.confirm('Send reset password email? You will be logged out!') &&
-                            userActions.resetPassword(e, user.email)}
+                            resetPassword(e, user.email)}
                           >
                           Reset Password
                         </button>
@@ -152,7 +154,7 @@ const Settings = () => {
                           className={`btn btn-uppercase-sm ${userSettings.twoFAEnabled ? 'btn-outline-danger' : 'btn-outline-success' }`}
                           onClick={() => {
                             toggle2FADialog(!twoFADialogOpened);
-                            if (layout.qrCodeUrl === '') userActions.getQRCode();
+                            if (layout.qrCodeUrl === '') getQRCode();
                           }}
                           >
                           {userSettings.twoFAEnabled ? 'Disable' : 'Enable' }
@@ -169,7 +171,7 @@ const Settings = () => {
                             </p>
                             <form
                               onSubmit={e =>
-                                userActions.update2FA(
+                                update2FA(
                                   {
                                     e,
                                     twoFACode,
@@ -221,7 +223,7 @@ const Settings = () => {
 
                                 <form
                                   onSubmit={e =>
-                                    userActions.update2FA(
+                                    update2FA(
                                       {
                                         e,
                                         twoFACode,
