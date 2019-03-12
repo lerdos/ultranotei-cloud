@@ -28,7 +28,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "",
-    "aws:dev": "rm -rf ./build && react-scripts build && aws s3 cp --recursive ./build/ s3://ccx-webwallet-dev-v0.1.0/ --profile=priv --cache-control max-age=30 --region=us-west-2 --metadata-directive REPLACE"
+    "aws:dev": "rm -rf ./build && react-scripts build && aws s3 cp --recursive ./build/ s3://staging.conceal.cloud/ --profile=conceal --cache-control max-age=30 --metadata-directive REPLACE"
   },
   "eslintConfig": {
     "extends": "react-app"
