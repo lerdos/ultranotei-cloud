@@ -8,7 +8,8 @@ import { AppContext } from '../ContextProvider';
 
 const DetailsModal = props => {
   const { toggleModal, wallet, ...rest } = props;
-  const { appSettings } = useContext(AppContext);
+  const { state } = useContext(AppContext);
+  const { appSettings } = state;
 
   const formatOptions = {
     minimumFractionDigits: appSettings.coinDecimals,

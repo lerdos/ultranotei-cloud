@@ -9,8 +9,9 @@ import { useFormInput } from '../../helpers/hooks';
 
 
 const ReceiveModal = props => {
+  const { state } = useContext(AppContext);
+  const { appSettings } = state;
   const { toggleModal, ...rest } = props;
-  const { appSettings } = useContext(AppContext);
 
   const [addressCopied, setAddressCopied] = useState(false);
   const [qrCodeLarge, setQRCodeLarge] = useState(false);

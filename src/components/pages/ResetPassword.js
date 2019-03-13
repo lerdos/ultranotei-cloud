@@ -24,7 +24,7 @@ const ResetPassword = props => {
   );
   const formValid = useFormValidation(formValidation);
 
-  if (user.loggedIn) return <Redirect to="/" />;
+  if (user.loggedIn()) return <Redirect to="/" />;
 
   return (
     <div className="signin-wrapper">

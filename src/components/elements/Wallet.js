@@ -11,15 +11,16 @@ import KeysModal from '../modals/Keys';
 
 
 const Wallet = props => {
-  const { appSettings, walletActions, wallets } = useContext(AppContext);
+  const { actions, state } = useContext(AppContext);
+  const { deleteWallet } = actions;
+  const { appSettings } = state;
 
   const [sendModalOpen, toggleSendModal] = useState(false);
   const [receiveModalOpen, toggleReceiveModal] = useState(false);
   const [detailsModalOpen, toggleDetailsModal] = useState(false);
   const [keysModalOpen, toggleKeysModal] = useState(false);
 
-  const wallet = wallets[props.address];
-
+  const wallet = props.wallet;
   const txs = wallet.transactions || [];
   const txIn = txs.length > 0 ? wallet.transactions.filter(t => t.type === 'received') : [];
   const txOut = txs.length > 0 ? wallet.transactions.filter(t => t.type === 'sent') : [];
@@ -96,7 +97,7 @@ const Wallet = props => {
             className={`btn btn-outline-dark ${!wallet.loaded || balanceTotal !== 0 ? 'disabled' : ''}`}
             onClick={() => {
               window.confirm('You are about to delete this wallet PERMANENTLY! Do you really wish to proceed?') &&
-              walletActions.deleteWallet(props.address);
+              deleteWallet(props.address);
             }}
             disabled={!wallet.loaded || balanceTotal !== 0}
           >

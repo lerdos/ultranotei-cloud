@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 
 export const useFormInput = (init) => {
@@ -17,6 +17,7 @@ export const useFormValidation = (init) => {
 export const useTypeaheadInput = (init) => {
   const [defaultInputValue, setDefaultInputValue] = useState(init);
   const onInputChange = value => setDefaultInputValue(value);
+  const onChange = value => value.length > 0 && setDefaultInputValue(value[0].address);
   const reset = () => setDefaultInputValue('');
-  return { bind: { defaultInputValue, onInputChange }, reset, setDefaultInputValue, value: defaultInputValue };
+  return { bind: { defaultInputValue, onInputChange, onChange }, reset, setDefaultInputValue, value: defaultInputValue };
 };

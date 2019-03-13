@@ -20,15 +20,15 @@ const Market = () => {
           <div className="row">
             <div className="col">
               <label className="tx-12">Ask</label>
-              <p>{markets[market].ask.toLocaleString(undefined, btcFormatOptions)}</p>
+              <p>{parseFloat(markets[market].ask).toLocaleString(undefined, btcFormatOptions)}</p>
             </div>
             <div className="col">
               <label className="tx-12">Bid</label>
-              <p>{markets[market].bid.toLocaleString(undefined, btcFormatOptions)}</p>
+              <p>{parseFloat(markets[market].bid).toLocaleString(undefined, btcFormatOptions)}</p>
             </div>
             <div className="col">
               <label className="tx-12">Volume</label>
-              <p>{markets[market].volume.toLocaleString(undefined, volumeFormatOptions)}</p>
+              <p>{parseFloat(markets[market].volume).toLocaleString(undefined, volumeFormatOptions)}</p>
             </div>
           </div>
         </React.Fragment>

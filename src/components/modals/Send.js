@@ -11,9 +11,11 @@ import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 
 
 const SendModal = props => {
-  const { appSettings, layout, user, userSettings, walletActions } = useContext(AppContext);
+  const { actions, state } = useContext(AppContext);
+  const { sendTx } = actions;
+  const { appSettings, layout, user, userSettings } = state;
   const { coinDecimals, defaultFee, messageFee, feePerChar } = appSettings;
-  const { sendTxResponse } = layout;
+  const { formSubmitted, sendTxResponse } = layout;
   const { toggleModal, wallet, ...rest } = props;
 
   const [qrReaderOpened, setQrReaderOpened] = useState(false);
@@ -115,7 +117,7 @@ const SendModal = props => {
         <form
           className="send-form"
           onSubmit={e =>
-            walletActions.sendTx(
+            sendTx(
               {
                 e,
                 wallet: props.address,
@@ -160,6 +162,7 @@ const SendModal = props => {
                   {...bindAddress}
                   id="address"
                   labelKey="address"
+                  filterBy={['address', 'label', 'paymentID']}
                   options={user.addressBook}
                   placeholder="Address"
                   emptyLabel="No records in Address Book"
@@ -316,15 +319,16 @@ const SendModal = props => {
             <div className="tx-total-btns">
               <button
                 type="submit"
-                disabled={!formValid}
+                disabled={formSubmitted || !formValid}
                 className={`btn btn-send ${formValid ? 'btn-outline-success' : 'btn-outline-danger'}`}
               >
-                SEND
+                {formSubmitted ? 'SENDING' : 'SEND'}
               </button>
               <button
                 type="button"
                 className="btn btn-outline-secondary"
                 onClick={() => setQrReaderOpened(!qrReaderOpened)}
+                disabled={formSubmitted}
               >
                 SCAN QR CODE
               </button>

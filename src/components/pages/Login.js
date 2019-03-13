@@ -22,9 +22,9 @@ const Login = props => {
   );
   const formValid = useFormValidation(formValidation);
 
-  if (user.loggedIn) return <Redirect to="/" />;
+  if (user.loggedIn()) return <Redirect to="/" />;
 
-  if (redirectToReferrer) {
+  if (redirectToReferrer && props.location.state) {
     const { from } = props.location.state;
     return <Redirect to={from} />;
   }

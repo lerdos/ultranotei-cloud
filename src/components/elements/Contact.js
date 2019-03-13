@@ -9,7 +9,8 @@ import { maskAddress } from '../../helpers/utils';
 
 
 const Contact = props => {
-  const { userActions } = useContext(AppContext);
+  const { actions } = useContext(AppContext);
+  const { deleteContact } = actions;
   const { contact } = props;
 
   const [contactModalOpen, toggleContactModal] = useState(false);
@@ -57,7 +58,7 @@ const Contact = props => {
             className="btn btn-outline-dark"
             onClick={() => {
               window.confirm('You are about to delete this contact! Do you really wish to proceed?') &&
-              userActions.deleteContact(contact);
+              deleteContact(contact);
             }}
           >
             <FontAwesomeIcon icon="trash-alt" fixedWidth />

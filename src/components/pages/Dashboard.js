@@ -14,7 +14,7 @@ import Market from '../cards/Market';
 
 const Dashboard = () => {
   const { actions, state } = useContext(AppContext);
-  const { walletActions } = actions;
+  const { createWallet } = actions;
   const { appSettings, layout, wallets } = state;
 
   const walletsKeys = Object.keys(wallets);
@@ -48,7 +48,7 @@ const Dashboard = () => {
                 className="btn btn-primary btn-sm"
                 onClick={() => {
                   window.confirm('You are about to create a new wallet. Proceed?') &&
-                  walletActions.createWallet()
+                  createWallet()
                 }}
               >
                 CREATE NEW WALLET
@@ -62,7 +62,7 @@ const Dashboard = () => {
                 <>
                   {
                     walletsKeys.length > 0 &&
-                    walletsKeys.map(address => <Wallet key={address} address={address} />)
+                    walletsKeys.map(address => <Wallet key={address} wallet={wallets[address]} address={address} />)
                   }
                   {walletsKeys.length === 0 &&
                     <div className="section-title text-center">You don't have any wallets. Please create one</div>
