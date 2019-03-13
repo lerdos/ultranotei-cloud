@@ -6,13 +6,15 @@ import { useFormInput, useFormValidation } from '../../helpers/hooks';
 
 
 const SignUp = () => {
-  const { layout, user, userSettings, userActions } = useContext(AppContext);
+  const { actions, state } = useContext(AppContext);
+  const { signUpUser } = actions;
+  const { layout, user, userSettings } = state;
   const { formSubmitted, message } = layout;
 
 
-  const { value: userName, bind: bindUserName, /*reset: reseUserName*/ } = useFormInput('');
-  const { value: email, bind: bindEmail, /*reset: resetEmail*/ } = useFormInput('');
-  const { value: password, bind: bindPassword, /*reset: resetPassword*/ } = useFormInput('');
+  const { value: userName, bind: bindUserName } = useFormInput('');
+  const { value: email, bind: bindEmail } = useFormInput('');
+  const { value: password, bind: bindPassword } = useFormInput('');
 
   const formValidation = (
     userName !== '' && userName.length >= 3 &&
@@ -21,7 +23,7 @@ const SignUp = () => {
   );
   const formValid = useFormValidation(formValidation);
 
-  if (user.loggedIn) return <Redirect to="/" />;
+  if (user.loggedIn()) return <Redirect to="/" />;
 
   return (
     <div className="signin-wrapper">
@@ -34,7 +36,7 @@ const SignUp = () => {
           <div className="alert alert-outline alert-danger text-center">{message}</div>
         }
 
-        <form onSubmit={e => userActions.signUpUser(e, userName, email, password)}>
+        <form onSubmit={e => signUpUser(e, userName, email, password)}>
           <div className="form-group">
             <input
               {...bindUserName}

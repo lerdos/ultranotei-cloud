@@ -6,7 +6,9 @@ import { AppContext } from '../ContextProvider';
 
 
 const NavBar = () => {
-  const { appSettings, userActions } = useContext(AppContext);
+  const { actions, state } = useContext(AppContext);
+  const { logoutUser } = actions;
+  const { appSettings } = state;
 
   return (
     <div className="slim-navbar">
@@ -97,7 +99,7 @@ const NavBar = () => {
             </div>
           </li>
           <li className="nav-item">
-            <button className="nav-link hot_link" onClick={userActions.logoutUser}>
+            <button className="nav-link hot_link" onClick={logoutUser}>
               <FontAwesomeIcon icon="sign-out-alt" fixedWidth /> <span>Sign Out</span>
             </button>
           </li>

@@ -10,7 +10,9 @@ import { useFormInput, useFormValidation } from '../../helpers/hooks';
 
 const KeysModal = props => {
   const { toggleModal, wallet, ...rest } = props;
-  const { layout, userSettings, walletActions } = useContext(AppContext);
+  const { actions, state } = useContext(AppContext);
+  const { getWalletKeys } = actions;
+  const { layout, userSettings } = state;
   const { formSubmitted, message } = layout;
 
   const [spendPublicKeyCopied, setSpendPublicKeyCopied] = useState(false);
@@ -144,7 +146,7 @@ const KeysModal = props => {
                   <h5 className="text-center">
                     Please confirm with your 2-Factor Authentication code.
                   </h5>
-                  <form onSubmit={e => walletActions.getWalletKeys(e, props.address, twoFACode)}>
+                  <form onSubmit={e => getWalletKeys(e, props.address, twoFACode)}>
                     <div className="form-layout form-layout-7">
                       <div className="row no-gutters">
                         <div className="col-5 col-sm-4">

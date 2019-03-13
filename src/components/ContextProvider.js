@@ -1,557 +1,397 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { withRouter } from 'react-router';
 
 import AuthHelper from '../helpers/AuthHelper';
-import Api from '../helpers/Api';
+import ApiHelper from '../helpers/ApiHelper';
+import useAppState from './useAppState';
 
 
 export const AppContext = React.createContext();
+const Auth = new AuthHelper();
 
-class AppContextProvider extends React.Component {
+const AppContextProvider = props => {
+  const [state, dispatch] = useAppState(Auth);
+  const Api = new ApiHelper({ Auth, state });
 
-  Auth = new AuthHelper();
-  Api = new Api({ auth: this.Auth });
+  const loginUser = (e, email, password, twoFACode) => {
+    e.preventDefault();
+    dispatch({ type: 'FORM_SUBMITTED', value: true });
+    Auth.login(email, password, twoFACode)
+      .then(res => {
+        if (res.result === 'success') {
+          dispatch({ type: 'REDIRECT_TO_REFERRER', value: true });
+          initApp();
+        } else {
+          dispatch({ type: 'DISPLAY_MESSAGE', message: res.message });
+        }
+      })
+      .catch(err => dispatch({ type: 'DISPLAY_MESSAGE', message: `ERROR ${err}` }))
+      .finally(() => dispatch({ type: 'FORM_SUBMITTED', value: false }));
+  };
 
-  constructor(props) {
-    super(props);
-
-    this.loginUser = (e, email, password, twoFACode) => {
-      e.preventDefault();
-      const { layout } = this.state;
-      layout.formSubmitted = true;
-      layout.message = null;
-      this.setState({ layout });
-      this.Auth.login(email, password, twoFACode)
-        .then(res => {
-          if (res.result === 'success') {
-            layout.redirectToReferrer = true;
-            this.initApp();
-          } else {
-            layout.message = res.message;
-          }
-        })
-        .catch(err => {
-          layout.message = `ERROR ${err}`;
-        })
-        .finally(() => {
-          layout.formSubmitted = false;
-          this.setState({ layout });
-        });
-    };
-
-    this.signUpUser = (e, userName, email, password) => {
-      e.preventDefault();
-      const { layout } = this.state;
-      layout.formSubmitted = true;
-      layout.message = null;
-      this.setState({ layout });
-      this.Api.signUpUser(userName, email, password)
-        .then(res => {
-          if (res.result === 'success') {
-            layout.message = 'Please check your email and follow the instructions to activate your account.';
-            return props.history.replace('/login');
-          } else {
-            layout.message = res.message;
-          }
-        })
-        .catch(err => {
-          layout.message = `ERROR ${err}`;
-        })
-        .finally(() => {
-          layout.formSubmitted = false;
-          this.setState({ layout });
-        });
-    };
-
-    this.resetPassword = (e, email) => {
-      e.preventDefault();
-      const { layout } = this.state;
-      layout.formSubmitted = true;
-      layout.message = null;
-      this.setState({ layout });
-      this.Api.resetPassword(email)
-        .then(res => {
-          if (res.result === 'success') {
-            this.Auth.logout();
-            this.clearApp();
-            layout.message = 'Please check your email and follow instructions to reset password.';
-            this.setState({ layout });
-            return props.history.replace('/login');
-          } else {
-            layout.message = res.message;
-          }
-        })
-        .catch(err => {
-          layout.message = `ERROR ${err}`;
-        })
-        .finally(() => {
-          // layout.message = 'Please check your email and follow instructions to reset password.';
-          layout.formSubmitted = false;
-          this.setState({ layout });
-        });
-    };
-
-    this.resetPasswordConfirm = (e, password, token) => {
-      e.preventDefault();
-      const { layout } = this.state;
-      layout.formSubmitted = true;
-      layout.message = null;
-      this.setState({ layout });
-      this.Api.resetPasswordConfirm(password, token)
-        .then(res => {
-          if (res.result === 'success') {
-            layout.message = (<>Password successfully changed.<br />Please log in.</>);
-            this.setState({ layout });
-            return props.history.replace('/login');
-          } else {
-            layout.message = res.message;
-          }
-        })
-        .catch(err => {
-          layout.message = `ERROR ${err}`;
-        })
-        .finally(() => {
-          layout.formSubmitted = false;
-          this.setState({ layout });
-        });
-    };
-
-    this.logoutUser = () => {
-      this.Auth.logout();
-      this.clearApp();
-      props.history.replace('/login');
-    };
-
-    this.updateUser = ({ e, email, avatar }) => {
-      e.preventDefault();
-      const { layout } = this.state;
-      layout.formSubmitted = true;
-      layout.message = null;
-      this.setState({ layout });
-      this.Api.updateUser({ email, file: avatar })
-        .then(res => {
-          layout.message = res.message[0];
-        })
-        .catch(err => {
-          layout.message = `ERROR ${err}`;
-        })
-        .finally(() => {
-          layout.formSubmitted = false;
-          this.setState({ layout });
-          this.getUser();
-        });
-    };
-
-    this.getUser = () => {
-      const { layout, user } = this.state;
-      this.Api.getUser()
-        .then(res => this.setState({ user: {...user, ...res.message} }))
-        .catch(e => console.error(e))
-        .finally(() => {
-          layout.userLoaded = true;
-          this.setState({ layout });
-        });
-    };
-
-    this.addContact = (contact, extras) => {
-      const { e, label, address, paymentID, entryID, edit } = contact;
-      if (e) e.preventDefault();
-      this.Api.addContact(label, address, paymentID, entryID, edit)
-        .then(res => {
-          if (res.result === 'success') {
-            this.getUser();
-            extras.forEach(fn => fn())
-          }
-        })
-        .catch(e => console.error(e));
-    };
-
-    this.deleteContact = contact => {
-      const { entryID } = contact;
-      this.Api.deleteContact(entryID)
-        .then(res => {
-          if (res.result === 'success') {
-            this.getUser();
-          }
-        })
-        .catch(e => console.error(e));
-    };
-
-    this.check2FA = () => {
-      const { userSettings } = this.state;
-      this.Api.check2FA()
-        .then(res => {
-          userSettings.twoFAEnabled = res.message.enabled;
-          if (!userSettings.twoFAEnabled) this.getQRCode();
-          this.setState({ userSettings });
-        })
-        .catch(e => console.error(e));
-    };
-
-    this.update2FA = (options, extras) => {
-      const { e, twoFACode, enable } = options;
-      e.preventDefault();
-      const { layout, userSettings } = this.state;
-      layout.formSubmitted = true;
-      layout.message = null;
-      this.setState({ layout });
-      this.Api.update2FA(twoFACode, enable)
-        .then(res => {
-          if (res.result === 'success') {
-            layout.message = `QR Code ${enable ? 'enabled' : 'disabled'}.`;
-            this.check2FA();
-            extras.forEach(fn => fn());
-          } else {
-            layout.message = res.message;
-          }
-        })
-        .catch(e => console.error(e))
-        .finally(() => {
-          layout.formSubmitted = false;
-          this.setState({ layout, userSettings });
-        });
-    };
-
-    this.getQRCode = () => {
-      const { layout } = this.state;
-      this.Api.getQRCode()
-        .then(res => {
-          layout.qrCodeUrl = res.message.qrCodeUrl;
-          this.setState({ layout });
-        })
-        .catch(e => console.error(e));
-    };
-
-    this.getBlockchainHeight = () => {
-      const { network } = this.state;
-      this.Api.getBlockchainHeight()
-        .then(res => {
-          network.blockchainHeight = res.message.height;
-          this.setState({ network });
-        })
-        .catch(e => console.error(e));
-    };
-
-    this.getWalletList = () => {
-      const { appSettings, layout, wallets } = this.state;
-      this.Api.getWalletList()
-        .then(res => {
-          res.message.addresses && res.message.addresses.forEach(address => {
-            if (address in wallets === false) wallets[address] = {};
-            this.Api.getWalletDetails(address)
-              .then(res => {
-                if (res.result === 'success') {
-                  wallets[address] = { ...wallets[address], ...res.message };
-                  appSettings.lastUpdate = new Date();
-                }
-              })
-              .catch(e => console.error(e))
-              .finally(() => {
-                wallets[address].loaded = true;
-                this.setState({ appSettings, wallets });
-              });
-          });
-        })
-        .catch(e => console.error(e))
-        .finally(() => {
-          layout.walletsLoaded = true;
-          this.setState({ layout });
-        });
-    };
-
-    this.getWalletDetails = address => {
-      this.Api.getWalletDetails(address)
-        .then(res => res)
-        .catch(e => console.error(e));
-    };
-
-    this.createWallet = () => {
-      const { appSettings, wallets } = this.state;
-      this.Api.createWallet()
-        .then(res => {
-          const address = res.message.wallet;
-          wallets[address] = {};
-          this.Api.getWalletDetails(address)
-            .then(res => {
-              wallets[address] = res.message;
-              wallets[address].loaded = true;
-              appSettings.lastUpdate = new Date();
-              this.setState({ appSettings, wallets });
-            })
-            .catch(e => console.error(e));
-        })
-        .catch(e => console.error(e));
-    };
-
-    this.getWalletKeys = (e, address, code) => {
-      e.preventDefault();
-      const { layout, wallets } = this.state;
-      layout.formSubmitted = true;
-      layout.message = null;
-      this.setState({ layout });
-      if (!wallets[address].keys) {
-        this.Api.getWalletKeys(address, code)
-          .then(res => {
-            if (res.result === 'success') {
-              wallets[address].keys = res.message;
-              this.setState({ wallets });
-            } else {
-              layout.message = res.message;
-            }
-          })
-          .catch(e => console.error(e))
-          .finally(() => {
-            layout.formSubmitted = false;
-            this.setState({ layout });
-          });
-      }
-    };
-
-    this.sendTx = (options, extras) => {
-      const { e, wallet, address, paymentID, amount, message, twoFACode, password, label } = options;
-      e.preventDefault();
-      const { layout } = this.state;
-      this.Api.sendTx(wallet, address, paymentID, amount, message, twoFACode, password)
-        .then(res => {
-          if (res.result === 'error' || res.message.error) {
-            layout.sendTxResponse = {
-              status: 'error',
-              message: `Wallet Error: ${res.message.error ? res.message.error.message : res.message}`,
-            };
-            this.setState({ layout });
-            return;
-          }
-          layout.sendTxResponse = {
-            status: 'success',
-            message: res.message.result,
-          };
-          this.setState({ layout });
-          if (label && label.value !== '' && address.value !== '') {
-            this.addContact({ label: label.value, address: address.value, paymentID: paymentID.value });
-          }
-          extras.forEach(fn => fn());
-        })
-        .catch(e => console.error(e));
-    };
-
-    this.deleteWallet = address => {
-      const { wallets } = this.state;
-      this.Api.deleteWallet(address)
-        .then(res => {
-          if (res.result === 'success') {
-            delete wallets[address];
-            this.setState({ wallets });
-          }
-        })
-        .catch(e => console.error(e));
-    };
-
-    this.getMarketPrices = () => {
-      const { markets } = this.state;
-      Object.keys(markets).forEach(market => {
-        this.Api.getMarketPrices(markets[market].apiURL)
-          .then(res => {
-            markets[market].ask = parseFloat(market === 'tradeogre' ? res.ask : res.message[0].ask);
-            markets[market].bid = parseFloat(market === 'tradeogre' ? res.bid : res.message[0].bid);
-            markets[market].volume = parseFloat(market === 'tradeogre' ? res.volume : res.message[0].vol_market);
-            this.setState({ markets });
-          })
-          .catch(e => console.error(e));
+  const signUpUser = (e, userName, email, password) => {
+    e.preventDefault();
+    let message;
+    dispatch({ type: 'FORM_SUBMITTED', value: true });
+    Api.signUpUser(userName, email, password)
+      .then(res => {
+        message = res.message;
+        if (res.result === 'success') {
+          message = 'Please check your email and follow the instructions to activate your account.';
+          return props.history.replace('/login');
+        }
+      })
+      .catch(err => { message = `ERROR ${err}` })
+      .finally(() => {
+        dispatch({ type: 'DISPLAY_MESSAGE', message });
+        dispatch({ type: 'FORM_SUBMITTED', value: false });
       });
-    };
+  };
 
-    this.getPrices = () => {
-      const { appSettings, prices } = this.state;
-      this.Api.getPrices(appSettings.coingeckoAPI)
+  const resetPassword = (e, email) => {
+    e.preventDefault();
+    dispatch({ type: 'FORM_SUBMITTED', value: true });
+    let message;
+    Api.resetPassword(email)
+      .then(res => {
+        message = res.message;
+        if (res.result === 'success') {
+          message = 'Please check your email and follow instructions to reset password.';
+          Auth.logout();
+          clearApp();
+        }
+      })
+      .catch(err => { message = `ERROR ${err}` })
+      .finally(() => {
+        dispatch({ type: 'DISPLAY_MESSAGE', message });
+        dispatch({ type: 'FORM_SUBMITTED', value: false });
+      });
+  };
+
+  const resetPasswordConfirm = (e, password, token) => {
+    e.preventDefault();
+    let message;
+    dispatch({ type: 'FORM_SUBMITTED', value: true });
+    Api.resetPasswordConfirm(password, token)
+      .then(res => {
+        message = res.message;
+        if (res.result === 'success') {
+          message = (<>Password successfully changed.<br />Please log in.</>);
+          return props.history.replace('/login');
+        }
+      })
+      .catch(err => { message = `ERROR ${err}` })
+      .finally(() => {
+        dispatch({ type: 'DISPLAY_MESSAGE', message });
+        dispatch({ type: 'FORM_SUBMITTED', value: false });
+      });
+  };
+
+  const logoutUser = () => {
+    clearApp();
+    Auth.logout();
+    return props.history.replace('/');
+  };
+
+  const getUser = () => {
+    Api.getUser()
+      .then(res => dispatch({ type: 'USER_LOADED', user: res.message }))
+      .catch(e => console.error(e));
+  };
+
+  const updateUser = ({ e, email, avatar }) => {
+    e.preventDefault();
+    let message;
+    dispatch({ type: 'FORM_SUBMITTED', value: true });
+    Api.updateUser({ email, file: avatar })
+      .then(res => {
+        if (res.result === 'success') {
+          getUser();
+        } else {
+          message = res.message;
+        }
+      })
+      .catch(err => { message = `ERROR ${err}` })
+      .finally(() => {
+        dispatch({ type: 'DISPLAY_MESSAGE', message });
+        dispatch({ type: 'FORM_SUBMITTED', value: false });
+      });
+  };
+
+  const addContact = (contact, extras) => {
+    const { e, label, address, paymentID, entryID, edit } = contact;
+    if (e) e.preventDefault();
+    let message;
+    Api.addContact(label, address, paymentID, entryID, edit)
+      .then(res => {
+        if (res.result === 'success') {
+          getUser();
+          extras.forEach(fn => fn());
+        } else {
+          message = res.message;
+        }
+      })
+      .catch(err => { message = `ERROR ${err}` })
+      .finally(() => message && dispatch({ type: 'DISPLAY_MESSAGE', message }));
+  };
+
+  const deleteContact = contact => {
+    const { entryID } = contact;
+    let message;
+    Api.deleteContact(entryID)
+      .then(res => {
+        if (res.result === 'success') {
+          getUser();
+        } else {
+          message = res.message;
+        }
+      })
+      .catch(err => { message = `ERROR ${err}` })
+      .finally(() => message && dispatch({ type: 'DISPLAY_MESSAGE', message }));
+  };
+
+  const getQRCode = () => {
+    let message;
+    Api.getQRCode()
+      .then(res => {
+        if (res.result === 'success') {
+          dispatch({ type: 'UPDATE_QR_CODE', qrCodeUrl: res.message.qrCodeUrl });
+        } else {
+          message = res.message;
+        }
+      })
+      .catch(err => { message = `ERROR ${err}` })
+      .finally(() => message && dispatch({ type: 'DISPLAY_MESSAGE', message }));
+  };
+
+  const check2FA = () => {
+    let message;
+    Api.check2FA()
+      .then(res => {
+        if (res.result === 'success') {
+          dispatch({ type: '2FA_CHECK', value: res.message.enabled });
+          if (!res.message.enabled) getQRCode();
+        } else {
+          message = res.message;
+        }
+      })
+      .catch(err => { message = `ERROR ${err}` })
+      .finally(() => message && dispatch({ type: 'DISPLAY_MESSAGE', message }));
+  };
+
+  const update2FA = (options, extras) => {
+    const { e, twoFACode, enable } = options;
+    e.preventDefault();
+    let message;
+    dispatch({ type: 'FORM_SUBMITTED', value: true });
+    Api.update2FA(twoFACode, enable)
+      .then(res => {
+        if (res.result === 'success') {
+          message = `QR Code ${enable ? 'enabled' : 'disabled'}.`;
+          check2FA();
+          extras.forEach(fn => fn());
+        } else {
+          message = res.message;
+        }
+      })
+      .catch(err => { message = `ERROR ${err}` })
+      .finally(() => message && dispatch({ type: 'DISPLAY_MESSAGE', message }));
+  };
+
+  const createWallet = () => {
+    let message;
+    Api.createWallet()
+      .then(res => {
+        if (res.result === 'success') {
+          const address = res.message.wallet;
+          dispatch({ type: 'CREATE_WALLET', address });
+          getWalletDetails(address);
+        } else {
+          message = res.message;
+        }
+      })
+      .catch(err => { message = `ERROR ${err}` })
+      .finally(() => message && dispatch({ type: 'DISPLAY_MESSAGE', message }));
+  };
+
+  const getWalletDetails = address => {
+    let message;
+    Api.getWalletDetails(address)
+      .then(res => {
+        if (res.result === 'success') {
+          dispatch({ type: 'UPDATE_WALLET', address, walletData: res.message });
+          dispatch({ type: 'APP_UPDATED' });
+        } else {
+          message = res.message;
+        }
+      })
+      .catch(err => { message = `ERROR ${err}` })
+      .finally(() => message && dispatch({ type: 'DISPLAY_MESSAGE', message }));
+  };
+
+  const getWalletList = () => {
+    Api.getWalletList()
+      .then(res => {
+        res.message.addresses && res.message.addresses.forEach(address => {
+          dispatch({ type: 'CREATE_WALLET', address });
+          getWalletDetails(address);
+        });
+      })
+      .catch(e => console.error(e))
+      .finally(() => dispatch({ type: 'WALLETS_LOADED' }));
+  };
+
+  const getWalletKeys = (e, address, code) => {
+    e.preventDefault();
+    const { wallets } = state;
+    let message;
+    dispatch({ type: 'FORM_SUBMITTED', value: true });
+    if (!wallets[address].keys) {
+      Api.getWalletKeys(address, code)
         .then(res => {
-          prices.priceCCXBTC = res.conceal && res.conceal.btc ? res.conceal.btc : 0;
-          this.setState({ prices });
+          if (res.result === 'success') {
+            dispatch({ type: 'SET_WALLET_KEYS', keys: res.message });
+          } else {
+            message = res.message;
+          }
+        })
+        .catch(err => { message = `ERROR ${err}` })
+        .finally(() => message && dispatch({ type: 'DISPLAY_MESSAGE', message }));
+    }
+  };
+
+  const deleteWallet = address => {
+    Api.deleteWallet(address)
+      .then(res => res.result === 'success' && dispatch({ type: 'DELETE_WALLET', address }))
+      .catch(e => console.error(e));
+  };
+
+  const sendTx = (options, extras) => {
+    const { e, wallet, address, paymentID, amount, message, twoFACode, password, label } = options;
+    e.preventDefault();
+    dispatch({ type: 'FORM_SUBMITTED', value: true });
+    let layoutMessage;
+    let sendTxResponse;
+    Api.sendTx(wallet, address, paymentID, amount, message, twoFACode, password)
+      .then(res => {
+        if (res.result === 'error' || res.message.error) {
+          sendTxResponse = {
+            status: 'error',
+            message: `Wallet Error: ${res.message.error ? res.message.error.message : res.message}`,
+          };
+          dispatch({ type: 'SEND_TX', sendTxResponse });
+          return;
+        }
+        sendTxResponse = {
+          status: 'success',
+          message: res.message.result,
+        };
+        dispatch({ type: 'SEND_TX', sendTxResponse });
+        if (label && label !== '') addContact({ label, address, paymentID });
+        extras.forEach(fn => fn());
+      })
+      .catch(err => { layoutMessage = `ERROR ${err}` })
+      .finally(() => {
+        dispatch({ type: 'FORM_SUBMITTED', value: false });
+        if (message) dispatch({ type: 'DISPLAY_MESSAGE', message: layoutMessage });
+      });
+  };
+
+  const getBlockchainHeight = () => {
+    Api.getBlockchainHeight()
+      .then(res => dispatch({ type: 'UPDATE_BLOCKCHAIN_HEIGHT', blockchainHeight: res.message.height }))
+      .catch(e => console.error(e));
+  };
+
+  const getMarketPrices = () => {
+    const { markets } = state;
+    Object.keys(markets).forEach(market => {
+      Api.getMarketPrices(markets[market].apiURL)
+        .then(res => {
+          dispatch({ type: 'UPDATE_MARKET', market, marketData: res })
         })
         .catch(e => console.error(e));
-    };
+    });
+  };
 
-    this.onRouteChanged = prevProps => {
-      const { location } = prevProps;
-      const isRedirect = this.props.history.action === 'REPLACE';
-      if ((location.pathname !== '/signup' && !location.pathname.startsWith('/reset_password')) || !isRedirect) {
-        const { layout } = this.state;
-        layout.message = null;
-        this.setState({ layout });
-      }
-    };
+  const getPrices = () => {
+    const { appSettings } = state;
+    Api.getPrices(appSettings.coingeckoAPI)
+      .then(res => dispatch({ type: 'UPDATE_PRICES', pricesData: res }))
+      .catch(e => console.error(e));
+  };
 
-    this.state = {
-      appSettings: {
-        appVersion: process.env.REACT_APP_VERSION,
-        apiURL: process.env.REACT_APP_API_ENDPOINT,
-        homePage: 'https://conceal.network',
-        explorerURL: 'https://explorer.conceal.network',
-        poolURL: 'https://pool.conceal.network',
-        coingeckoAPI: 'https://api.coingecko.com/api/v3',
-        discord: 'https://discord.gg/QY4ksas',
-        twitter: 'https://twitter.com/ConcealNetwork',
-        reddit: 'https://www.reddit.com/r/ConcealNetwork',
-        telegram: 'https://t.me/concealnetworkusers',
-        medium: 'https://medium.com/@ConcealNetwork',
-        coinGecko: 'https://coingecko.com/en/coins/conceal',
-        coinMarketCap: 'https://coinmarketcap.com/currencies/conceal',
-        updateBlockchainHeightInterval: 15,  // seconds
-        updateMarketPricesInterval: 30,  // seconds
-        maxWallets: 10,
-        lastUpdate: new Date(),
-        coinDecimals: 5,
-        defaultFee: 0.0001,
-        messageFee: 0.001,
-        selfDestructMessageFee: 0.0001,
-        feePerChar: 0.00001,
-        depositFee: 0.001,
-        investmentFee: 0.001,
-        withdrawalFee: 0.0001,
-        qrCodePrefix: 'conceal',
-      },
-      layout: {
-        redirectToReferrer: false,
-        formSubmitted: false,
-        message: null,
-        userLoaded: false,
-        walletsLoaded: false,
-        sendTxResponse: null,
-        qrCodeUrl: '',
-        editContactData: {},
-      },
-      user: {
-        userName: '',
-        loggedIn: this.Auth.loggedIn(),
-        addressBook: [],
-      },
-      userSettings: {
-        updateWalletsInterval: 10,  // seconds
-        qrCodeURL: '',
-        twoFACode: '',
-        twoFAEnabled: false,
-        minimumPasswordLength: 8,
-      },
-      wallets: {},
-      network: {
-        blockchainHeight: 0,
-      },
-      prices: {
-        priceBTCUSD: 0,
-        priceCCXBTC: 0,
-      },
-      markets: {
-        stex: {
-          apiURL: 'https://api.wallet.conceal.network/api/stex/status',
-          ask: 0,
-          bid: 0,
-          volume: 0,
-        },
-        tradeogre: {
-          apiURL: 'https://tradeogre.com/api/v1/ticker/BTC-CCX',
-          ask: 0,
-          bid: 0,
-          volume: 0,
-        },
-      },
-      userActions: {
-        loginUser: this.loginUser,
-        signUpUser: this.signUpUser,
-        resetPassword: this.resetPassword,
-        resetPasswordConfirm: this.resetPasswordConfirm,
-        logoutUser: this.logoutUser,
-        getUser: this.getUser,
-        check2FA: this.check2FA,
-        update2FA: this.update2FA,
-        getQRCode: this.getQRCode,
-        updateUser: this.updateUser,
-        addContact: this.addContact,
-        editContact: this.editContact,
-        deleteContact: this.deleteContact,
-      },
-      walletActions: {
-        createWallet: this.createWallet,
-        getWalletList: this.getWalletList,
-        getWalletDetails: this.getWalletDetails,
-        getWalletKeys: this.getWalletKeys,
-        sendTx: this.sendTx,
-        deleteWallet: this.deleteWallet,
-      },
-      networkActions: {
-        getBlockchainHeight: this.getBlockchainHeight,
-      },
-      pricesActions: {
-        getPrices: this.getPrices,
-      },
-      marketActions: {
-        getMarketPrices: this.getMarketPrices,
-      },
-    };
-  }
+  const actions = {
+    loginUser,
+    signUpUser,
+    resetPassword,
+    resetPasswordConfirm,
+    logoutUser,
+    getUser,
+    updateUser,
+    check2FA,
+    update2FA,
+    getQRCode,
+    createWallet,
+    getWalletList,
+    deleteWallet,
+    getWalletKeys,
+    sendTx,
+    getBlockchainHeight,
+    getMarketPrices,
+    getPrices,
+    addContact,
+    deleteContact,
+  };
 
-  componentDidMount() {
-    // console.log('PROVIDER MOUNTED.');
-    const { layout, user } = this.state;
-    const { location } = this.props;
-    if (location.pathname === '/login' && location.search === '?activated') {
-      layout.message = (<>Account successfully activated.<br />Please log in.</>);
-      this.setState({ layout });
+  const initApp = () => {
+    const { appSettings, userSettings } = state;
+
+    getUser();
+    check2FA();
+    getWalletList();
+    getBlockchainHeight();
+    getMarketPrices();
+    getPrices();
+
+    const intervals = [
+      { fn: getWalletList, time: userSettings.updateWalletsInterval },
+      { fn: getBlockchainHeight, time: appSettings.updateBlockchainHeightInterval },
+      { fn: getMarketPrices, time: appSettings.updateMarketPricesInterval },
+      { fn: getPrices, time: appSettings.updateMarketPricesInterval },
+    ];
+
+    dispatch({ type: 'SET_INTERVALS', intervals });
+  };
+
+  const clearApp = () => {
+    dispatch({ type: 'CLEAR_APP' });
+    dispatch({ type: 'REDIRECT_TO_REFERRER', value: false });
+  };
+
+  const onRouteChanged = location => {
+    const isRedirect = props.history.action === 'REPLACE';
+    if ((location.pathname !== '/signup' && !location.pathname.startsWith('/reset_password')) || !isRedirect) {
+      dispatch({ type: 'DISPLAY_MESSAGE', message: null });
     }
-    if (user.loggedIn) this.initApp();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.location !== prevProps.location) this.onRouteChanged(prevProps);
-  }
-
-  componentWillUnmount() {
-    this.clearApp();
-    // console.log('PROVIDER UNMOUNTED.');
-  }
-
-  initApp = () => {
-    const {
-      appSettings,
-      marketActions,
-      networkActions,
-      pricesActions,
-      userSettings,
-      userActions,
-      walletActions,
-    } = this.state;
-    userActions.getUser();
-    userActions.check2FA();
-    walletActions.getWalletList();
-    networkActions.getBlockchainHeight();
-    marketActions.getMarketPrices();
-    pricesActions.getPrices();
-    this.updateWalletsInterval = setInterval(walletActions.getWalletList, userSettings.updateWalletsInterval * 1000);
-    this.updateBlockchainHeightInterval = setInterval(networkActions.getBlockchainHeight, appSettings.updateBlockchainHeightInterval * 1000);
-    this.updateMarketPricesInterval = setInterval(marketActions.getMarketPrices, appSettings.updateMarketPricesInterval * 1000);
-    this.updatePricesInterval = setInterval(pricesActions.getPrices, appSettings.updateMarketPricesInterval * 1000);
-    // console.log('APP INITIALIZED.');
+    if (location.pathname === '/login' && location.search === '?activated') {
+      const message = (<>Account successfully activated.<br />Please log in.</>);
+      dispatch({ type: 'DISPLAY_MESSAGE', message });
+    }
   };
 
-  clearApp = () => {
-    const { layout } = this.state;
-    const wallets = {};
-    layout.redirectToReferrer = false;
+  useEffect(() => {
+    if (state.user.loggedIn()) initApp();
+    return () => clearApp();
+  }, []);
 
-    this.setState({ layout, wallets });
+  useEffect(() => onRouteChanged(props.location), [props.location]);
 
-    if (this.updateWalletsInterval) clearInterval(this.updateWalletsInterval);
-    if (this.updateBlockchainHeightInterval) clearInterval(this.updateBlockchainHeightInterval);
-    if (this.updateMarketPricesInterval) clearInterval(this.updateMarketPricesInterval);
-    if (this.updatePricesInterval) clearInterval(this.updatePricesInterval);
-    // console.log('APP CLEARED.');
-  };
-
-  render() {
-    return (
-      <AppContext.Provider value={this.state}>
-        {this.props.children}
-      </AppContext.Provider>
-    )
-  }
-}
+  return (
+    <AppContext.Provider value={{ state, actions }}>
+      {props.children}
+    </AppContext.Provider>
+  )
+};
 
 export default withRouter(AppContextProvider);

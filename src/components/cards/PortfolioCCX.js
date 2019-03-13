@@ -4,7 +4,8 @@ import { AppContext } from '../ContextProvider';
 
 
 const PortfolioCCX = () => {
-  const { appSettings, wallets } = useContext(AppContext);
+  const { state } = useContext(AppContext);
+  const { appSettings, wallets } = state;
 
   const totalCCX = Object.keys(wallets).reduce((acc, curr) => acc + wallets[curr].balance || acc, 0);
   const formatOptions = {

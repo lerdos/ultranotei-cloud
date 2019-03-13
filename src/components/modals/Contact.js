@@ -7,7 +7,8 @@ import { useFormInput, useFormValidation } from '../../helpers/hooks';
 
 const ContactModal = props => {
   const { contact, toggleModal, ...rest } = props;
-  const { userActions } = useContext(AppContext);
+  const { actions } = useContext(AppContext);
+  const { addContact } = actions;
 
   const { value: label, bind: bindLabel, reset: resetLabel } = useFormInput(contact ? contact.label : '');
   const { value: address, bind: bindAddress, reset: resetAddress } = useFormInput(contact ? contact.address : '');
@@ -42,7 +43,7 @@ const ContactModal = props => {
       <Modal.Body>
         <form
           onSubmit={e =>
-            userActions.addContact(
+            addContact(
               {
                 e,
                 label,

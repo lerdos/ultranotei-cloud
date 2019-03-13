@@ -1,7 +1,7 @@
-export default class Api {
+export default class ApiHelper {
   constructor(options) {
-    this.apiURL = process.env.REACT_APP_API_ENDPOINT;
-    this.auth = options.auth;
+    this.apiURL = options.state.appSettings.apiURL;
+    this.auth = options.Auth;
   }
 
   signUpUser = (userName, email, password) => {
