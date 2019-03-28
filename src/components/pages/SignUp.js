@@ -29,7 +29,7 @@ const SignUp = () => {
     <div className="signin-wrapper">
 
       <div className="signin-box">
-        <h2 className="slim-logo"><a href="/">Conceal Cloud</a> <span className="beta-header">BETA</span></h2>
+        <h2 className="slim-logo"><a href="/">Conceal Cloud</a></h2>
         <h3 className="signin-title-secondary">Sign Up</h3>
 
         {message &&

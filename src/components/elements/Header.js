@@ -7,16 +7,12 @@ const Header = () => (
   <div className="slim-header">
     <div className="container">
       <div className="slim-header-left">
-        {/*<img src={logo} alt="Logo" />*/}
         <Logo className="logo" />
         <div className="logoText">
           <h2 className="slim-logo">
-            <Link to="/"><span>CLOUD Wallet</span></Link>
+            <Link to="/"><span>CLOUD</span></Link>
           </h2>
         </div>
-      </div>
-      <div className="slim-header-right">
-        <span className="beta-header">BETA</span>
       </div>
     </div>
   </div>

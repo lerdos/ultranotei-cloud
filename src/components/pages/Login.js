@@ -33,7 +33,7 @@ const Login = props => {
     <div className="signin-wrapper">
 
       <div className="signin-box">
-        <h2 className="slim-logo"><a href="/">Conceal Cloud</a> <span className="beta-header">BETA</span></h2>
+        <h2 className="slim-logo"><a href="/">Conceal Cloud</a></h2>
         <h2 className="signin-title-primary">Welcome back!</h2>
         <h3 className="signin-title-secondary">Sign in to continue.</h3>
 

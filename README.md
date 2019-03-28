@@ -1,4 +1,4 @@
-# Conceal Web Wallet
+# Conceal Cloud
 
 > Work in progress...
 
@@ -14,8 +14,8 @@ Optional requirements:
 
 Clone repository:
 ```bash
-git clone https://github.com/bomb-on/wallet.conceal.network-front-end
-cd wallet.conceal.network-front-end
+git clone https://github.com/bomb-on/conceal.cloud
+cd conceal.cloud
 
 # optional, checkout specific branch
 # git checkout release/0.1.0
