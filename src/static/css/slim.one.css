@@ -1482,3 +1482,19 @@ body {
 	text-decoration: none;
 	background-color: rgb(255, 255, 255, 0.1);	
 }
+
+/******************** market stats inof *********************/
+
+.dash-flex {
+	display: flex;
+	margin-left: 0px !important;
+}
+
+.info-text {
+	width: 100%;
+	padding-left: 20px;
+}
+
+.icon-info {
+	font-size: 4em !important;
+}

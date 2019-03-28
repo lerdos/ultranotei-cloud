@@ -72,46 +72,58 @@ const MarketStats = () => {
   return (
     <div>
       <div className="nav-statistics-wrapper mg-t-20">
-        <nav className="nav">Market</nav>
+        <nav className="nav">
+			<a href="#" class="nav-link active" tkey="markets">Market</a>	
+		</nav>
       </div>
 
       <div id="blockStats" className="card card-dash-one mg-b-20">
         <div className="row no-gutters">
           <div className="col-lg-3">
-            <div className="dash-content dash-small-info">
+            <div className="dash-content dash-small-info dash-flex">
               <div className="icon icon-info">
                 <FontAwesomeIcon icon="dollar-sign" fixedWidth />
               </div>
-              <label className="tx-primary">CCX to USD</label>
-              <h2>$ {ccxToUSD.toLocaleString(undefined, format2Decimals)}</h2>
+   			  <div class="info-text">
+				<label className="tx-primary">CCX to USD</label>
+				<h2>$ {ccxToUSD.toLocaleString(undefined, format2Decimals)}</h2>
+			  </div>
             </div>
           </div>
 
           <div className="col-lg-3">
-            <div className="dash-content dash-small-info">
+            <div className="dash-content dash-small-info dash-flex">
               <div className="icon icon-info">
                 <FontAwesomeIcon icon={['fab', 'bitcoin']} fixedWidth />
               </div>
-              <label className="tx-primary">CCX to BTC</label>
-              <h2>{ccxToBTC.toLocaleString(undefined, format8Decimals)}</h2>
+   			  <div class="info-text">
+				<label className="tx-primary">CCX to BTC</label>
+				<h2>{ccxToBTC.toLocaleString(undefined, format8Decimals)}</h2>
+			  </div>
             </div>
           </div>
 
           <div className="col-lg-3">
-            <div className="dash-content dash-small-info">
-              <div className="icon icon-info" />
-              <label className="tx-primary">Marketcap</label>
-              <h2>$ {parseInt(marketCap).toLocaleString()} ({marketCapRank})</h2>
-            </div>
-          </div>
-
-          <div className="col-lg-3">
-            <div className="dash-content dash-small-info">
+            <div className="dash-content dash-small-info dash-flex">
               <div className="icon icon-info">
                 <FontAwesomeIcon icon={['far', 'money-bill-alt']} fixedWidth />
               </div>
-              <label className="tx-primary">Daily Volume</label>
-              <h2>$ {parseInt(dailyVolume).toLocaleString()}</h2>
+   			  <div class="info-text">
+				<label className="tx-primary">Marketcap</label>
+				<h2>$ {parseInt(marketCap).toLocaleString()}</h2>
+			  </div>
+            </div>
+          </div>
+
+          <div className="col-lg-3">
+            <div className="dash-content dash-small-info dash-flex">
+              <div className="icon icon-info">
+                <FontAwesomeIcon icon={['far', 'money-bill-alt']} fixedWidth />
+              </div>
+   			  <div class="info-text">
+				<label className="tx-primary">Daily Volume</label>
+				<h2>$ {parseInt(dailyVolume).toLocaleString()}</h2>
+			  </div>
             </div>
           </div>
 
