@@ -19,7 +19,14 @@ const UpcomingFeatures = () => (
           <label className="section-title">Upcoming Features</label>
           <div className="row">
             <div className="col-lg-12">
-              ...
+              <ul>
+                <li>Address Book (done)</li>
+                <li>Banking (deposits + investments)</li>
+                <li>Vault (wallet with extra security layer)</li>
+                <li>Messaging</li>
+                <li>Shop</li>
+                <li>Premium Services</li>
+              </ul>
             </div>
           </div>
         </div>

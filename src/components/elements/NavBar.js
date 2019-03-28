@@ -72,12 +72,12 @@ const NavBar = () => {
               <ul>
                 <li>
                   <a href={appSettings.discord} className="hot_link" target="_blank" rel="noopener noreferrer">
-                    <FontAwesomeIcon icon={['fab', 'discord']} fixedWidth /> <span>Discord Support Channel</span>
+                    <FontAwesomeIcon icon={['fab', 'discord']} fixedWidth /> <span>Discord Support</span>
                   </a>
                 </li>
                 <li>
                   <a href={appSettings.telegram} className="hot_link" target="_blank" rel="noopener noreferrer">
-                    <FontAwesomeIcon icon={['fab', 'telegram-plane']} fixedWidth /> <span>Telegram User Group</span>
+                    <FontAwesomeIcon icon={['fab', 'telegram-plane']} fixedWidth /> <span>Telegram</span>
                   </a>
                 </li>
                 <li>
