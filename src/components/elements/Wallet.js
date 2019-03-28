@@ -54,11 +54,9 @@ const Wallet = props => {
         <OverlayTrigger overlay={<Tooltip id={`${props.address}-send`}>Send CCX</Tooltip>}>
           <span>
             <button
-              {...props}
               className={`btn btn-outline-dark ${!wallet.loaded || balanceTotal === 0 || balanceTotal === locked ? 'disabled' : ''}`}
               onClick={() => toggleSendModal(!sendModalOpen)}
               disabled={!wallet.loaded || balanceTotal === 0 || balanceTotal === locked}
-              style={{ pointerEvents: 'none' }}
             >
               <FontAwesomeIcon icon="arrow-up" fixedWidth />
             </button>
@@ -81,7 +79,6 @@ const Wallet = props => {
               className={`btn btn-outline-dark ${!wallet.loaded || txs.length === 0 ? 'disabled' : ''}`}
               onClick={() => toggleDetailsModal(!detailsModalOpen)}
               disabled={!wallet.loaded || txs.length === 0}
-              style={{ pointerEvents: 'none' }}
             >
               <FontAwesomeIcon icon="list-alt" fixedWidth />
             </button>
@@ -107,7 +104,6 @@ const Wallet = props => {
                 deleteWallet(props.address);
               }}
               disabled={!wallet.loaded || balanceTotal !== 0}
-              style={{ pointerEvents: 'none' }}
             >
               <FontAwesomeIcon icon="trash-alt" fixedWidth/>
             </button>
