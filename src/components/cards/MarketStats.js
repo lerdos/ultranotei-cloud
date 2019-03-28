@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import moment from 'moment';
 
 import { AppContext } from '../ContextProvider';
 
@@ -8,15 +9,18 @@ import { AppContext } from '../ContextProvider';
 const MarketStats = () => {
   const { state } = useContext(AppContext);
   const { marketData } = state;
+  const [xLabels, setXLabels] = useState([]);
 
   const ccxToUSD =  marketData ? marketData.market_data.current_price.usd : 0;
   const ccxToBTC =  marketData ? marketData.market_data.current_price.btc : 0;
   const marketCap =  marketData ? marketData.market_data.market_cap.usd : 0;
-  const marketCapRank =  marketData ? marketData.market_cap_rank : 0;
   const dailyVolume = marketData ? marketData.market_data.total_volume.usd : 0;
 
+  const format2Decimals = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
+  const format8Decimals = { minimumFractionDigits: 8, maximumFractionDigits: 8 };
+
   const data = {
-    labels: marketData ? marketData.market_data.sparkline_7d.price : [],
+    labels: xLabels,
     datasets: [
       {
         fill: true,
@@ -42,14 +46,22 @@ const MarketStats = () => {
           maxTicksLimit: 5,
           beginAtZero: true,
           fontSize: 10,
-          callback: value => `$ ${value.toFixed(2)}`
+          callback: value => `$ ${value.toLocaleString(undefined, format2Decimals)}`
         },
         gridLines: {
           color: 'rgba(255, 255, 255, .08)'
         },
       }],
       xAxes: [{
-        display: false,
+        ticks: {
+          autoSkip: true,
+          maxTicksLimit: 7,
+          maxRotation: 0,
+          minRotation: 0,
+        },
+        gridLines: {
+          color: 'rgba(255, 255, 255, .08)'
+        },
       }],
     },
     hover: {
@@ -60,20 +72,29 @@ const MarketStats = () => {
       mode: 'index',
       intersect: false,
       callbacks: {
-        title: () => {},
-        label: item => `$ ${parseFloat(item.value).toFixed(2)}`,
+        label: item => `$ ${parseFloat(item.value).toLocaleString(undefined, format2Decimals)}`,
       }
     },
   };
 
-  const format2Decimals = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
-  const format8Decimals = { minimumFractionDigits: 8, maximumFractionDigits: 8 };
+  useEffect(() => {
+    const len = marketData ? marketData.market_data.sparkline_7d.price.length : 0;
+    if (len !== data.labels.length) {
+      const duration = moment.duration(7 / len, 'd').asMilliseconds();
+      setXLabels(
+        Array(len)
+          .fill(len)
+          .map((val, i) => moment().subtract(duration * (i + 1), 'ms').format('YYYY-MM-DD'))
+          .reverse()
+      );
+    }
+  }, [marketData]);
 
   return (
     <div>
       <div className="nav-statistics-wrapper mg-t-20">
         <nav className="nav">
-			<a href="#" class="nav-link active" tkey="markets">Market</a>	
+			  <span className="nav-link active">Market</span>
 		</nav>
       </div>
 
@@ -81,49 +102,49 @@ const MarketStats = () => {
         <div className="row no-gutters">
           <div className="col-lg-3">
             <div className="dash-content dash-small-info dash-flex">
+   			      <div className="info-text">
+				        <label className="tx-primary">CCX to USD</label>
+				        <h2>$ {ccxToUSD.toLocaleString(undefined, format2Decimals)}</h2>
+			        </div>
               <div className="icon icon-info">
                 <FontAwesomeIcon icon="dollar-sign" fixedWidth />
               </div>
-   			  <div class="info-text">
-				<label className="tx-primary">CCX to USD</label>
-				<h2>$ {ccxToUSD.toLocaleString(undefined, format2Decimals)}</h2>
-			  </div>
             </div>
           </div>
 
           <div className="col-lg-3">
             <div className="dash-content dash-small-info dash-flex">
+   			      <div className="info-text">
+                <label className="tx-primary">CCX to BTC</label>
+                <h2>{ccxToBTC.toLocaleString(undefined, format8Decimals)}</h2>
+			        </div>
               <div className="icon icon-info">
                 <FontAwesomeIcon icon={['fab', 'bitcoin']} fixedWidth />
               </div>
-   			  <div class="info-text">
-				<label className="tx-primary">CCX to BTC</label>
-				<h2>{ccxToBTC.toLocaleString(undefined, format8Decimals)}</h2>
-			  </div>
             </div>
           </div>
 
           <div className="col-lg-3">
             <div className="dash-content dash-small-info dash-flex">
+   			      <div className="info-text">
+                <label className="tx-primary">Marketcap</label>
+                <h2>$ {parseInt(marketCap).toLocaleString()}</h2>
+              </div>
               <div className="icon icon-info">
                 <FontAwesomeIcon icon={['far', 'money-bill-alt']} fixedWidth />
               </div>
-   			  <div class="info-text">
-				<label className="tx-primary">Marketcap</label>
-				<h2>$ {parseInt(marketCap).toLocaleString()}</h2>
-			  </div>
             </div>
           </div>
 
           <div className="col-lg-3">
             <div className="dash-content dash-small-info dash-flex">
+              <div className="info-text">
+                <label className="tx-primary">Daily Volume</label>
+                <h2>$ {parseInt(dailyVolume).toLocaleString()}</h2>
+			        </div>
               <div className="icon icon-info">
                 <FontAwesomeIcon icon={['far', 'money-bill-alt']} fixedWidth />
               </div>
-   			  <div class="info-text">
-				<label className="tx-primary">Daily Volume</label>
-				<h2>$ {parseInt(dailyVolume).toLocaleString()}</h2>
-			  </div>
             </div>
           </div>
 

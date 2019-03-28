@@ -1463,15 +1463,15 @@ body {
 .btnSaveContact {
 	margin-top: 15px;
 }
-	
+
 /******************** address dropdown menu *********************/
-	
+
 .addrDropdownLabel {
 	color: #6c757d;
 }
 
 .addrDropdownAddress {
-	color: rgb(255, 255, 255);	
+	color: rgb(255, 255, 255);
 }
 #address {
 	border: 1px solid #6c757d;
@@ -1480,22 +1480,25 @@ body {
 #address .dropdown-item:hover, #address .dropdown-item:focus {
 	color: #16181b;
 	text-decoration: none;
-	background-color: rgb(255, 255, 255, 0.1);	
+	background-color: rgba(255, 255, 255, 0.1);
 }
 
-/******************** market stats inof *********************/
+/******************** market stats info *********************/
 
 .dash-flex {
+  width: 100%;
 	display: flex;
-	margin-left: 0px !important;
+	margin-left: 0 !important;
+  justify-content: space-between;
+  justify-items: center;
+  align-items: center;
+  align-content: space-between;
 }
 
 .info-text {
 	width: 100%;
-	padding-left: 20px;
 }
 
 .icon-info {
-	font-size: 3em !important;
-	line-height: 1.5em !important;
+	font-size: 3rem !important;
 }
