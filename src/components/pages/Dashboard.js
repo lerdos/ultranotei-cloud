@@ -7,9 +7,7 @@ import PortfolioBTC from '../cards/PortfolioBTC';
 import Transactions from '../cards/Transactions';
 import Height from '../cards/Height';
 import Wallet from '../elements/Wallet';
-import GettingStarted from '../cards/GettingStarted';
-import UpcomingFeatures from '../cards/UpcomingFeatures';
-import Market from '../cards/Market';
+import MarketStats from '../cards/MarketStats';
 
 
 const Dashboard = () => {
@@ -75,9 +73,7 @@ const Dashboard = () => {
         </div>
 
         <div className="row row-sm mg-t-20 flex-stretch-vertical">
-          <div className="col-lg-4"><GettingStarted /></div>
-          <div className="col-lg-4 mg-t-20 mg-lg-t-0"><UpcomingFeatures /></div>
-          <div className="col-lg-4 mg-t-20 mg-lg-t-0"><Market /></div>
+          <div className="col-lg-12"><MarketStats /></div>
         </div>
 
       </div>

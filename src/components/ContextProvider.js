@@ -321,6 +321,12 @@ const AppContextProvider = props => {
       .catch(e => console.error(e));
   };
 
+  const getMarketData = () => {
+    Api.getMarketData()
+      .then(res => dispatch({ type: 'UPDATE_MARKET_DATA', marketData: res }))
+      .catch(e => console.error(e));
+  };
+
   const actions = {
     loginUser,
     signUpUser,
@@ -342,6 +348,7 @@ const AppContextProvider = props => {
     getPrices,
     addContact,
     deleteContact,
+    getMarketData,
   };
 
   const initApp = () => {
@@ -353,12 +360,14 @@ const AppContextProvider = props => {
     getBlockchainHeight();
     getMarketPrices();
     getPrices();
+    getMarketData();
 
     const intervals = [
       { fn: getWalletList, time: userSettings.updateWalletsInterval },
       { fn: getBlockchainHeight, time: appSettings.updateBlockchainHeightInterval },
       { fn: getMarketPrices, time: appSettings.updateMarketPricesInterval },
       { fn: getPrices, time: appSettings.updateMarketPricesInterval },
+      { fn: getMarketData, time: appSettings.updateMarketPricesInterval },
     ];
 
     dispatch({ type: 'SET_INTERVALS', intervals });

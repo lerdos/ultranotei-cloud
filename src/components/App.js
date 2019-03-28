@@ -2,15 +2,15 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
-import {
-  faCheck,
-} from '@fortawesome/free-solid-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
 import {
   faAddressBook,
   faArrowUp,
   faArrowDown,
+  faCheck,
   faCopy,
   faCog,
+  faDollarSign,
   faExternalLinkAlt,
   faGlobe,
   faHashtag,
@@ -42,12 +42,14 @@ import '../static/css/slim.one.css';
 
 library.add(
   fab,
+  far,
   faAddressBook,
   faArrowUp,
   faArrowDown,
   faCheck,
   faCopy,
   faCog,
+  faDollarSign,
   faExternalLinkAlt,
   faGlobe,
   faHashtag,

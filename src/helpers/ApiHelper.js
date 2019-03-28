@@ -138,6 +138,12 @@ export default class ApiHelper {
       .then(res => Promise.resolve(res));
   };
 
+  getMarketData = () => {
+    return fetch('https://api.coingecko.com/api/v3/coins/conceal?sparkline=true')
+      .then(r => r.json())
+      .then(res => Promise.resolve(res));
+  };
+
   fetch = (url, options) => {
     const headers = options.headers || {
       Accept: 'application/json',

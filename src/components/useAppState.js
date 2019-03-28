@@ -122,6 +122,14 @@ const useAppState = Auth => {
             priceCCXBTC: pricesData.conceal && pricesData.conceal.btc ? pricesData.conceal.btc : 0,
           },
         };
+      case 'UPDATE_MARKET_DATA':
+        return {
+          ...state,
+          marketData: {
+            ...state.marketData,
+            ...action.marketData,
+          },
+        };
       case 'FORM_SUBMITTED':
         const s = {
           ...state,
@@ -221,6 +229,7 @@ const useAppState = Auth => {
         volume: 0,
       },
     },
+    marketData: null,
     intervals: [],
   };
 
