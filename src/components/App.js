@@ -21,6 +21,7 @@ import {
   faNetworkWired,
   faSignOutAlt,
   faTrashAlt,
+  faTrophy,
   faUserEdit,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -60,6 +61,7 @@ library.add(
   faNetworkWired,
   faSignOutAlt,
   faTrashAlt,
+  faTrophy,
   faUserEdit,
 );
 

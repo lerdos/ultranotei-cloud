@@ -30,8 +30,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "",
-    "aws:dev": "rm -rf ./build && react-scripts build && aws s3 cp --recursive ./build/ s3://staging.conceal.cloud/ --profile=conceal --cache-control max-age=30 --metadata-directive REPLACE"
+    "aws:dev": "npm run build:clean && aws s3 cp --recursive ./build/ s3://staging.conceal.cloud/ --profile=conceal --cache-control max-age=30 --metadata-directive REPLACE",
+    "aws:prod": "npm run build:clean && aws s3 cp --recursive ./build/ s3://conceal.cloud/ --profile=conceal --cache-control max-age=30 --metadata-directive REPLACE && npm run aws:invalidate",
+    "aws:invalidate": "aws configure set preview.cloudfront true --profile=conceal && aws cloudfront create-invalidation --profile=conceal --distribution-id E1GRNOKTY1DVG --paths / && aws cloudfront create-invalidation --profile=conceal --distribution-id E1GRNOKTY1DVG --paths /index.html",
+    "build:clean": "rm -rf ./build && react-scripts build"
   },
   "eslintConfig": {
     "extends": "react-app"

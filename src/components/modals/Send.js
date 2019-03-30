@@ -361,7 +361,7 @@ const SendModal = props => {
                 ? <div className="text-danger">{sendTxResponse.message}</div>
                 : <>
                     TX Hash: <a
-                      href={`${appSettings.explorerURL}/?hash=${sendTxResponse.message.transactionHash}#blockchain_transaction`}
+                      href={`${appSettings.explorerURL}/index.html?hash=${sendTxResponse.message.transactionHash}#blockchain_transaction`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
