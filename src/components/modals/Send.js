@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import QrReader from 'react-qr-reader';
@@ -20,7 +20,7 @@ const SendModal = props => {
 
   const [qrReaderOpened, setQrReaderOpened] = useState(false);
 
-  const { value: address, bind: bindAddress, reset: resetAddress } = useTypeaheadInput('');
+  const { value: address, bind: bindAddress, reset: resetAddress, paymentIDValue } = useTypeaheadInput('');
   const { value: paymentID, bind: bindPaymentID, setValue: setPaymentIDValue, reset: resetPaymentID } = useFormInput('');
   const { value: amount, bind: bindAmount, setValue: setAmountValue, reset: resetAmount } = useFormInput('');
   const { value: message, bind: bindMessage, setValue: setMessageValue, reset: resetMessage } = useFormInput('');
@@ -42,12 +42,16 @@ const SendModal = props => {
   const messageAmountValid = totalMessageFee > 0 && totalTxFee.toFixed(coinDecimals) <= wallet.balance;
   const totalAmountValid = (parsedAmount.toFixed(coinDecimals) >= defaultFee && totalAmount > 0) || messageAmountValid;
 
+  useEffect(() => {
+    if (paymentIDValue) setPaymentIDValue(paymentIDValue);
+  }, [paymentIDValue]);
+
   const formValidation = (
     address !== props.address &&
     address.length === 98 &&
     address.startsWith('ccx7') &&
     walletBalanceValid &&
-    totalAmountValid && amount.toString().length <= 7 &&
+    totalAmountValid &&
     (paymentID === '' || paymentID.length === 64) &&
     (userSettings.twoFAEnabled
       ? (parseInt(twoFACode) && twoFACode.toString().length === 6)
