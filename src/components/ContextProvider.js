@@ -250,7 +250,7 @@ const AppContextProvider = props => {
       Api.getWalletKeys(address, code)
         .then(res => {
           if (res.result === 'success') {
-            dispatch({ type: 'SET_WALLET_KEYS', keys: res.message });
+            dispatch({ type: 'SET_WALLET_KEYS', keys: res.message, address });
           } else {
             message = res.message;
           }
