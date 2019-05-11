@@ -1460,7 +1460,8 @@ body {
 
 /******************** save contact button *********************/
 
-.btnSaveContact {
+.btnSaveContact,
+.btnExportKeys {
 	margin-top: 15px;
 }
 

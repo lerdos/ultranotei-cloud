@@ -12,8 +12,8 @@ export const constants = {
   medium: 'https://medium.com/@ConcealNetwork',
   coinGecko: 'https://coingecko.com/en/coins/conceal',
   coinMarketCap: 'https://coinmarketcap.com/currencies/conceal',
-  updateBlockchainHeightInterval: 15,  // seconds
-  updateMarketPricesInterval: 30,  // seconds
+  updateBlockchainHeightInterval: 30,  // seconds
+  updateMarketPricesInterval: 120,  // seconds
   maxWallets: 10,
   coinDecimals: 5,
   defaultFee: 0.0001,

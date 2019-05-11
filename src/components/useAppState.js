@@ -201,7 +201,7 @@ const useAppState = Auth => {
       addressBook: [],
     },
     userSettings: {
-      updateWalletsInterval: 10,  // seconds
+      updateWalletsInterval: 60,  // seconds
       qrCodeURL: '',
       twoFACode: '',
       twoFAEnabled: false,

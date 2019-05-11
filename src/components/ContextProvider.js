@@ -260,6 +260,18 @@ const AppContextProvider = props => {
     }
   };
 
+  const downloadWalletKeys = keys => {
+    const element = document.createElement('a');
+    const file = new Blob(
+      [JSON.stringify(keys, null, 2)],
+      { type: 'text/plain' },
+    );
+    element.href = URL.createObjectURL(file);
+    element.download = 'conceal.json';
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+  };
+
   const deleteWallet = address => {
     Api.deleteWallet(address)
       .then(res => res.result === 'success' && dispatch({ type: 'DELETE_WALLET', address }))
@@ -342,6 +354,7 @@ const AppContextProvider = props => {
     getWalletList,
     deleteWallet,
     getWalletKeys,
+    downloadWalletKeys,
     sendTx,
     getBlockchainHeight,
     getMarketPrices,

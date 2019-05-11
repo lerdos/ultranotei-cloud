@@ -11,7 +11,7 @@ import { useFormInput, useFormValidation } from '../../helpers/hooks';
 const KeysModal = props => {
   const { toggleModal, wallet, ...rest } = props;
   const { actions, state } = useContext(AppContext);
-  const { getWalletKeys } = actions;
+  const { downloadWalletKeys, getWalletKeys } = actions;
   const { layout, userSettings } = state;
   const { formSubmitted, message } = layout;
 
@@ -141,6 +141,14 @@ const KeysModal = props => {
                       </div>
                     </div>
                   </div>
+
+                  <button
+                    type="button"
+                    className="btn btn-outline-primary btn-uppercase-sm btnExportKeys"
+                    onClick={() => downloadWalletKeys(wallet.keys)}
+                  >
+                    DOWNLOAD AS FILE
+                  </button>
                 </div>
               : <>
                   <h5 className="text-center">
