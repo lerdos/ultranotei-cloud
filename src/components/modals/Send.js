@@ -33,14 +33,14 @@ const SendModal = props => {
   const totalMessageFee = message.length > 0 ? messageFee + message.length * feePerChar : 0;
   const txFee = parsedAmount > 0 || amount !== '' ? defaultFee : 0;
   const totalTxFee = txFee + totalMessageFee;
-  const totalAmount = parsedAmount > 0 ? (parsedAmount + totalTxFee).toFixed(coinDecimals) : totalTxFee;
+  const totalAmount = parsedAmount > 0 ? (parsedAmount + totalTxFee) : totalTxFee;
   const maxValue = totalTxFee > 0
-    ? (wallet.balance - totalTxFee).toFixed(coinDecimals)
-    : (wallet.balance - defaultFee).toFixed(coinDecimals);
+    ? (wallet.balance - totalTxFee)
+    : (wallet.balance - defaultFee);
 
   const walletBalanceValid = totalAmount <= wallet.balance;
-  const messageAmountValid = totalMessageFee > 0 && totalTxFee.toFixed(coinDecimals) <= wallet.balance;
-  const totalAmountValid = (parsedAmount.toFixed(coinDecimals) >= defaultFee && totalAmount > 0) || messageAmountValid;
+  const messageAmountValid = totalMessageFee > 0 && totalTxFee <= wallet.balance;
+  const totalAmountValid = (parsedAmount >= defaultFee && totalAmount > 0) || messageAmountValid;
 
   useEffect(() => {
     if (paymentIDValue) setPaymentIDValue(paymentIDValue);
@@ -207,7 +207,7 @@ const SendModal = props => {
                     type="number"
                     min={0}
                     max={maxValue}
-                    step={Math.pow(10, -coinDecimals)}
+                    step={Math.pow(10, -coinDecimals).toFixed(coinDecimals)}
                   />
                   <span className="input-group-btn">
                       <button className="btn btn-outline-secondary btn-max" onClick={calculateMax} type="button">
