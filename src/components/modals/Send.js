@@ -33,10 +33,10 @@ const SendModal = props => {
   const totalMessageFee = message.length > 0 ? messageFee + message.length * feePerChar : 0;
   const txFee = parsedAmount > 0 || amount !== '' ? defaultFee : 0;
   const totalTxFee = txFee + totalMessageFee;
-  const totalAmount = parsedAmount > 0 ? (parsedAmount + totalTxFee) : totalTxFee;
+  const totalAmount = parsedAmount > 0 ? (parsedAmount + totalTxFee).toFixed(coinDecimals) : totalTxFee;
   const maxValue = totalTxFee > 0
-    ? (wallet.balance - totalTxFee)
-    : (wallet.balance - defaultFee);
+    ? (wallet.balance - totalTxFee).toFixed(coinDecimals)
+    : (wallet.balance - defaultFee).toFixed(coinDecimals);
 
   const walletBalanceValid = totalAmount <= wallet.balance;
   const messageAmountValid = totalMessageFee > 0 && totalTxFee <= wallet.balance;
