@@ -20,7 +20,7 @@ export const useTypeaheadInput = (init) => {
   const onInputChange = value => setDefaultInputValue(value);
   const onChange = value => {
     if (value.length > 0) {
-      setDefaultInputValue(value[0].address);
+      value[0].address ? setDefaultInputValue(value[0].address) : setDefaultInputValue(value[0]);
       if (value[0].paymentID !== '') setPaymentIDValue(value[0].paymentID)
     }
   };

@@ -1,32 +1,58 @@
-import React, { useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import { AppContext } from '../ContextProvider';
-import { useFormInput, useFormValidation } from '../../helpers/hooks';
+import {useFormInput, useFormValidation, useTypeaheadInput} from '../../helpers/hooks';
+// import {maskAddress} from '../../helpers/utils';
+import {Typeahead} from 'react-bootstrap-typeahead';
 
 
 const Settings = () => {
   const { actions, state } = useContext(AppContext);
   const { getQRCode, updateUser, resetPassword, update2FA } = actions;
-  const { layout, user, userSettings } = state;
+  const { appSettings, layout, user, userSettings, wallets } = state;
   const { formSubmitted, message } = layout;
 
   const { value: email, bind: bindEmail } = useFormInput('');
   const { value: twoFACode, bind: bindTwoFACode, reset: resetTwoFACode } = useFormInput('');
   const [avatar, setAvatar] = useState(user.avatar);
   const [twoFADialogOpened, toggle2FADialog] = useState(false);
+  const { value: donationWallet, bind: bindDonationWallet, /* reset: resetAddress */ } = useTypeaheadInput('');
+  const { value: recipientName, bind: bindRecipientName } = useFormInput('');
+  const [donationURL, setDonationURL] = useState(null);
 
   const emailValidation = (email !== user.email && email.length >= 3);
   const avatarValidation = (avatar && avatar.name);
   const twoFAFormValidation = (parseInt(twoFACode) && twoFACode.length === 6);
+  const donationFormValidation = (
+    donationWallet.length === 98 &&
+    donationWallet.startsWith('ccx7')
+  );
 
   const emailValid = useFormValidation(emailValidation);
   const avatarValid = useFormValidation(avatarValidation);
   const twoFAFormValid = useFormValidation(twoFAFormValidation);
+  const donationFormValid = useFormValidation(donationFormValidation);
+
+  useEffect(() => {
+    let url = appSettings.donationURL;
+    if (donationWallet) url = `${url}/${donationWallet}`;
+    if (donationWallet && recipientName) url = `${url}/${encodeURIComponent(recipientName)}`;
+    if (donationWallet === '') url = null;
+    let donateHTML = url
+      ? `<a href="${url}" target="_blank">DONATE</a>`
+      : null;
+    setDonationURL(donateHTML);
+  }, [donationWallet, recipientName]);
+
+  // donate/ccx7eC5fEABK1wyrJWiuaThKtU7LbfrzaUfj1diAvKtj6fFRpR2ymbqXtznxBsofFP8JB32YYBmtwLdoEirjAbYo4DBZi71SCy
+  const handleDonationURLFocus = event => event.target.firstChild
+    ? event.target.firstChild.select()
+    : event.target.select();
 
   return (
     <div>
-      <div className="slim-mainpanel">
+      <div className="slim-mainpanel settings">
         <div className="container">
 
           <div className="slim-pageheader">
@@ -266,6 +292,44 @@ const Settings = () => {
                           }
                         </div>
                       }
+                    </div>
+                  </div>
+
+                  <div className="row no-gutters">
+                    <div className="col-5 col-sm-4 align-items-start pd-t-25-force">
+                      Donation
+                    </div>
+                    <div className="col-7 col-sm-8">
+                      <form onSubmit={e => updateUser({ e, email })}>
+                        <div className="input-group">
+                          <Typeahead
+                            {...bindDonationWallet}
+                            id="donationWallet"
+                            labelKey="donationWallet"
+                            options={Object.keys(wallets)}
+                            placeholder="Address"
+                            emptyLabel="No wallets available"
+                            highlightOnlyResult
+                            selectHintOnEnter
+                            minLength={1}
+                            bodyContainer
+                          />
+                          <input
+                            {...bindRecipientName}
+                            type="text"
+                            placeholder="Recipient Name"
+                            name="recipientName"
+                            className="form-control"
+                            maxLength={64}
+                          />
+                        </div>
+                      </form>
+                      <div>
+                        {donationFormValid
+                          ? <>Copy this code to preferred location: <pre onClick={handleDonationURLFocus}><input readOnly type="text" value={donationURL} /></pre></>
+                          : <>Add valid Conceal address to generate HTML code.</>
+                        }
+                      </div>
                     </div>
                   </div>
 

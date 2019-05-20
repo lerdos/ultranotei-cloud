@@ -301,6 +301,7 @@ const AppContextProvider = props => {
         dispatch({ type: 'SEND_TX', sendTxResponse });
         if (label && label !== '') addContact({ label, address, paymentID });
         extras.forEach(fn => fn());
+        getWalletList();
       })
       .catch(err => { layoutMessage = `ERROR ${err}` })
       .finally(() => {
@@ -365,23 +366,28 @@ const AppContextProvider = props => {
   };
 
   const initApp = () => {
+    const { location } = props;
     const { appSettings, userSettings } = state;
 
     getUser();
     check2FA();
     getWalletList();
-    getBlockchainHeight();
-    getMarketPrices();
-    getPrices();
-    getMarketData();
 
-    const intervals = [
-      { fn: getWalletList, time: userSettings.updateWalletsInterval },
-      { fn: getBlockchainHeight, time: appSettings.updateBlockchainHeightInterval },
-      { fn: getMarketPrices, time: appSettings.updateMarketPricesInterval },
-      { fn: getPrices, time: appSettings.updateMarketPricesInterval },
-      { fn: getMarketData, time: appSettings.updateMarketPricesInterval },
-    ];
+    const intervals = [];
+    intervals.push({ fn: getWalletList, time: userSettings.updateWalletsInterval });
+
+    if (!location.pathname.startsWith('/donate')) {
+      getBlockchainHeight();
+      getMarketPrices();
+      getPrices();
+      getMarketData();
+      intervals.push(
+        { fn: getBlockchainHeight, time: appSettings.updateBlockchainHeightInterval },
+        { fn: getMarketPrices, time: appSettings.updateMarketPricesInterval },
+        { fn: getPrices, time: appSettings.updateMarketPricesInterval },
+        { fn: getMarketData, time: appSettings.updateMarketPricesInterval },
+      )
+    }
 
     dispatch({ type: 'SET_INTERVALS', intervals });
   };

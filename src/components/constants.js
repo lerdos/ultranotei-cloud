@@ -24,4 +24,5 @@ export const constants = {
   investmentFee: 0.001,
   withdrawalFee: 0.0001,
   qrCodePrefix: 'conceal',
+  donationURL: 'https://conceal.cloud/donate',
 };

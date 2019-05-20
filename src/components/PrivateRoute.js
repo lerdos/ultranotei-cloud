@@ -17,17 +17,18 @@ const PrivateRoute = props => {
       {...rest}
       render={props =>
         Auth.loggedIn()
-          ? (
-              <>
-                <Header />
-                <NavBar />
-                <Component {...props} />
-                <Footer />
-              </>
-            )
-          : (
-              <Redirect to={{ pathname: '/login', state: { from: props.location } }}/>
-            )
+          ? <>
+              {props.location.pathname.startsWith('/donate')
+                ? <Component {...props} />
+                : <>
+                    <Header />
+                    <NavBar />
+                    <Component {...props} />
+                    <Footer />
+                  </>
+              }
+            </>
+          : <Redirect to={{ pathname: '/login', state: { from: props.location } }}/>
       }
     />
   );
