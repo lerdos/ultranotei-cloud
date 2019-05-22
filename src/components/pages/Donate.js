@@ -58,114 +58,135 @@ const Donate = props => {
   const formValid = useFormValidation(formValidation);
 
   return (
-    <div>
-      <h4>Donate</h4>
+    <div class="donatePage">
+		<div class="donateWrapper">
+		  <h6 class="slim-pagetitle">Donate</h6>
 
-      <div>
-        Donating to: {address} {recipientName && `(${recipientName})`}
-      </div>
+		  <form
+			onSubmit={e =>
+			  actions.sendTx(
+				{
+				  e,
+				  wallet: walletAddress,
+				  address,
+				  amount,
+				  message,
+				  twoFACode,
+				  password,
+				},
+				[
+				  resetAmount,
+				  resetMessage,
+				  resetTwoFACode,
+				  resetPassword,
+				],
+			  )
+			}
+		  >
+			<div class="row donateData">
+				<div class="col-lg-12">
+					<div class="form-layout form-layout-7">
+						<div class="row no-gutters">
+							<div class="col-5 col-sm-2">Donating to</div>
+							<div class="col-7 col-sm-10 wallet-address">{address} {recipientName && `(${recipientName})`}</div>
+						</div>
+						<div class="row no-gutters">
+							<div class="col-5 col-sm-2">From Wallet:</div>
+							<div class="col-7 col-sm-10">
+								<select
+									className="form-control"								
+									onChange={e => {
+									setWallet(wallets[e.target.value]);
+									setWalletAddress(e.target.value);
+									}}
+									value={walletAddress}
+								>
+									{Object.keys(wallets).map(address =>
+									<option value={address} key={address} disabled={wallets[address].balance <= 0}>
+										{maskAddress(address)} ({wallets[address].balance} CCX)
+									</option>
+									)}
+								</select>						
+							</div>
+						</div>
+						<div class="row no-gutters">
+							<div class="col-5 col-sm-2">Amount</div>
+							<div class="col-7 col-sm-10">
+								<input
+									{...bindAmount}
+									size={2}
+									className="form-control"								
+									placeholder="Amount"
+									name="amount"
+									type="number"
+									min={0}
+									max={maxValue}
+									step={Math.pow(10, -coinDecimals).toFixed(coinDecimals)}
+								/>
+							</div>
+						</div>
+						<div class="row no-gutters">
+							<div class="col-5 col-sm-2">Message</div>
+							<div class="col-7 col-sm-10">
+								<input
+									{...bindMessage}
+									size={6}
+									className="form-control maxWidth"								
+									placeholder="Message"
+									name="message"
+									type="text"
+								/>					
+							</div>
+						</div>
+						<div class="row no-gutters">
+							{userSettings.twoFAEnabled
+								? <>
+									<div class="col-5 col-sm-2">2FA Code</div>
+									<div class="col-7 col-sm-10">
+										<input
+										  {...bindTwoFACode}
+										  size={6}
+										  placeholder="2 Factor Authentication"
+										  className="form-control maxWidth"								
+										  name="twoFACode"
+										  type="number"
+										  minLength={6}
+										  maxLength={6}
+										/>
+									</div>
+								</>
+								: <>
+									<div class="col-5 col-sm-2">Password</div>
+									<div class="col-7 col-sm-10">
+										<input
+										  {...bindPassword}
+										  size={6}
+										  className="form-control maxWidth"								
+										  placeholder="Password"
+										  name="password"
+										  type="password"
+										  minLength={8}
+										/>
+									</div>
+								</>
+							}
+						</div>
+					</div>
+				</div>
+			</div>
 
-      <form
-        onSubmit={e =>
-          actions.sendTx(
-            {
-              e,
-              wallet: walletAddress,
-              address,
-              amount,
-              message,
-              twoFACode,
-              password,
-            },
-            [
-              resetAmount,
-              resetMessage,
-              resetTwoFACode,
-              resetPassword,
-            ],
-          )
-        }
-      >
-        <div>
-          From Wallet:
-          <select
-            onChange={e => {
-              setWallet(wallets[e.target.value]);
-              setWalletAddress(e.target.value);
-            }}
-            value={walletAddress}
-          >
-            {Object.keys(wallets).map(address =>
-              <option value={address} key={address} disabled={wallets[address].balance <= 0}>
-                {maskAddress(address)} ({wallets[address].balance} CCX)
-              </option>
-            )}
-          </select>
-        </div>
-
-        <div>
-          Amount:
-          <input
-            {...bindAmount}
-            size={2}
-            placeholder="Amount"
-            name="amount"
-            type="number"
-            min={0}
-            max={maxValue}
-            step={Math.pow(10, -coinDecimals).toFixed(coinDecimals)}
-          />
-        </div>
-
-        <div>
-          Message:
-          <input
-            {...bindMessage}
-            size={6}
-            placeholder="Message"
-            name="message"
-            type="text"
-          />
-        </div>
-
-        <div>
-          {userSettings.twoFAEnabled
-            ? <>
-                2FA Code:
-                <input
-                  {...bindTwoFACode}
-                  size={6}
-                  placeholder="2 Factor Authentication"
-                  name="twoFACode"
-                  type="number"
-                  minLength={6}
-                  maxLength={6}
-                />
-              </>
-            : <>
-                Password:
-                <input
-                  {...bindPassword}
-                  size={6}
-                  placeholder="Password"
-                  name="password"
-                  type="password"
-                  minLength={8}
-                />
-              </>
-          }
-        </div>
-
-        <div>
-          <button
-            type="submit"
-            disabled={formSubmitted || !formValid}
-          >
-            SEND
-          </button>
-        </div>
-      </form>
-    </div>
+			<div>
+			  <button
+				type="submit"
+				className="btn btn-outline-primary btn-uppercase-sm"
+				disabled={formSubmitted || !formValid}
+			  >
+				SEND
+			  </button>
+			</div>
+		  </form>
+		</div>
+	</div>
   )
 };
 

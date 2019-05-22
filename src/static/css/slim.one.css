@@ -1523,7 +1523,7 @@ pre input {
   color: rgb(255, 255, 255);
 }
 
-/******************** donation styling *********************/
+/******************** donation settings styling *********************/
 
 div.donationInfo .rbt-input-main {
   border: 1px solid #333 !important;
@@ -1534,3 +1534,31 @@ div.donationInfo .rbt-input-main {
 div.donationInfo .rbt-input-main:first-of-type {
   margin-right: 5px;
 }
+
+/******************** donation page styling *********************/
+
+div.donatePage {
+  padding: 40px;	
+}
+
+div.donateWrapper {
+  background-color: #212529;
+  max-width: 1140px;
+  padding: 25px;
+  margin: auto;
+}
+
+div.donateData {
+  margin-top: 25px;	
+  margin-bottom: 25px;	
+}
+
+div.donateData .form-control {
+  width: auto; 	
+}
+
+div.donateData .maxWidth {
+  width: 100%;
+}
+
+
