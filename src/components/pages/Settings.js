@@ -301,7 +301,7 @@ const Settings = () => {
                     </div>
                     <div className="col-7 col-sm-8">
                       <form onSubmit={e => updateUser({ e, email })}>
-                        <div className="input-group">
+                        <div className="input-group donationInfo">
                           <Typeahead
                             {...bindDonationWallet}
                             id="donationWallet"
@@ -319,7 +319,7 @@ const Settings = () => {
                             type="text"
                             placeholder="Recipient Name"
                             name="recipientName"
-                            className="form-control"
+                            className="form-control rbt-input-main"
                             maxLength={64}
                           />
                         </div>
