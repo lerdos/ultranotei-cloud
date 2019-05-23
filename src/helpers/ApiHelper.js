@@ -108,6 +108,7 @@ export default class ApiHelper {
   };
 
   sendTx = (wallet, address, paymentID, amount, message, twoFACode, password, ref) => {
+    let isPayment;
     const body = {
       amount: parseFloat(amount),
       message,
@@ -118,8 +119,17 @@ export default class ApiHelper {
     if (paymentID && paymentID !== '') body.paymentID = paymentID;
     if (twoFACode && twoFACode !== '') body.code = twoFACode;
     if (password && password !== '') body.password = password;
-    if (ref && ref !== '') body.ref = ref;
-    return this.fetch(`${this.apiURL}/wallet`, { method: 'PUT', body: JSON.stringify(body) })
+    if (ref && ref !== '') {
+      body.ref = ref;
+      isPayment = '/pay';
+    }
+    return this
+      .fetch(
+        `${this.apiURL}/wallet${isPayment}`,
+        {
+          method: isPayment ? 'POST' : 'PUT', 
+          body: JSON.stringify(body),
+        })
       .then(res => Promise.resolve(res));
   };
 
