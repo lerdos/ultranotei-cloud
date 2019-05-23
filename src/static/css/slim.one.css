@@ -1594,3 +1594,7 @@ label.codeExample {
 .autoWidth {
   width: auto !important;
 }
+
+.btnIPNS {
+  margin: 5px;
+}

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {AppContext} from '../ContextProvider';
+import { AppContext } from '../ContextProvider';
 import { maskAddress } from '../../helpers/utils';
-import {useFormInput, useFormValidation} from '../../helpers/hooks';
+import { useFormInput, useFormValidation } from '../../helpers/hooks';
 
 
 const IPN = props => {
@@ -59,8 +59,8 @@ const IPN = props => {
       walletBalanceValid &&
       totalAmountValid &&
       (twoFAEnabled
-          ? (parseInt(twoFACode) && twoFACode.toString().length === 6)
-          : (password !== '' && password.length >= 8)
+        ? (parseInt(twoFACode) && twoFACode.toString().length === 6)
+        : (password !== '' && password.length >= 8)
       )
     );
   }
@@ -104,7 +104,7 @@ const IPN = props => {
                   <div className="col-5 col-sm-2">From Wallet</div>
                   <div className="col-7 col-sm-10">
                     <select
-                      className="form-control"
+                      className="form-control autoWidth"
                       onChange={e => {
                         setWallet(wallets[e.target.value]);
                         setWalletAddress(e.target.value);
@@ -125,7 +125,7 @@ const IPN = props => {
                     <input
                       {...bindAmount}
                       size={2}
-                      className="form-control"
+                      className="form-control autoWidth"
                       placeholder="Amount"
                       name="amount"
                       type="number"
@@ -157,7 +157,7 @@ const IPN = props => {
                           {...bindTwoFACode}
                           size={6}
                           placeholder="2 Factor Authentication"
-                          className="form-control maxWidth"
+                          className="form-control autoWidth"
                           name="twoFACode"
                           type="number"
                           minLength={6}
@@ -171,7 +171,7 @@ const IPN = props => {
                         <input
                           {...bindPassword}
                           size={6}
-                          className="form-control maxWidth"
+                          className="form-control"
                           placeholder="Password"
                           name="password"
                           type="password"
@@ -188,14 +188,14 @@ const IPN = props => {
           <div>
             <button
               type="reset"
-              className="btn btn-outline-danger btn-uppercase-sm"
+              className="btn btn-outline-danger btn-uppercase-sm btnIPNS"
               onClick={() => window.location.replace(ipn.failedIpnUrl)}
             >
               CANCEL
             </button>
             <button
               type="submit"
-              className={`btn ${formValid ? 'btn-outline-success' : 'btn-outline-secondary'} btn-uppercase-sm`}
+              className={`btn ${formValid ? 'btn-outline-success' : 'btn-outline-secondary'} btn-uppercase-sm btnIPNS`}
               disabled={formSubmitted || !formValid}
             >
               SEND
@@ -208,12 +208,12 @@ const IPN = props => {
                   ? <div className="text-danger">{sendTxResponse.message}</div>
                   : <>
                     TX Hash: <a
-                    href={`${appSettings.explorerURL}/index.html?hash=${sendTxResponse.message.transactionHash}#blockchain_transaction`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {sendTxResponse.message.transactionHash}
-                  </a><br />
+                      href={`${appSettings.explorerURL}/index.html?hash=${sendTxResponse.message.transactionHash}#blockchain_transaction`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {sendTxResponse.message.transactionHash}
+                    </a><br />
                     Secret Key: {sendTxResponse.message.transactionSecretKey}
                   </>
               }
