@@ -1582,3 +1582,15 @@ input[type=number] {
 .rbt-menu.dropdown-menu li a {
   color: rgb(181, 197, 210);
 }
+
+#btnUpdateIPN {
+  margin-top: 20px;
+}
+
+label.codeExample {
+  display: none;
+}
+
+.autoWidth {
+  width: auto !important;
+}

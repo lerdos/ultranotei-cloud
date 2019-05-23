@@ -2,8 +2,8 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import { AppContext } from '../ContextProvider';
-import {useFormInput, useFormValidation, useTypeaheadInput} from '../../helpers/hooks';
-import {Typeahead} from 'react-bootstrap-typeahead';
+import { useFormInput, useFormValidation, useTypeaheadInput } from '../../helpers/hooks';
+import { Typeahead } from 'react-bootstrap-typeahead';
 
 
 const Settings = () => {
@@ -20,7 +20,7 @@ const Settings = () => {
   const { value: donationWallet, bind: bindDonationWallet } = useTypeaheadInput('');
   const { value: recipientName, bind: bindRecipientName } = useFormInput('');
   const [donationURL, setDonationURL] = useState(null);
-  const { value: IPNName, bind: bindIPNName } = useFormInput( '');
+  const { value: IPNName, bind: bindIPNName } = useFormInput('');
   const { value: IPNWallet, bind: bindIPNWallet, setDefaultInputValue: setIPNWallet } = useTypeaheadInput('');
   const { value: IPNURL, bind: bindIPNURL } = useFormInput('');
   const { value: IPNSuccessInputURL, bind: bindIPNSuccessInputURL } = useFormInput('');
@@ -91,8 +91,9 @@ const Settings = () => {
             </ol>
             <h6 className="slim-pagetitle">Settings</h6>
           </div>
+
           <div className="section-wrapper mg-t-20">
-            <label className="section-title">Settings</label>
+            <label className="section-title">General</label>
             {message &&
               <div className="text-danger mg-b-20">{message}</div>
             }
@@ -185,7 +186,7 @@ const Settings = () => {
                           onClick={e =>
                             window.confirm('Send reset password email? You will be logged out!') &&
                             resetPassword(e, user.email)}
-                          >
+                        >
                           Reset Password
                         </button>
                       </div>
@@ -201,18 +202,18 @@ const Settings = () => {
                         <div className="settingsText">
                           Your two-factor authentication is currently&nbsp;
                           <strong className={twoFAEnabled ? 'text-success' : 'text-danger'}>
-                            {twoFAEnabled ? 'ENABLED' : 'DISABLED' }
+                            {twoFAEnabled ? 'ENABLED' : 'DISABLED'}
                           </strong>.&nbsp;
                         </div>
                         <div className="settingsButton">
                           <button
-                          className={`btn btn-uppercase-sm ${twoFAEnabled ? 'btn-outline-danger' : 'btn-outline-success' }`}
-                          onClick={() => {
-                            toggle2FADialog(!twoFADialogOpened);
-                            if (layout.qrCodeUrl === '') getQRCode();
-                          }}
+                            className={`btn btn-uppercase-sm ${twoFAEnabled ? 'btn-outline-danger' : 'btn-outline-success'}`}
+                            onClick={() => {
+                              toggle2FADialog(!twoFADialogOpened);
+                              if (layout.qrCodeUrl === '') getQRCode();
+                            }}
                           >
-                          {twoFAEnabled ? 'Disable' : 'Enable' }
+                            {twoFAEnabled ? 'Disable' : 'Enable'}
                           </button>
                         </div>
                       </div>
@@ -220,52 +221,52 @@ const Settings = () => {
                       {twoFADialogOpened &&
                         <div className="twofa-dialog">
                           {twoFAEnabled &&
-                          <>
-                            <p>
-                              Enter the passcode from your authenticator app to disable two-factor authentication.
+                            <>
+                              <p>
+                                Enter the passcode from your authenticator app to disable two-factor authentication.
                             </p>
-                            <form
-                              onSubmit={e =>
-                                update2FA(
-                                  {
-                                    e,
-                                    twoFACode,
-                                    enable: false,
-                                  },
-                                  [
-                                    resetTwoFACode,
-                                    toggle2FADialog,
-                                  ],
-                                )
-                              }
-                            >
-                              <div className="form-layout form-layout-7">
-                                <div className="row no-gutters">
-                                  <div className="col-5 col-sm-4">
-                                    2FA Key
+                              <form
+                                onSubmit={e =>
+                                  update2FA(
+                                    {
+                                      e,
+                                      twoFACode,
+                                      enable: false,
+                                    },
+                                    [
+                                      resetTwoFACode,
+                                      toggle2FADialog,
+                                    ],
+                                  )
+                                }
+                              >
+                                <div className="form-layout form-layout-7">
+                                  <div className="row no-gutters">
+                                    <div className="col-5 col-sm-4">
+                                      2FA Key
                                   </div>
-                                  <div className="col-7 col-sm-8 wallet-address">
-                                    <input
-                                      {...bindTwoFACode}
-                                      placeholder="2 Factor Authentication Key"
-                                      type="number"
-                                      name="twoFACode"
-                                      className="form-control"
-                                      minLength={6}
-                                      maxLength={6}
-                                    />
+                                    <div className="col-7 col-sm-8 wallet-address">
+                                      <input
+                                        {...bindTwoFACode}
+                                        placeholder="2 Factor Authentication Key"
+                                        type="number"
+                                        name="twoFACode"
+                                        className="form-control"
+                                        minLength={6}
+                                        maxLength={6}
+                                      />
+                                    </div>
                                   </div>
+                                  <button
+                                    type="submit"
+                                    disabled={formSubmitted || !twoFAFormValid}
+                                    className="btn btn-primary btn-block btn-signin"
+                                  >
+                                    {formSubmitted ? 'Please wait...' : 'Disable'}
+                                  </button>
                                 </div>
-                                <button
-                                  type="submit"
-                                  disabled={formSubmitted || !twoFAFormValid}
-                                  className="btn btn-primary btn-block btn-signin"
-                                >
-                                  {formSubmitted ? 'Please wait...' : 'Disable'}
-                                </button>
-                              </div>
-                            </form>
-                          </>
+                              </form>
+                            </>
                           }
                           {!twoFAEnabled &&
                             <>
@@ -361,151 +362,166 @@ const Settings = () => {
                       </div>
                     </div>
                   </div>
-
-                  <div className="row no-gutters">
-                    <div className="col-5 col-sm-4 align-items-start pd-t-25-force">
-                      IPN
-                    </div>
-                    <div className="col-7 col-sm-8 wallet-address">
-                      <form
-                        className="form-layout form-layout-2"
-                        onSubmit={e =>
-                          updateIPNConfig({
-                            e,
-                            IPNName,
-                            IPNWallet,
-                            IPNURL,
-                            IPNSuccessInputURL,
-                            IPNFailedInputURL,
-                            IPNMaxRetries,
-                            IPNTxThreshold,
-                          })
-                        }
-                      >
-                        <div className="form-group ipn-input">
-                          <label className="form-control-label">
-                            Name of the business:
-                          </label>
-                          <input
-                            {...bindIPNName}
-                            placeholder={ipn.name || 'Business Name'}
-                            type="text"
-                            name="ipnName"
-                            className="form-control"
-                            minLength={1}
-                          />
-                        </div>
-                        <div className="form-group ipn-input">
-                          <label className="form-control-label">
-                            Wallet address for receiving funds:
-                          </label>
-                          <Typeahead
-                            {...bindIPNWallet}
-                            id="IPNWallet"
-                            labelKey="IPNWallet"
-                            options={Object.keys(wallets)}
-                            placeholder={ipn.wallet || 'Wallet Address'}
-                            emptyLabel="No wallets available"
-                            highlightOnlyResult
-                            selectHintOnEnter
-                            minLength={1}
-                            bodyContainer
-                          />
-                        </div>
-                        <div className="form-group ipn-input">
-                          <label className="form-control-label">
-                            Callback URL (e.g. <code>https://example.com/ccx_transaction_received?tx=TX_HASH&ref=ORDER_ID</code>):
-                          </label>
-                          <input
-                            {...bindIPNURL}
-                            placeholder={ipn.ipnUrl || 'Callback URL'}
-                            type="url"
-                            name="ipnURL"
-                            className="form-control"
-                            minLength={10}
-                          />
-                        </div>
-                        <div className="form-group ipn-input">
-                          <label className="form-control-label">
-                            URL to redirect on successful payment:
-                          </label>
-                          <input
-                            {...bindIPNSuccessInputURL}
-                            placeholder={ipn.successIpnUrl || 'Success URL'}
-                            type="url"
-                            name="ipnSuccessURL"
-                            className="form-control"
-                            minLength={10}
-                          />
-                        </div>
-                        <div className="form-group ipn-input">
-                          <label className="form-control-label">
-                            URL to redirect on failed payment:
-                          </label>
-                          <input
-                            {...bindIPNFailedInputURL}
-                            placeholder={ipn.failedIpnUrl || 'Failed URL'}
-                            type="url"
-                            name="ipnFailedURL"
-                            className="form-control"
-                            minLength={10}
-                          />
-                        </div>
-                        <div className="form-group ipn-input">
-                          <label className="form-control-label">
-                            Number of retries to call callback URL (max. 10 times):
-                          </label>
-                          <input
-                            {...bindIPNMaxRetries}
-                            placeholder={ipn.maxRetries || 'Max. Retries'}
-                            type="number"
-                            name="ipnMaxRetries"
-                            className="form-control"
-                            min={0}
-                            max={10}
-                          />
-                        </div>
-                        <div className="form-group ipn-input">
-                          <label className="form-control-label">
-                            Number of confirmations before calling callback URL:
-                          </label>
-                          <input
-                            {...bindIPNTxThreshold}
-                            placeholder={ipn.txThreshold || 'Nr. of Confirmations'}
-                            type="number"
-                            name="ipnTxThreshold"
-                            className="form-control"
-                            min={1}
-                            max={10}
-                          />
-                        </div>
-
-                        <button
-                          type="submit"
-                          className="btn btn-outline-primary btn-uppercase-sm"
-                          disabled={formSubmitted || !IPNFormValid}
-                        >
-                          UPDATE
-                        </button>
-                      </form>
-                      {ipn.clientKey &&
-                        <div>
-                          Current Client Key:
-                          <pre onClick={handleIPNKeyFocus}><input readOnly type="text" value={ipn.clientKey} /></pre>
-                          Use the URL above to receive CCX payments from your Website.
-                        </div>
-                      }
-                    </div>
-                  </div>
-
                 </div>
               </div>
             </div>
           </div>
 
+          <div className="section-wrapper mg-t-20">
+            <label className="section-title">IPN</label>
+            <div className="row">
+              <div className="col-lg-12">
+                <div className="form-layout form-layout-7">
+                  <form
+                    className="form-layout form-layout-2"
+                    onSubmit={e =>
+                      updateIPNConfig({
+                        e,
+                        IPNName,
+                        IPNWallet,
+                        IPNURL,
+                        IPNSuccessInputURL,
+                        IPNFailedInputURL,
+                        IPNMaxRetries,
+                        IPNTxThreshold,
+                      })
+                    }
+                  >
+                    <div className="row no-gutters">
+                      <div className="col-5 col-sm-4">
+                        Name of the business
+                      </div>
+                      <div className="col-7 col-sm-8 wallet-address">
+                        <input
+                          {...bindIPNName}
+                          placeholder={ipn.name || 'Business Name'}
+                          type="text"
+                          name="ipnName"
+                          className="form-control"
+                          minLength={1}
+                        />
+                      </div>
+                    </div>
+                    <div className="row no-gutters">
+                      <div className="col-5 col-sm-4">
+                        Wallet address for receiving funds
+                      </div>
+                      <div className="col-7 col-sm-8 wallet-address">
+                        <Typeahead
+                          {...bindIPNWallet}
+                          id="IPNWallet"
+                          labelKey="IPNWallet"
+                          options={Object.keys(wallets)}
+                          placeholder={ipn.wallet || 'Wallet Address'}
+                          emptyLabel="No wallets available"
+                          highlightOnlyResult
+                          selectHintOnEnter
+                          minLength={1}
+                          bodyContainer
+                        />
+                      </div>
+                    </div>
+                    <div className="row no-gutters">
+                      <div className="col-5 col-sm-4">
+                        Callback URL <label class="codeExample">e.g. <code>https://example.com/ccx_transaction_received?tx=TX_HASH&ref=ORDER_ID</code></label>
+                      </div>
+                      <div className="col-7 col-sm-8 wallet-address">
+                        <input
+                          {...bindIPNURL}
+                          placeholder={ipn.ipnUrl || 'Callback URL'}
+                          type="url"
+                          name="ipnURL"
+                          className="form-control"
+                          minLength={10}
+                        />
+                      </div>
+                    </div>
+                    <div className="row no-gutters">
+                      <div className="col-5 col-sm-4">
+                        URL to redirect on successful payment
+                      </div>
+                      <div className="col-7 col-sm-8 wallet-address">
+                        <input
+                          {...bindIPNSuccessInputURL}
+                          placeholder={ipn.successIpnUrl || 'Success URL'}
+                          type="url"
+                          name="ipnSuccessURL"
+                          className="form-control"
+                          minLength={10}
+                        />
+                      </div>
+                    </div>
+                    <div className="row no-gutters">
+                      <div className="col-5 col-sm-4">
+                        URL to redirect on failed payment
+                      </div>
+                      <div className="col-7 col-sm-8 wallet-address">
+                        <input
+                          {...bindIPNFailedInputURL}
+                          placeholder={ipn.failedIpnUrl || 'Failed URL'}
+                          type="url"
+                          name="ipnFailedURL"
+                          className="form-control"
+                          minLength={10}
+                        />
+                      </div>
+                    </div>
+                    <div className="row no-gutters">
+                      <div className="col-5 col-sm-4">
+                        Number of retries to call callback URL (max. 10 times)
+                      </div>
+                      <div className="col-7 col-sm-8 wallet-address">
+                        <input
+                          {...bindIPNMaxRetries}
+                          placeholder={ipn.maxRetries || 'Max. Retries'}
+                          type="number"
+                          name="ipnMaxRetries"
+                          className="form-control autoWidth"
+                          min={0}
+                          max={10}
+                        />
+                      </div>
+                    </div>
+                    <div className="row no-gutters">
+                      <div className="col-5 col-sm-4">
+                        Number of confirmations before calling callback URL
+                      </div>
+                      <div className="col-7 col-sm-8 wallet-address">
+                        <input
+                          {...bindIPNTxThreshold}
+                          placeholder={ipn.txThreshold || 'Nr. of Confirmations'}
+                          type="number"
+                          name="ipnTxThreshold"
+                          className="form-control autoWidth"
+                          min={1}
+                          max={10}
+                        />
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      id="btnUpdateIPN"
+                      className="btn btn-outline-primary btn-uppercase-sm"
+                      disabled={formSubmitted || !IPNFormValid}
+                    >
+                      UPDATE
+                        </button>
+                  </form>
+                  {ipn.clientKey &&
+                    <div>
+                      Current Client Key:
+                          <pre onClick={handleIPNKeyFocus}><input readOnly type="text" value={ipn.clientKey} /></pre>
+                      Use the URL above to receive CCX payments from your Website.
+                        </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 };
 
