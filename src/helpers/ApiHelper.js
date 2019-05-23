@@ -107,22 +107,57 @@ export default class ApiHelper {
       .then(res => Promise.resolve(res));
   };
 
-  sendTx = (wallet, address, paymentID, amount, message, twoFACode, password) => {
+  sendTx = (wallet, address, paymentID, amount, message, twoFACode, password, ref) => {
     const body = {
-      address,  // destination
       amount: parseFloat(amount),
       message,
       paymentID,
       wallet,  // origin
     };
+    if (address && address !== '') body.address = address;  // destination
+    if (paymentID && paymentID !== '') body.paymentID = paymentID;
     if (twoFACode && twoFACode !== '') body.code = twoFACode;
     if (password && password !== '') body.password = password;
+    if (ref && ref !== '') body.ref = ref;
     return this.fetch(`${this.apiURL}/wallet`, { method: 'PUT', body: JSON.stringify(body) })
       .then(res => Promise.resolve(res));
   };
 
   deleteWallet = address => {
     return this.fetch(`${this.apiURL}/wallet?address=${address}`, { method: 'DELETE' })
+      .then(res => Promise.resolve(res));
+  };
+
+  getIPNConfig = address => {
+    return this.fetch(`${this.apiURL}/ipn/config/?wallet=${address}`, { method: 'GET' })
+      .then(res => Promise.resolve(res));
+  };
+
+  getIPNClient = client => {
+    return this.fetch(`${this.apiURL}/ipn/?client=${client}`, { method: 'GET' })
+      .then(res => Promise.resolve(res));
+  };
+
+  updateIPNConfig = options => {
+    const {
+      IPNName,
+      IPNWallet,
+      IPNURL,
+      IPNSuccessInputURL,
+      IPNFailedInputURL,
+      IPNMaxRetries,
+      IPNTxThreshold,
+    } = options;
+    const body = {
+      name: IPNName,
+      wallet: IPNWallet,
+      ipnUrl: IPNURL,
+      successIpnUrl: IPNSuccessInputURL,
+      failedIpnUrl:  IPNFailedInputURL,
+      maxRetries: IPNMaxRetries,
+      txThreshold: IPNTxThreshold,
+    };
+    return this.fetch(`${this.apiURL}/ipn`, { method: 'POST', body: JSON.stringify(body) })
       .then(res => Promise.resolve(res));
   };
 

@@ -198,6 +198,34 @@ const AppContextProvider = props => {
       .finally(() => message && dispatch({ type: 'DISPLAY_MESSAGE', message }));
   };
 
+  const getIPNConfig = address => {
+    Api.getIPNConfig(address)
+      .then(res =>
+        res.result === 'success' && res.message[0] !== false &&
+        dispatch({ type: 'SET_IPN_CONFIG', ipn: res.message, wallet: address })
+      )
+      .catch(e => console.error(e));
+  };
+
+  const getIPNClient = client => {
+    Api.getIPNClient(client)
+      .then(res =>
+        res.result === 'success' && res.message[0] !== false &&
+        dispatch({ type: 'SET_IPN_CONFIG', ipn: res.message })
+      )
+      .catch(e => console.error(e));
+  };
+
+  const updateIPNConfig = options => {
+    options.e.preventDefault();
+    Api.updateIPNConfig(options)
+      .then(res =>
+        res.result === 'success' &&
+        dispatch({ type: 'UPDATE_IPN_CONFIG', clientKey: res.message.config })
+      )
+      .catch(e => console.error(e));
+  };
+
   const createWallet = () => {
     let message;
     Api.createWallet()
@@ -235,6 +263,7 @@ const AppContextProvider = props => {
         res.message.addresses && res.message.addresses.forEach(address => {
           dispatch({ type: 'CREATE_WALLET', address });
           getWalletDetails(address);
+          getIPNConfig(address);
         });
       })
       .catch(e => console.error(e))
@@ -279,12 +308,12 @@ const AppContextProvider = props => {
   };
 
   const sendTx = (options, extras) => {
-    const { e, wallet, address, paymentID, amount, message, twoFACode, password, label } = options;
+    const { e, wallet, address, paymentID, amount, message, twoFACode, password, label, ref } = options;
     e.preventDefault();
     dispatch({ type: 'FORM_SUBMITTED', value: true });
     let layoutMessage;
     let sendTxResponse;
-    Api.sendTx(wallet, address, paymentID, amount, message, twoFACode, password)
+    Api.sendTx(wallet, address, paymentID, amount, message, twoFACode, password, ref)
       .then(res => {
         if (res.result === 'error' || res.message.error) {
           sendTxResponse = {
@@ -297,6 +326,7 @@ const AppContextProvider = props => {
         sendTxResponse = {
           status: 'success',
           message: res.message.result,
+          redirect: res.message.redirect,
         };
         dispatch({ type: 'SEND_TX', sendTxResponse });
         if (label && label !== '') addContact({ label, address, paymentID });
@@ -356,6 +386,8 @@ const AppContextProvider = props => {
     deleteWallet,
     getWalletKeys,
     downloadWalletKeys,
+    updateIPNConfig,
+    getIPNClient,
     sendTx,
     getBlockchainHeight,
     getMarketPrices,
@@ -376,7 +408,7 @@ const AppContextProvider = props => {
     const intervals = [];
     intervals.push({ fn: getWalletList, time: userSettings.updateWalletsInterval });
 
-    if (!location.pathname.startsWith('/donate')) {
+    if (!location.pathname.startsWith('/donate') && !location.pathname.startsWith('/pay')) {
       getBlockchainHeight();
       getMarketPrices();
       getPrices();
@@ -387,6 +419,12 @@ const AppContextProvider = props => {
         { fn: getPrices, time: appSettings.updateMarketPricesInterval },
         { fn: getMarketData, time: appSettings.updateMarketPricesInterval },
       )
+    }
+
+    if (location.pathname.startsWith('/pay')) {
+      const params = new URLSearchParams(props.location.search);
+      const client = params.get('client');
+      if (client) getIPNClient(client);
     }
 
     dispatch({ type: 'SET_INTERVALS', intervals });

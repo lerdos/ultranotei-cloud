@@ -1283,26 +1283,26 @@ hr {
 /******************** MARGIN FOR NAV ICONS *********************/
 
 .nav-link span {
-	margin-left: 10px;
+  margin-left: 10px;
 }
 
 /******************** STRETCH ALL CHILDREN 100% VERTICAL *********************/
 
 .flex-stretch-vertical {
-	flex-direction: row;
-	height: 100%;
+  flex-direction: row;
+  height: 100%;
 }
 
 .flex-stretch-vertical .card {
-	height: 100%;
+  height: 100%;
 }
 
 /******************** dialogs widths should be larger *********************/
 
 #dlgReceiveCoins, #dlgSendCoins {
-	width: 80%;
-	max-width: 1100px;
-	border: 1px solid #343a40;
+  width: 80%;
+  max-width: 1100px;
+  border: 1px solid #343a40;
 }
 
 #dlgExportKeys {
@@ -1320,65 +1320,65 @@ hr {
 /******************** the send dialog buttons *********************/
 
 .tx-total-btns {
-	display: flex;
-	flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .btn-send {
-	margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 /******************** wallet address in receive *********************/
 
 #dlgReceiveCoins .receive-address {
-	padding: 5px 8px 5px 20px !important;
+  padding: 5px 8px 5px 20px !important;
 }
 
 #dlgReceiveCoins .receive-address input {
-	background-color: #212529 !important;
+  background-color: #212529 !important;
 }
 
 /******************** export keys background and padding *********************/
 
 #dlgExportKeys .wallet-address {
-	padding: 5px 8px 5px 20px !important;
+  padding: 5px 8px 5px 20px !important;
 }
 
 #dlgExportKeys .wallet-address input {
-	background-color: #212529 !important;
+  background-color: #212529 !important;
 }
 
 /******************** mobile related dialog fixes *********************/
 
 @media (max-width: 900px) {
-	.modal-dialog {
-		width: 90% !important;
-		margin: 0px !important;
-	}
+  .modal-dialog {
+    width: 90% !important;
+    margin: 0px !important;
+  }
 }
 
 @media (max-width: 600px) {
-	.modal-dialog {
-		width: 100% !important;
-		margin: 0px !important;
-	}
+  .modal-dialog {
+    width: 100% !important;
+    margin: 0px !important;
+  }
 }
 
 /******************** mobile related dialog fixes *********************/
 
 #dlgTxDetails {
-	border: 1px solid #343a40;
+  border: 1px solid #343a40;
 }
 
 #dlgTxDetails .media {
-	overflow: hidden;
+  overflow: hidden;
 }
 
 /******************** settings buttons *********************/
 
 .row-text-button {
-	display: flex;
-	align-items: center;
+  display: flex;
+  align-items: center;
   justify-content: space-between;
 }
 
@@ -1391,48 +1391,48 @@ hr {
 /******************** file select *********************/
 
 .custom-file-input {
-	opacity: 1 !important;
+  opacity: 1 !important;
 }
 
 /******************** mobile forms  *********************/
 
 .form-layout .row .col-5 {
-	text-align: right;
+  text-align: right;
 }
 
 @media (max-width: 700px) {
-	.form-layout .row {
-		display: block !important;
-	}
+  .form-layout .row {
+    display: block !important;
+  }
 
-	.form-layout .row .col-5 {
-		text-align: left;
-	}
+  .form-layout .row .col-5 {
+    text-align: left;
+  }
 
-	.form-layout .row .col-5,
-	.form-layout .row .col-7 {
-		max-width: 100% !important;
-		display: block !important;
-		width: 100% !important;
-	}
+  .form-layout .row .col-5,
+  .form-layout .row .col-7 {
+    max-width: 100% !important;
+    display: block !important;
+    width: 100% !important;
+  }
 }
 
 /******************** mobile send form  *********************/
 
 @media (max-width: 600px) {
-	.sendSummary h2 {
-		font-size: 1.4rem;
-	}
+  .sendSummary h2 {
+    font-size: 1.4rem;
+  }
 }
 
 @media (max-width: 400px) {
-	.sendSection {
-		display: block !important;
-	}
+  .sendSection {
+    display: block !important;
+  }
 
-	.sendSummary {
-		padding: 20px;
-	}
+  .sendSummary {
+    padding: 20px;
+  }
 }
 
 /******************** sticky footer at bottom  *********************/
@@ -1462,34 +1462,34 @@ body {
 
 .btnSaveContact,
 .btnExportKeys {
-	margin-top: 15px;
+  margin-top: 15px;
 }
 
 /******************** address dropdown menu *********************/
 
 .addrDropdownLabel {
-	color: #6c757d;
+  color: #6c757d;
 }
 
 .addrDropdownAddress {
-	color: rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
 }
 #address {
-	border: 1px solid #6c757d;
+  border: 1px solid #6c757d;
 }
 
 #address .dropdown-item:hover, #address .dropdown-item:focus {
-	color: #16181b;
-	text-decoration: none;
-	background-color: rgba(255, 255, 255, 0.1);
+  color: #16181b;
+  text-decoration: none;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 /******************** market stats info *********************/
 
 .dash-flex {
   width: 100%;
-	display: flex;
-	margin-left: 0 !important;
+  display: flex;
+  margin-left: 0 !important;
   justify-content: space-between;
   justify-items: center;
   align-items: center;
@@ -1497,11 +1497,11 @@ body {
 }
 
 .info-text {
-	width: 100%;
+  width: 100%;
 }
 
 .icon-info {
-	font-size: 3rem !important;
+  font-size: 3rem !important;
 }
 
 code,
@@ -1538,7 +1538,7 @@ div.donationInfo .rbt-input-main:first-of-type {
 /******************** donation page styling *********************/
 
 div.donatePage {
-  padding: 40px;	
+  padding: 40px;
 }
 
 div.donateWrapper {
@@ -1549,16 +1549,36 @@ div.donateWrapper {
 }
 
 div.donateData {
-  margin-top: 25px;	
-  margin-bottom: 25px;	
+  margin-top: 25px;
+  margin-bottom: 25px;
 }
 
 div.donateData .form-control {
-  width: auto; 	
+  width: auto;
 }
 
 div.donateData .maxWidth {
   width: 100%;
 }
 
+/******************** ipn settings styling *********************/
 
+.ipn-input .form-control-label code {
+  text-transform: none;
+}
+
+.ipn-input code {
+  color: rgb(134, 139, 161);
+}
+
+input[type=number] {
+  color: rgb(255, 255, 255) !important;
+}
+
+.rbt-input-hint {
+  color: rgb(108, 117, 125) !important;
+}
+
+.rbt-menu.dropdown-menu li a {
+  color: rgb(181, 197, 210);
+}

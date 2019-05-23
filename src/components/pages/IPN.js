@@ -4,21 +4,32 @@ import { maskAddress } from '../../helpers/utils';
 import {useFormInput, useFormValidation} from '../../helpers/hooks';
 
 
-const Donate = props => {
+const IPN = props => {
   const { actions, state } = useContext(AppContext);
   const { appSettings, layout, userSettings, wallets } = state;
   const { coinDecimals, defaultFee, messageFee, feePerChar } = appSettings;
+  const { ipn, twoFAEnabled } = userSettings;
   const { formSubmitted, sendTxResponse } = layout;
 
-  const address = props.match.params.address;
-  const recipientName = props.match.params.recipientName;
+  if (sendTxResponse && sendTxResponse.redirect) {
+    setTimeout(() => window.location(sendTxResponse.redirect), 10 * 1000);
+  }
 
-  const { value: amount, bind: bindAmount, reset: resetAmount } = useFormInput('');
+  const params = new URLSearchParams(props.location.search);
+  const client = params.get('client');
+  const ref = params.get('ref');
+  const amountPredefined = params.get('amount');
+
+  const { value: amount, bind: bindAmount, reset: resetAmount, setValue: setAmountValue } = useFormInput('');
   const { value: message, bind: bindMessage, reset: resetMessage } = useFormInput('');
   const { value: twoFACode, bind: bindTwoFACode, reset: resetTwoFACode } = useFormInput('');
   const { value: password, bind: bindPassword, reset: resetPassword } = useFormInput('');
   const [wallet, setWallet] = useState(null);
   const [walletAddress, setWalletAddress] = useState('');
+
+  useEffect(() => {
+    if (amountPredefined) setAmountValue(amountPredefined);
+  }, []);
 
   useEffect(() => {
     if (Object.keys(wallets).length > 0 && (!wallet || Object.keys(wallets).length !== 0)) {
@@ -47,9 +58,9 @@ const Donate = props => {
     formValidation = (
       walletBalanceValid &&
       totalAmountValid &&
-      (userSettings.twoFAEnabled
-        ? (parseInt(twoFACode) && twoFACode.toString().length === 6)
-        : (password !== '' && password.length >= 8)
+      (twoFAEnabled
+          ? (parseInt(twoFACode) && twoFACode.toString().length === 6)
+          : (password !== '' && password.length >= 8)
       )
     );
   }
@@ -58,26 +69,27 @@ const Donate = props => {
   return (
     <div className="donatePage">
       <div className="donateWrapper">
-        <h6 className="slim-pagetitle">Donate</h6>
+        <h6 className="slim-pagetitle">IPN</h6>
 
         <form
           onSubmit={e =>
             actions.sendTx(
-            {
-              e,
-              wallet: walletAddress,
-              address,
-              amount,
-              message,
-              twoFACode,
-              password,
-            },
-            [
-              resetAmount,
-              resetMessage,
-              resetTwoFACode,
-              resetPassword,
-            ],
+              {
+                e,
+                wallet: walletAddress,
+                client,
+                amount,
+                message,
+                twoFACode,
+                password,
+                ref,
+              },
+              [
+                resetAmount,
+                resetMessage,
+                resetTwoFACode,
+                resetPassword,
+              ],
             )
           }
         >
@@ -85,8 +97,8 @@ const Donate = props => {
             <div className="col-lg-12">
               <div className="form-layout form-layout-7">
                 <div className="row no-gutters">
-                  <div className="col-5 col-sm-2">Donating to</div>
-                  <div className="col-7 col-sm-10 wallet-address">{address} {recipientName && `(${recipientName})`}</div>
+                  <div className="col-5 col-sm-2">Client ID</div>
+                  <div className="col-7 col-sm-10 wallet-address">{client}</div>
                 </div>
                 <div className="row no-gutters">
                   <div className="col-5 col-sm-2">From Wallet</div>
@@ -100,9 +112,9 @@ const Donate = props => {
                       value={walletAddress}
                     >
                       {Object.keys(wallets).map(address =>
-                      <option value={address} key={address} disabled={wallets[address].balance <= 0}>
-                        {maskAddress(address)} ({wallets[address].balance} CCX)
-                      </option>
+                        <option value={address} key={address} disabled={wallets[address].balance <= 0}>
+                          {maskAddress(address)} ({wallets[address].balance} CCX)
+                        </option>
                       )}
                     </select>
                   </div>
@@ -137,36 +149,36 @@ const Donate = props => {
                   </div>
                 </div>
                 <div className="row no-gutters">
-                  {userSettings.twoFAEnabled
+                  {twoFAEnabled
                     ? <>
-                        <div className="col-5 col-sm-2">2FA Code</div>
-                        <div className="col-7 col-sm-10">
-                          <input
-                            {...bindTwoFACode}
-                            size={6}
-                            placeholder="2 Factor Authentication"
-                            className="form-control maxWidth"
-                            name="twoFACode"
-                            type="number"
-                            minLength={6}
-                            maxLength={6}
-                          />
-                        </div>
-                      </>
+                      <div className="col-5 col-sm-2">2FA Code</div>
+                      <div className="col-7 col-sm-10">
+                        <input
+                          {...bindTwoFACode}
+                          size={6}
+                          placeholder="2 Factor Authentication"
+                          className="form-control maxWidth"
+                          name="twoFACode"
+                          type="number"
+                          minLength={6}
+                          maxLength={6}
+                        />
+                      </div>
+                    </>
                     : <>
-                        <div className="col-5 col-sm-2">Password</div>
-                        <div className="col-7 col-sm-10">
-                          <input
-                            {...bindPassword}
-                            size={6}
-                            className="form-control maxWidth"
-                            placeholder="Password"
-                            name="password"
-                            type="password"
-                            minLength={8}
-                          />
-                        </div>
-                      </>
+                      <div className="col-5 col-sm-2">Password</div>
+                      <div className="col-7 col-sm-10">
+                        <input
+                          {...bindPassword}
+                          size={6}
+                          className="form-control maxWidth"
+                          placeholder="Password"
+                          name="password"
+                          type="password"
+                          minLength={8}
+                        />
+                      </div>
+                    </>
                   }
                 </div>
               </div>
@@ -175,14 +187,20 @@ const Donate = props => {
 
           <div>
             <button
+              type="reset"
+              className="btn btn-outline-danger btn-uppercase-sm"
+              onClick={() => window.location.replace(ipn.failedIpnUrl)}
+            >
+              CANCEL
+            </button>
+            <button
               type="submit"
-              className="btn btn-outline-primary btn-uppercase-sm"
+              className={`btn ${formValid ? 'btn-outline-success' : 'btn-outline-secondary'} btn-uppercase-sm`}
               disabled={formSubmitted || !formValid}
             >
               SEND
             </button>
           </div>
-
           {sendTxResponse &&
             <div className={`${sendTxResponse.status}-message`}>
               {
@@ -201,10 +219,15 @@ const Donate = props => {
               }
             </div>
           }
+          {sendTxResponse && sendTxResponse.redirect &&
+            <div>
+              You will be redirected in 10 seconds...
+            </div>
+          }
         </form>
       </div>
     </div>
   )
 };
 
-export default Donate;
+export default IPN;

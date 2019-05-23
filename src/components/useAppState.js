@@ -1,187 +1,9 @@
-import { useReducer } from 'react';
+import { useReducer, useRef } from 'react';
 
 import { constants as appSettings } from './constants';
 
 
 const useAppState = Auth => {
-  const reducer = (state, action) => {
-    switch (action.type) {
-      case 'USER_LOADED':
-        return {
-          ...state,
-          layout: {
-            ...state.layout,
-            userLoaded: true,
-          },
-          user: {
-            ...state.user,
-            ...action.user,
-          },
-        };
-      case '2FA_CHECK':
-        return {
-          ...state,
-          userSettings: {
-            ...state.userSettings,
-            twoFAEnabled: action.value,
-          },
-        };
-      case 'UPDATE_QR_CODE':
-        return {
-          ...state,
-          layout: {
-            ...state.layout,
-            qrCodeUrl: action.qrCodeUrl,
-          },
-        };
-      case 'WALLETS_LOADED':
-        return {
-          ...state,
-          layout: {
-            ...state.layout,
-            walletsLoaded: true,
-          },
-        };
-      case 'SET_WALLET_KEYS':
-        return {
-          ...state,
-          wallets: {
-            ...state.wallets,
-            [action.address]: {
-              ...state.wallets[action.address],
-              keys: action.keys,
-            }
-          }
-        };
-      case 'CREATE_WALLET':
-        if (!(action.address in state.wallets)) state.wallets[action.address] = {};
-        return {
-          ...state,
-          wallets: {
-            ...state.wallets,
-          },
-        };
-      case 'UPDATE_WALLET':
-        return {
-          ...state,
-          wallets: {
-            ...state.wallets,
-            [action.address]: {
-              ...state.wallets[action.address],
-              ...action.walletData,
-              loaded: true,
-            }
-          },
-        };
-      case 'DELETE_WALLET':
-        const { address } = action;
-        delete state.wallets[address];
-        return {
-          ...state,
-          wallets: {
-            ...state.wallets,
-          },
-        };
-      case 'SEND_TX':
-        return {
-          ...state,
-          layout: {
-            ...state.layout,
-            sendTxResponse: action.sendTxResponse,
-          },
-        };
-      case 'UPDATE_BLOCKCHAIN_HEIGHT':
-        return {
-          ...state,
-          network: {
-            ...state.network,
-            blockchainHeight: action.blockchainHeight,
-          },
-        };
-      case 'UPDATE_MARKET':
-        const { market, marketData } = action;
-        const data = marketData.result !== 'error'
-          ? { ...state.markets[market], ...marketData }
-          : { ...state.markets[market] };
-        if (market === 'stex') marketData.volume = marketData.vol_market || 0;
-        return {
-          ...state,
-          markets: {
-            ...state.markets,
-            [market]: {
-              ...data,
-            },
-          },
-        };
-      case 'UPDATE_PRICES':
-        const { pricesData } = action;
-        return {
-          ...state,
-          prices: {
-            ...state.prices,
-            priceCCXBTC: pricesData.conceal && pricesData.conceal.btc ? pricesData.conceal.btc : 0,
-          },
-        };
-      case 'UPDATE_MARKET_DATA':
-        return {
-          ...state,
-          marketData: {
-            ...state.marketData,
-            ...action.marketData,
-          },
-        };
-      case 'FORM_SUBMITTED':
-        const s = {
-          ...state,
-          layout: {
-            ...state.layout,
-            formSubmitted: action.value,
-          },
-        };
-        if (action.value) s.layout.message = null;
-        return s;
-      case 'DISPLAY_MESSAGE':
-        return {
-          ...state,
-          layout: {
-            ...state.layout,
-            message: action.message,
-          },
-        };
-      case 'REDIRECT_TO_REFERRER':
-        return {
-          ...state,
-          layout: {
-            ...state.layout,
-            redirectToReferrer: action.value,
-          },
-        };
-      case 'APP_UPDATED':
-        return {
-          ...state,
-          layout: {
-            ...state.layout,
-            lastUpdate: new Date(),
-          },
-        };
-      case 'SET_INTERVALS':
-        const intervals = action.intervals.map(i => setInterval(i.fn, i.time * 1000));
-        return {
-          ...state,
-          intervals,
-        };
-      case 'CLEAR_APP':
-        state.intervals.forEach(interval => clearInterval(interval));
-        return {
-          ...state,
-          wallets: {},
-          intervals: [],
-        };
-      default:
-        throw new Error();
-    }
-  };
-
   const initialState = {
     appSettings,
     layout: {
@@ -206,6 +28,7 @@ const useAppState = Auth => {
       twoFACode: '',
       twoFAEnabled: false,
       minimumPasswordLength: 8,
+      ipn: {},
     },
     wallets: {},
     network: {
@@ -232,8 +55,233 @@ const useAppState = Auth => {
     marketData: null,
     intervals: [],
   };
+  const updatedState = useRef(initialState);
 
-  return useReducer(reducer, initialState);
+  const reducer = (state, action) => {
+    let result = {};
+    switch (action.type) {
+      case 'USER_LOADED':
+        result = {
+          ...state,
+          layout: {
+            ...state.layout,
+            userLoaded: true,
+          },
+          user: {
+            ...state.user,
+            ...action.user,
+          },
+        };
+        break;
+      case '2FA_CHECK':
+        result = {
+          ...state,
+          userSettings: {
+            ...state.userSettings,
+            twoFAEnabled: action.value,
+          },
+        };
+        break;
+      case 'SET_IPN_CONFIG':
+        result = {
+          ...state,
+          userSettings: {
+            ...state.userSettings,
+            ipn: {
+              ...action.ipn,
+              wallet: action.wallet,
+            },
+          }
+        };
+        break;
+      case 'UPDATE_IPN_CONFIG':
+        result = {
+          ...state,
+          userSettings: {
+            ...state.userSettings,
+            ipn: {
+              ...state.userSettings.ipn,
+              clientKey: action.clientKey,
+            },
+          }
+        };
+        break;
+      case 'UPDATE_QR_CODE':
+        result = {
+          ...state,
+          layout: {
+            ...state.layout,
+            qrCodeUrl: action.qrCodeUrl,
+          },
+        };
+        break;
+      case 'WALLETS_LOADED':
+        result = {
+          ...state,
+          layout: {
+            ...state.layout,
+            walletsLoaded: true,
+          },
+        };
+        break;
+      case 'SET_WALLET_KEYS':
+        result = {
+          ...state,
+          wallets: {
+            ...state.wallets,
+            [action.address]: {
+              ...state.wallets[action.address],
+              keys: action.keys,
+            }
+          }
+        };
+        break;
+      case 'CREATE_WALLET':
+        if (!(action.address in state.wallets)) state.wallets[action.address] = {};
+        result = {
+          ...state,
+          wallets: {
+            ...state.wallets,
+          },
+        };
+        break;
+      case 'UPDATE_WALLET':
+        result = {
+          ...state,
+          wallets: {
+            ...state.wallets,
+            [action.address]: {
+              ...state.wallets[action.address],
+              ...action.walletData,
+              loaded: true,
+            }
+          },
+        };
+        break;
+      case 'DELETE_WALLET':
+        const { address } = action;
+        delete state.wallets[address];
+        result = {
+          ...state,
+          wallets: {
+            ...state.wallets,
+          },
+        };
+        break;
+      case 'SEND_TX':
+        result = {
+          ...state,
+          layout: {
+            ...state.layout,
+            sendTxResponse: action.sendTxResponse,
+          },
+        };
+        break;
+      case 'UPDATE_BLOCKCHAIN_HEIGHT':
+        result = {
+          ...state,
+          network: {
+            ...state.network,
+            blockchainHeight: action.blockchainHeight,
+          },
+        };
+        break;
+      case 'UPDATE_MARKET':
+        const { market, marketData } = action;
+        const data = marketData.result !== 'error'
+          ? { ...state.markets[market], ...marketData }
+          : { ...state.markets[market] };
+        if (market === 'stex') marketData.volume = marketData.vol_market || 0;
+        result = {
+          ...state,
+          markets: {
+            ...state.markets,
+            [market]: {
+              ...data,
+            },
+          },
+        };
+        break;
+      case 'UPDATE_PRICES':
+        const { pricesData } = action;
+        result = {
+          ...state,
+          prices: {
+            ...state.prices,
+            priceCCXBTC: pricesData.conceal && pricesData.conceal.btc ? pricesData.conceal.btc : 0,
+          },
+        };
+        break;
+      case 'UPDATE_MARKET_DATA':
+        result = {
+          ...state,
+          marketData: {
+            ...state.marketData,
+            ...action.marketData,
+          },
+        };
+        break;
+      case 'FORM_SUBMITTED':
+        result = {
+          ...state,
+          layout: {
+            ...state.layout,
+            formSubmitted: action.value,
+          },
+        };
+        if (action.value) result.layout.message = null;
+        break;
+      case 'DISPLAY_MESSAGE':
+        result = {
+          ...state,
+          layout: {
+            ...state.layout,
+            message: action.message,
+          },
+        };
+        break;
+      case 'REDIRECT_TO_REFERRER':
+        result = {
+          ...state,
+          layout: {
+            ...state.layout,
+            redirectToReferrer: action.value,
+          },
+        };
+        break;
+      case 'APP_UPDATED':
+        result = {
+          ...state,
+          layout: {
+            ...state.layout,
+            lastUpdate: new Date(),
+          },
+        };
+        break;
+      case 'SET_INTERVALS':
+        const intervals = action.intervals.map(i => setInterval(i.fn, i.time * 1000));
+        result = {
+          ...state,
+          intervals,
+        };
+        break;
+      case 'CLEAR_APP':
+        state.intervals.forEach(interval => clearInterval(interval));
+        result = {
+          ...state,
+          wallets: {},
+          intervals: [],
+        };
+        break;
+      default:
+        throw new Error();
+    }
+
+    updatedState.current = result;
+    return result;
+  };
+
+  return [...useReducer(reducer, initialState), updatedState];
 };
 
 
