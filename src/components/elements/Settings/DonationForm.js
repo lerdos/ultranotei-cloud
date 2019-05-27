@@ -13,6 +13,7 @@ const DonationForm = () => {
 
   const { value: donationWallet, bind: bindDonationWallet } = useTypeaheadInput('');
   const { value: recipientName, bind: bindRecipientName } = useFormInput('');
+  const [donationHTML, setDonationHTML] = useState(null);
   const [donationURL, setDonationURL] = useState(null);
 
   const donationFormValid = useFormValidation(WAValidator.validate(donationWallet, 'CCX'));
@@ -25,7 +26,8 @@ const DonationForm = () => {
     let donateHTML = url
       ? `<a href="${url}" target="_blank">DONATE</a>`
       : null;
-    setDonationURL(donateHTML);
+    setDonationHTML(donateHTML);
+    setDonationURL(url);
   }, [donationWallet, recipientName]);
 
   const handleDonationURLFocus = event => event.target.firstChild
@@ -61,17 +63,26 @@ const DonationForm = () => {
       <div>
         {donationFormValid
           ? <div className="d-flex flex flex-column">
-              <div>Copy this code to preferred location:</div>
+              <div>Use this URL as donation endpoint:</div>
+              <div className="d-flex flex flex-row align-items-stretch">
+                  <pre className="flex-1" onClick={handleDonationURLFocus}>
+                    <input readOnly type="text" value={donationURL} />
+                  </pre>
+                <div>
+                  <CopyButton text={donationURL} toolTipText="Copy URL" />
+                </div>
+              </div>
+              <div>or use HTML code:</div>
               <div className="d-flex flex flex-row align-items-stretch">
                 <pre className="flex-1" onClick={handleDonationURLFocus}>
-                  <input readOnly type="text" value={donationURL} />
+                  <input readOnly type="text" value={donationHTML} />
                 </pre>
                 <div>
-                  <CopyButton text={donationURL} toolTipText="Copy Donation URL" />
+                  <CopyButton text={donationHTML} toolTipText="Copy HTML" />
                 </div>
               </div>
             </div>
-          : <>Add valid Conceal address to generate HTML code.</>
+          : <>Add valid Conceal address to generate URL and HTML code.</>
         }
       </div>
     </>

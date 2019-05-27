@@ -108,7 +108,7 @@ export default class ApiHelper {
   };
 
   sendTx = (wallet, address, paymentID, amount, message, twoFACode, password, ref) => {
-    let isPayment;
+    let isPayment = '';
     const body = {
       amount: parseFloat(amount),
       message,

@@ -20,6 +20,7 @@ import {
   faLink,
   faListAlt,
   faNetworkWired,
+  faReceipt,
   faSignOutAlt,
   faTrashAlt,
   faTrophy,
@@ -38,6 +39,7 @@ import Settings from './pages/Settings';
 import GettingStarted from './pages/GettingStarted';
 import UpcomingFeatures from './pages/UpcomingFeatures';
 import Donate from './pages/Donate';
+import Pay from './pages/Pay';
 import IPN from './pages/IPN';
 
 import '../static/css/slim.css';
@@ -63,6 +65,7 @@ library.add(
   faLink,
   faListAlt,
   faNetworkWired,
+  faReceipt,
   faSignOutAlt,
   faTrashAlt,
   faTrophy,
@@ -82,10 +85,11 @@ const App = () => (
       <PrivateRoute exact path="/" component={Dashboard} />
       <PrivateRoute exact path="/address_book" component={AddressBook} />
       <PrivateRoute exact path="/settings" component={Settings} />
+      <PrivateRoute exact path="/ipn" component={IPN} />
       <PrivateRoute exact path="/getting_started" component={GettingStarted} />
       <PrivateRoute exact path="/upcoming_features" component={UpcomingFeatures} />
       <PrivateRoute exact path="/donate/:address/:recipientName?" component={Donate} />
-      <PrivateRoute exact path="/pay" component={IPN} />
+      <PrivateRoute exact path="/pay" component={Pay} />
 
     </AppContextProvider>
   </Router>

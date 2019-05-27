@@ -156,7 +156,7 @@ const useAppState = Auth => {
               ...state.wallets[action.address],
               ...action.walletData,
               loaded: true,
-            }
+            },
           },
         };
         break;

@@ -30,6 +30,11 @@ const NavBar = () => {
               <FontAwesomeIcon icon="cog" fixedWidth /> <span>Settings</span>
             </NavLink>
           </li>
+          <li className="nav-item">
+            <NavLink to="/ipn" className="nav-link hot_link" activeClassName="active">
+              <FontAwesomeIcon icon="receipt" fixedWidth /> <span>IPN</span>
+            </NavLink>
+          </li>
           <li className="nav-item with-sub">
             <button className="nav-link hot_link" data-toggle="dropdown">
               <FontAwesomeIcon icon="network-wired" fixedWidth /> <span>Ecosystem</span>

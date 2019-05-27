@@ -1,19 +1,17 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import Accordion from 'react-bootstrap/Accordion';
 
 import { AppContext } from '../ContextProvider';
 import AvatarForm from '../elements/Settings/AvatarForm';
 import DonationForm from '../elements/Settings/DonationForm';
 import EmailForm from '../elements/Settings/EmailForm';
-import IPNForm from '../elements/Settings/IPNForm';
 import TwoFAForm from '../elements/Settings/TwoFAForm';
 
 
 const Settings = () => {
   const { actions, state } = useContext(AppContext);
   const { resetPassword } = actions;
-  const { user, wallets } = state;
+  const { user } = state;
 
   return (
     <div>
@@ -78,19 +76,6 @@ const Settings = () => {
                     <div className="col-7 col-sm-8"><DonationForm /></div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="section-wrapper mg-t-20">
-            <label className="section-title">IPN</label>
-            <div className="row">
-              <div className="col-lg-12">
-                <Accordion>
-                  {Object.keys(wallets).map(address =>
-                    <IPNForm key={address} address={address} wallet={wallets[address]} />
-                  )}
-                </Accordion>
               </div>
             </div>
           </div>

@@ -254,13 +254,16 @@ const AppContextProvider = props => {
   };
 
   const getWalletDetails = address => {
+    const { location } = props;
     let message;
     Api.getWalletDetails(address)
       .then(res => {
         if (res.result === 'success') {
           dispatch({ type: 'UPDATE_WALLET', address, walletData: res.message });
           dispatch({ type: 'APP_UPDATED' });
-          getIPNConfig(address);
+          if (!location.pathname.startsWith('/pay') && !location.pathname.startsWith('/donate')) {
+            getIPNConfig(address);
+          }
         } else {
           message = res.message;
         }
