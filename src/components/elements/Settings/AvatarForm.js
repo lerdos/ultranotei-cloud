@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react';
 import { AppContext } from '../../ContextProvider';
 import { useFormValidation } from '../../../helpers/hooks';
 
+
 const AvatarForm = () => {
   const { actions, state } = useContext(AppContext);
   const { updateUser } = actions;

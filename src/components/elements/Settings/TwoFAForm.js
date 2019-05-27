@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react';
 import { AppContext } from '../../ContextProvider';
 import { useFormInput, useFormValidation } from '../../../helpers/hooks';
 
+
 const TwoFAForm = () => {
   const { actions, state } = useContext(AppContext);
   const { getQRCode, update2FA } = actions;

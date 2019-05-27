@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import { AppContext } from '../../ContextProvider';
 import { useFormInput, useFormValidation } from '../../../helpers/hooks';
 
+
 const EmailForm = () => {
   const { actions, state } = useContext(AppContext);
   const { updateUser } = actions;

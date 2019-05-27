@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Typeahead } from 'react-bootstrap-typeahead';
+import WAValidator from 'multicoin-address-validator';
 
 import { AppContext } from '../../ContextProvider';
 import { useFormInput, useFormValidation, useTypeaheadInput } from '../../../helpers/hooks';
 import CopyButton from '../CopyButton';
-import Tooltip from 'react-bootstrap/Tooltip';
+
 
 const DonationForm = () => {
   const { state } = useContext(AppContext);
@@ -14,11 +15,7 @@ const DonationForm = () => {
   const { value: recipientName, bind: bindRecipientName } = useFormInput('');
   const [donationURL, setDonationURL] = useState(null);
 
-  const donationFormValidation = (
-    donationWallet.length === 98 &&
-    donationWallet.startsWith('ccx7')
-  );
-  const donationFormValid = useFormValidation(donationFormValidation);
+  const donationFormValid = useFormValidation(WAValidator.validate(donationWallet, 'CCX'));
 
   useEffect(() => {
     let url = appSettings.donationURL;

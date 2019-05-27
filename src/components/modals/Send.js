@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import QrReader from 'react-qr-reader';
+import WAValidator from 'multicoin-address-validator';
 
 import { AppContext } from '../ContextProvider';
 import { useFormInput, useFormValidation, useTypeaheadInput } from '../../helpers/hooks';
@@ -48,8 +49,7 @@ const SendModal = props => {
 
   const formValidation = (
     address !== props.address &&
-    address.length === 98 &&
-    address.startsWith('ccx7') &&
+    WAValidator.validate(address, 'CCX') &&
     walletBalanceValid &&
     totalAmountValid &&
     (paymentID === '' || paymentID.length === 64) &&
