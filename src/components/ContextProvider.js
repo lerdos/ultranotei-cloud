@@ -419,20 +419,22 @@ const AppContextProvider = props => {
     getUser();
     check2FA();
     getWalletList();
+    getMarketData();
 
     const intervals = [];
-    intervals.push({ fn: getWalletList, time: userSettings.updateWalletsInterval });
+    intervals.push(
+      { fn: getWalletList, time: userSettings.updateWalletsInterval },
+      { fn: getMarketData, time: appSettings.updateMarketPricesInterval },
+    );
 
     if (!location.pathname.startsWith('/donate') && !location.pathname.startsWith('/pay')) {
       getBlockchainHeight();
       getMarketPrices();
       getPrices();
-      getMarketData();
       intervals.push(
         { fn: getBlockchainHeight, time: appSettings.updateBlockchainHeightInterval },
         { fn: getMarketPrices, time: appSettings.updateMarketPricesInterval },
         { fn: getPrices, time: appSettings.updateMarketPricesInterval },
-        { fn: getMarketData, time: appSettings.updateMarketPricesInterval },
       )
     }
 

@@ -6,7 +6,7 @@ import { useFormInput, useFormValidation } from '../../helpers/hooks';
 
 const Donate = props => {
   const { actions, state } = useContext(AppContext);
-  const { appSettings, layout, userSettings, wallets } = state;
+  const { appSettings, layout, marketData, userSettings, wallets } = state;
   const { coinDecimals, defaultFee, messageFee, feePerChar } = appSettings;
   const { formSubmitted, sendTxResponse } = layout;
 
@@ -19,6 +19,8 @@ const Donate = props => {
   const { value: password, bind: bindPassword, reset: resetPassword } = useFormInput('');
   const [wallet, setWallet] = useState(null);
   const [walletAddress, setWalletAddress] = useState('');
+  const [btcValue, setBtcValue] = useState(0);
+  const [usdValue, setUsdValue] = useState(0);
 
   useEffect(() => {
     if (Object.keys(wallets).length > 0 && (!wallet || Object.keys(wallets).length !== 0)) {
@@ -54,6 +56,29 @@ const Donate = props => {
     );
   }
   const formValid = useFormValidation(formValidation);
+
+  const ccxToUSD =  marketData ? marketData.market_data.current_price.usd : 0;
+  const ccxToBTC =  marketData ? marketData.market_data.current_price.btc : 0;
+
+  useEffect(() => {
+    if (amount && parseFloat(amount) > 0) {
+      setBtcValue(parseFloat(amount) * ccxToBTC);
+      setUsdValue(parseFloat(amount) * ccxToUSD);
+    } else {
+      setBtcValue(0);
+      setUsdValue(0);
+    }
+  }, [amount]);
+
+  const btcFormatOptions = {
+    minimumFractionDigits: 8,
+    maximumFractionDigits: 8,
+  };
+
+  const usdFormatOptions = {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  };
 
   return (
     <div className="donatePage">
@@ -114,7 +139,7 @@ const Donate = props => {
                     <input
                       {...bindAmount}
                       size={2}
-                      className="form-control autoWidth"
+                      className="form-control autoWidth float-left"
                       placeholder="Amount"
                       name="amount"
                       type="number"
@@ -122,6 +147,10 @@ const Donate = props => {
                       max={maxValue}
                       step={Math.pow(10, -coinDecimals).toFixed(coinDecimals)}
                     />
+                    <div className="float-left">
+                      BTC: {btcValue.toLocaleString(undefined, btcFormatOptions)}<br />
+                      USD: {usdValue.toLocaleString(undefined, usdFormatOptions)}
+                    </div>
                   </div>
                 </div>
                 <div className="row no-gutters">
