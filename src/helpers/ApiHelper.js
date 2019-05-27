@@ -127,7 +127,7 @@ export default class ApiHelper {
       .fetch(
         `${this.apiURL}/wallet${isPayment}`,
         {
-          method: isPayment ? 'POST' : 'PUT', 
+          method: isPayment ? 'POST' : 'PUT',
           body: JSON.stringify(body),
         })
       .then(res => Promise.resolve(res));

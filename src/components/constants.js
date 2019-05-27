@@ -25,4 +25,5 @@ export const constants = {
   withdrawalFee: 0.0001,
   qrCodePrefix: 'conceal',
   donationURL: 'https://conceal.cloud/donate',
+  IPNURL: 'https://conceal.cloud/pay',
 };

@@ -37,11 +37,13 @@ const Login = props => {
         <h2 className="signin-title-primary">Welcome back!</h2>
         <h3 className="signin-title-secondary">Sign in to continue.</h3>
 
-        {message &&
-          <div className="alert alert-outline alert-danger text-center">{message}</div>
+        {(message.loginForm || message.signUpForm) &&
+          <div className="alert alert-outline alert-danger text-center">
+            {message.signUpForm || message.loginForm}
+          </div>
         }
 
-        <form onSubmit={e => loginUser(e, email, password, twoFACode)}>
+        <form onSubmit={e => loginUser({ e, email, password, twoFACode, id: 'loginForm' })}>
           <div className="form-group">
             <input
               {...bindEmail}

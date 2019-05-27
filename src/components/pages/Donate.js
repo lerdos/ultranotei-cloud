@@ -71,6 +71,7 @@ const Donate = props => {
                 message,
                 twoFACode,
                 password,
+                id: 'donateForm',
               },
               [
                 resetAmount,

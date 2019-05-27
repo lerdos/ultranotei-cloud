@@ -51,6 +51,7 @@ const ContactModal = props => {
                 paymentID,
                 entryID: contact ? contact.entryID : null,
                 edit: !!props.contact,
+                id: 'contactForm',
               },
               [
                 resetLabel,

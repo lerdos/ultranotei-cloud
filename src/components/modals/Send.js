@@ -132,6 +132,7 @@ const SendModal = props => {
                 twoFACode,
                 password,
                 label,
+                id: 'sendForm',
               },
               [
                 resetAddress,

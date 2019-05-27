@@ -10,7 +10,7 @@ const useAppState = Auth => {
       lastUpdate: new Date(),
       redirectToReferrer: false,
       formSubmitted: false,
-      message: null,
+      message: {},
       userLoaded: false,
       walletsLoaded: false,
       sendTxResponse: null,
@@ -28,7 +28,6 @@ const useAppState = Auth => {
       twoFACode: '',
       twoFAEnabled: false,
       minimumPasswordLength: 8,
-      ipn: {},
     },
     wallets: {},
     network: {
@@ -85,13 +84,16 @@ const useAppState = Auth => {
       case 'SET_IPN_CONFIG':
         result = {
           ...state,
-          userSettings: {
-            ...state.userSettings,
-            ipn: {
-              ...action.ipn,
-              wallet: action.wallet,
+          wallets: {
+            ...state.wallets,
+            [action.address]: {
+              ...state.wallets[action.address],
+              ipn: {
+                ...state.wallets[action.address].ipn,
+                ...action.ipn
+              },
             },
-          }
+          },
         };
         break;
       case 'UPDATE_IPN_CONFIG':
@@ -229,14 +231,15 @@ const useAppState = Auth => {
             formSubmitted: action.value,
           },
         };
-        if (action.value) result.layout.message = null;
+        if (action.value) result.layout.message = {};
         break;
       case 'DISPLAY_MESSAGE':
+        if (!action.message) action.message = {};
         result = {
           ...state,
           layout: {
             ...state.layout,
-            message: action.message,
+            message: action.id ? { [action.id]: action.message } : action.message,
           },
         };
         break;

@@ -13,7 +13,8 @@ const AppContextProvider = props => {
   const [state, dispatch] = useAppState(Auth);
   const Api = new ApiHelper({ Auth, state });
 
-  const loginUser = (e, email, password, twoFACode) => {
+  const loginUser = options => {
+    const { e, email, password, twoFACode, id } = options;
     e.preventDefault();
     dispatch({ type: 'FORM_SUBMITTED', value: true });
     Auth.login(email, password, twoFACode)
@@ -22,14 +23,15 @@ const AppContextProvider = props => {
           dispatch({ type: 'REDIRECT_TO_REFERRER', value: true });
           initApp();
         } else {
-          dispatch({ type: 'DISPLAY_MESSAGE', message: res.message });
+          dispatch({ type: 'DISPLAY_MESSAGE', message: res.message, id });
         }
       })
-      .catch(err => dispatch({ type: 'DISPLAY_MESSAGE', message: `ERROR ${err}` }))
+      .catch(err => dispatch({ type: 'DISPLAY_MESSAGE', message: `ERROR ${err}`, id }))
       .finally(() => dispatch({ type: 'FORM_SUBMITTED', value: false }));
   };
 
-  const signUpUser = (e, userName, email, password) => {
+  const signUpUser = options => {
+    const { e, userName, email, password, id } = options;
     e.preventDefault();
     let message;
     dispatch({ type: 'FORM_SUBMITTED', value: true });
@@ -43,12 +45,13 @@ const AppContextProvider = props => {
       })
       .catch(err => { message = `ERROR ${err}` })
       .finally(() => {
-        dispatch({ type: 'DISPLAY_MESSAGE', message });
+        dispatch({ type: 'DISPLAY_MESSAGE', message, id });
         dispatch({ type: 'FORM_SUBMITTED', value: false });
       });
   };
 
-  const resetPassword = (e, email) => {
+  const resetPassword = options => {
+    const { e, email, id } = options;
     e.preventDefault();
     dispatch({ type: 'FORM_SUBMITTED', value: true });
     let message;
@@ -63,12 +66,13 @@ const AppContextProvider = props => {
       })
       .catch(err => { message = `ERROR ${err}` })
       .finally(() => {
-        dispatch({ type: 'DISPLAY_MESSAGE', message });
+        dispatch({ type: 'DISPLAY_MESSAGE', message, id });
         dispatch({ type: 'FORM_SUBMITTED', value: false });
       });
   };
 
-  const resetPasswordConfirm = (e, password, token) => {
+  const resetPasswordConfirm = options => {
+    const { e, password, token, id } = options;
     e.preventDefault();
     let message;
     dispatch({ type: 'FORM_SUBMITTED', value: true });
@@ -82,7 +86,7 @@ const AppContextProvider = props => {
       })
       .catch(err => { message = `ERROR ${err}` })
       .finally(() => {
-        dispatch({ type: 'DISPLAY_MESSAGE', message });
+        dispatch({ type: 'DISPLAY_MESSAGE', message, id });
         dispatch({ type: 'FORM_SUBMITTED', value: false });
       });
   };
@@ -99,7 +103,7 @@ const AppContextProvider = props => {
       .catch(e => console.error(e));
   };
 
-  const updateUser = ({ e, email, avatar }) => {
+  const updateUser = ({ e, id, email, avatar }) => {
     e.preventDefault();
     let message;
     dispatch({ type: 'FORM_SUBMITTED', value: true });
@@ -113,13 +117,13 @@ const AppContextProvider = props => {
       })
       .catch(err => { message = `ERROR ${err}` })
       .finally(() => {
-        dispatch({ type: 'DISPLAY_MESSAGE', message });
+        dispatch({ type: 'DISPLAY_MESSAGE', message, id });
         dispatch({ type: 'FORM_SUBMITTED', value: false });
       });
   };
 
   const addContact = (contact, extras) => {
-    const { e, label, address, paymentID, entryID, edit } = contact;
+    const { e, label, address, paymentID, entryID, edit, id } = contact;
     if (e) e.preventDefault();
     let message;
     Api.addContact(label, address, paymentID, entryID, edit)
@@ -132,7 +136,7 @@ const AppContextProvider = props => {
         }
       })
       .catch(err => { message = `ERROR ${err}` })
-      .finally(() => message && dispatch({ type: 'DISPLAY_MESSAGE', message }));
+      .finally(() => message && dispatch({ type: 'DISPLAY_MESSAGE', message, id }));
   };
 
   const deleteContact = contact => {
@@ -180,7 +184,7 @@ const AppContextProvider = props => {
   };
 
   const update2FA = (options, extras) => {
-    const { e, twoFACode, enable } = options;
+    const { e, twoFACode, enable, id } = options;
     e.preventDefault();
     let message;
     dispatch({ type: 'FORM_SUBMITTED', value: true });
@@ -195,14 +199,14 @@ const AppContextProvider = props => {
         }
       })
       .catch(err => { message = `ERROR ${err}` })
-      .finally(() => message && dispatch({ type: 'DISPLAY_MESSAGE', message }));
+      .finally(() => message && dispatch({ type: 'DISPLAY_MESSAGE', message, id }));
   };
 
   const getIPNConfig = address => {
     Api.getIPNConfig(address)
       .then(res =>
         res.result === 'success' && res.message[0] !== false &&
-        dispatch({ type: 'SET_IPN_CONFIG', ipn: res.message, wallet: address })
+        dispatch({ type: 'SET_IPN_CONFIG', ipn: res.message, address })
       )
       .catch(e => console.error(e));
   };
@@ -217,13 +221,20 @@ const AppContextProvider = props => {
   };
 
   const updateIPNConfig = options => {
-    options.e.preventDefault();
+    const { e, id } = options;
+    e.preventDefault();
+    let message;
+    dispatch({ type: 'FORM_SUBMITTED', value: true });
     Api.updateIPNConfig(options)
-      .then(res =>
-        res.result === 'success' &&
-        dispatch({ type: 'UPDATE_IPN_CONFIG', clientKey: res.message.config })
-      )
-      .catch(e => console.error(e));
+      .then(res => {
+        if (res.result === 'success') {
+          dispatch({ type: 'UPDATE_IPN_CONFIG', clientKey: res.message.config })
+        } else {
+          message = res.message;
+        }
+      })
+      .catch(e => console.error(e))
+      .finally(() => message && dispatch({ type: 'DISPLAY_MESSAGE', message, id }));
   };
 
   const createWallet = () => {
@@ -249,6 +260,7 @@ const AppContextProvider = props => {
         if (res.result === 'success') {
           dispatch({ type: 'UPDATE_WALLET', address, walletData: res.message });
           dispatch({ type: 'APP_UPDATED' });
+          getIPNConfig(address);
         } else {
           message = res.message;
         }
@@ -263,14 +275,14 @@ const AppContextProvider = props => {
         res.message.addresses && res.message.addresses.forEach(address => {
           dispatch({ type: 'CREATE_WALLET', address });
           getWalletDetails(address);
-          getIPNConfig(address);
         });
       })
       .catch(e => console.error(e))
       .finally(() => dispatch({ type: 'WALLETS_LOADED' }));
   };
 
-  const getWalletKeys = (e, address, code) => {
+  const getWalletKeys = options => {
+    const { e, address, code, id } = options;
     e.preventDefault();
     const { wallets } = state;
     let message;
@@ -285,7 +297,10 @@ const AppContextProvider = props => {
           }
         })
         .catch(err => { message = `ERROR ${err}` })
-        .finally(() => message && dispatch({ type: 'DISPLAY_MESSAGE', message }));
+        .finally(() => {
+          dispatch({ type: 'FORM_SUBMITTED', value: false });
+          if (message) dispatch({ type: 'DISPLAY_MESSAGE', message, id });
+        });
     }
   };
 
@@ -308,7 +323,7 @@ const AppContextProvider = props => {
   };
 
   const sendTx = (options, extras) => {
-    const { e, wallet, address, paymentID, amount, message, twoFACode, password, label, ref } = options;
+    const { e, wallet, address, paymentID, amount, message, twoFACode, password, label, ref, id } = options;
     e.preventDefault();
     dispatch({ type: 'FORM_SUBMITTED', value: true });
     let layoutMessage;
@@ -336,7 +351,7 @@ const AppContextProvider = props => {
       .catch(err => { layoutMessage = `ERROR ${err}` })
       .finally(() => {
         dispatch({ type: 'FORM_SUBMITTED', value: false });
-        if (message) dispatch({ type: 'DISPLAY_MESSAGE', message: layoutMessage });
+        if (message) dispatch({ type: 'DISPLAY_MESSAGE', message: layoutMessage, id });
       });
   };
 

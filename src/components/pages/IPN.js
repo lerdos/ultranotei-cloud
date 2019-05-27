@@ -83,6 +83,7 @@ const IPN = props => {
                 twoFACode,
                 password,
                 ref,
+                id: 'ipnForm',
               },
               [
                 resetAmount,

@@ -1203,7 +1203,6 @@ hr {
 .wallet-address {
   font-size: 0.8rem;
   max-width: 100%;
-  overflow: auto;
 }
 
 .nav-item.with-sub button {
