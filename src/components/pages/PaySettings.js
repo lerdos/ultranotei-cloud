@@ -51,11 +51,16 @@ const PaySettings = () => {
                   Configure your Instant Payment Notification parameters to receive Client Key which you can
                   use and implement in your shopping carts and e-com software to receive Conceal as a payment method.
                 </div>
-                <Accordion>
-                  {Object.keys(wallets).map(address =>
-                    <IPNForm key={address} address={address} wallet={wallets[address]} />
-                  )}
-                </Accordion>
+                {Object.keys(wallets).length === 0
+                  ? <div>
+                      No wallets available. Please create one.
+                    </div>
+                  : <Accordion>
+                      {Object.keys(wallets).map(address =>
+                        <IPNForm key={address} address={address} wallet={wallets[address]} />
+                      )}
+                    </Accordion>
+                }
               </div>
             </div>
           </div>

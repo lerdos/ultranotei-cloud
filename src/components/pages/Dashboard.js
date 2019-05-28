@@ -14,6 +14,7 @@ const Dashboard = () => {
   const { actions, state } = useContext(AppContext);
   const { createWallet } = actions;
   const { appSettings, layout, wallets } = state;
+  const { walletsLoaded } = layout;
 
   const walletsKeys = Object.keys(wallets);
 
@@ -41,7 +42,7 @@ const Dashboard = () => {
         <div className="section-wrapper mg-t-20">
           <div className="d-flex flex-row width-100 justify-content-between mg-b-10">
             <label className="section-title d-inline-block">Your Wallets</label>
-            {(walletsKeys.length < appSettings.maxWallets || walletsKeys.length === 0) &&
+            {walletsLoaded && (walletsKeys.length < appSettings.maxWallets || walletsKeys.length === 0) &&
               <button
                 className="btn btn-primary btn-sm"
                 onClick={() => {
@@ -56,7 +57,7 @@ const Dashboard = () => {
           <div className="row">
             <div className="col-lg-12">
               <div className="list-group list-group-user">
-                {layout.walletsLoaded &&
+                {walletsLoaded &&
                 <>
                   {
                     walletsKeys.length > 0 &&

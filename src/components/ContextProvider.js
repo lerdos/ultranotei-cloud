@@ -10,7 +10,7 @@ export const AppContext = React.createContext();
 const Auth = new AuthHelper();
 
 const AppContextProvider = props => {
-  const [state, dispatch] = useAppState(Auth);
+  const [state, dispatch, updatedState] = useAppState(Auth);
   const Api = new ApiHelper({ Auth, state });
 
   const loginUser = options => {
@@ -204,10 +204,13 @@ const AppContextProvider = props => {
 
   const getIPNConfig = address => {
     Api.getIPNConfig(address)
-      .then(res =>
-        res.result === 'success' && res.message[0] !== false &&
-        dispatch({ type: 'SET_IPN_CONFIG', ipn: res.message, address })
-      )
+      .then(res => {
+        dispatch({
+          type: 'SET_IPN_CONFIG',
+          ipn: res.result === 'success' ? res.message : {},
+          address,
+        });
+      })
       .catch(e => console.error(e));
   };
 
@@ -237,6 +240,34 @@ const AppContextProvider = props => {
       .finally(() => message && dispatch({ type: 'DISPLAY_MESSAGE', message, id }));
   };
 
+  const getWallets = () => {
+    const { location } = props;
+    let message;
+    Api.getWallets()
+      .then(res => {
+        if (res.result === 'success') {
+          const wallets = res.message.wallets;
+          dispatch({ type: 'UPDATE_WALLETS', wallets });
+          if (!location.pathname.startsWith('/pay/') && !location.pathname.startsWith('/donate/')) {
+            Object.keys(wallets).forEach(address => {
+              if (!updatedState.current.wallets[address].ipn) getIPNConfig(address);
+            });
+          }
+        } else {
+          message = res.message;
+          if (Object.keys(updatedState.current.wallets).length > 0) {
+            dispatch({ type: 'DELETE_WALLETS' });
+          }
+        }
+      })
+      .catch(err => { message = `ERROR ${err}` })
+      .finally(() => {
+        if (message) dispatch({ type: 'DISPLAY_MESSAGE', message });
+        dispatch({ type: 'WALLETS_LOADED' });
+        dispatch({ type: 'APP_UPDATED' });
+      });
+  };
+
   const createWallet = () => {
     let message;
     Api.createWallet()
@@ -244,44 +275,13 @@ const AppContextProvider = props => {
         if (res.result === 'success') {
           const address = res.message.wallet;
           dispatch({ type: 'CREATE_WALLET', address });
-          getWalletDetails(address);
+          getWallets();
         } else {
           message = res.message;
         }
       })
       .catch(err => { message = `ERROR ${err}` })
       .finally(() => message && dispatch({ type: 'DISPLAY_MESSAGE', message }));
-  };
-
-  const getWalletDetails = address => {
-    const { location } = props;
-    let message;
-    Api.getWalletDetails(address)
-      .then(res => {
-        if (res.result === 'success') {
-          dispatch({ type: 'UPDATE_WALLET', address, walletData: res.message });
-          dispatch({ type: 'APP_UPDATED' });
-          if (!location.pathname.startsWith('/pay/') && !location.pathname.startsWith('/donate')) {
-            getIPNConfig(address);
-          }
-        } else {
-          message = res.message;
-        }
-      })
-      .catch(err => { message = `ERROR ${err}` })
-      .finally(() => message && dispatch({ type: 'DISPLAY_MESSAGE', message }));
-  };
-
-  const getWalletList = () => {
-    Api.getWalletList()
-      .then(res => {
-        res.message.addresses && res.message.addresses.forEach(address => {
-          dispatch({ type: 'CREATE_WALLET', address });
-          getWalletDetails(address);
-        });
-      })
-      .catch(e => console.error(e))
-      .finally(() => dispatch({ type: 'WALLETS_LOADED' }));
   };
 
   const getWalletKeys = options => {
@@ -322,7 +322,8 @@ const AppContextProvider = props => {
   const deleteWallet = address => {
     Api.deleteWallet(address)
       .then(res => res.result === 'success' && dispatch({ type: 'DELETE_WALLET', address }))
-      .catch(e => console.error(e));
+      .catch(e => console.error(e))
+      .finally(() => getWallets());
   };
 
   const sendTx = (options, extras) => {
@@ -349,7 +350,7 @@ const AppContextProvider = props => {
         dispatch({ type: 'SEND_TX', sendTxResponse });
         if (label && label !== '') addContact({ label, address, paymentID });
         extras.forEach(fn => fn());
-        getWalletList();
+        getWallets();
       })
       .catch(err => { layoutMessage = `ERROR ${err}` })
       .finally(() => {
@@ -400,7 +401,7 @@ const AppContextProvider = props => {
     update2FA,
     getQRCode,
     createWallet,
-    getWalletList,
+    getWallets,
     deleteWallet,
     getWalletKeys,
     downloadWalletKeys,
@@ -421,16 +422,16 @@ const AppContextProvider = props => {
 
     getUser();
     check2FA();
-    getWalletList();
+    getWallets();
     getMarketData();
 
     const intervals = [];
     intervals.push(
-      { fn: getWalletList, time: userSettings.updateWalletsInterval },
+      { fn: getWallets, time: userSettings.updateWalletsInterval },
       { fn: getMarketData, time: appSettings.updateMarketPricesInterval },
     );
 
-    if (!location.pathname.startsWith('/donate') && !location.pathname.startsWith('/pay/')) {
+    if (!location.pathname.startsWith('/donate/') && !location.pathname.startsWith('/pay/')) {
       getBlockchainHeight();
       getMarketPrices();
       getPrices();

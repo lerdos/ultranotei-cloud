@@ -1598,3 +1598,8 @@ label.codeExample {
 .btnIPNS {
   margin: 5px;
 }
+
+.btn-create-wallet {
+  padding: 0.3rem 0.5rem;
+  margin: 0 0.3rem;
+}

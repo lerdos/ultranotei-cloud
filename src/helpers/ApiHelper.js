@@ -87,13 +87,8 @@ export default class ApiHelper {
       .then(res => Promise.resolve(res));
   };
 
-  getWalletList = () => {
-    return this.fetch(`${this.apiURL}/wallet/list`, { method: 'GET' })
-      .then(res => Promise.resolve(res));
-  };
-
-  getWalletDetails = address => {
-    return this.fetch(`${this.apiURL}/wallet/get/address/${address}`, { method: 'GET' })
+  getWallets = () => {
+    return this.fetch(`${this.apiURL}/wallet/unified`, { method: 'GET' })
       .then(res => Promise.resolve(res));
   };
 

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
+import WAValidator from 'multicoin-address-validator';
 
 import { AppContext } from '../ContextProvider';
 import { maskAddress } from '../../helpers/utils';
@@ -8,11 +9,13 @@ import { useFormInput, useFormValidation } from '../../helpers/hooks';
 
 const Donate = props => {
   const { actions, state } = useContext(AppContext);
+  const { createWallet, sendTx } = actions;
   const { appSettings, layout, marketData, userSettings, wallets } = state;
   const { coinDecimals, defaultFee, messageFee, feePerChar } = appSettings;
   const { formSubmitted, sendTxResponse, walletsLoaded } = layout;
 
   const address = props.match.params.address;
+  const addressValid = WAValidator.validate(address, 'CCX');
   const recipientName = props.match.params.recipientName;
 
   const { value: amount, bind: bindAmount, reset: resetAmount } = useFormInput('');
@@ -96,169 +99,184 @@ const Donate = props => {
       <div className="donateWrapper">
         <h6 className="slim-pagetitle">Donate</h6>
 
-        <form
-          onSubmit={e =>
-            actions.sendTx(
-              {
-                e,
-                wallet: walletAddress,
-                address,
-                amount,
-                message,
-                twoFACode,
-                password,
-                id: 'donateForm',
-              },
-              [
-                resetAmount,
-                resetMessage,
-                resetTwoFACode,
-                resetPassword,
-              ],
-            )
-          }
-        >
-          <div className="row donateData">
-            <div className="col-lg-12">
-              <div className="form-layout form-layout-7">
-                <div className="row no-gutters">
-                  <div className="col-5 col-sm-2">Donating to</div>
-                  <div className="col-7 col-sm-10 wallet-address">{address} {recipientName && `(${recipientName})`}</div>
-                </div>
-                <div className="row no-gutters">
-                  <div className="col-5 col-sm-2">From Wallet</div>
-                  <div className="col-7 col-sm-10">
-                    {walletsLoaded && Object.keys(availableWallets).length > 0 &&
-                      <select
-                        className="form-control autoWidth"
-                        onChange={e => {
-                          setWallet(wallets[e.target.value]);
-                          setWalletAddress(e.target.value);
-                        }}
-                        value={walletAddress}
-                      >
-                        {Object.keys(availableWallets).map(address =>
-                          <option value={address} key={address} disabled={wallets[address].balance <= 0}>
-                            {maskAddress(address)} ({wallets[address].balance} CCX)
-                          </option>
-                        )}
-                      </select>
-                    }
-                    {walletsLoaded && Object.keys(availableWallets).length === 0 &&
-                      <div>
-                        Not enough funds. Send some CCX to your wallet.
+        {!addressValid &&
+          <div className="mg-t-15">
+            <h5>Invalid Payment Address</h5>
+            Please verify that Conceal address is valid.
+          </div>
+        }
+
+        {addressValid &&
+          <>
+            <form
+              onSubmit={e =>
+                sendTx(
+                  {
+                    e,
+                    wallet: walletAddress,
+                    address,
+                    amount,
+                    message,
+                    twoFACode,
+                    password,
+                    id: 'donateForm',
+                  },
+                  [
+                    resetAmount,
+                    resetMessage,
+                    resetTwoFACode,
+                    resetPassword,
+                  ],
+                )
+              }
+            >
+              <div className="row donateData">
+                <div className="col-lg-12">
+                  <div className="form-layout form-layout-7">
+                    <div className="row no-gutters">
+                      <div className="col-5 col-sm-2">Donating to</div>
+                      <div
+                        className="col-7 col-sm-10 wallet-address">{address} {recipientName && `(${recipientName})`}</div>
+                    </div>
+                    <div className="row no-gutters">
+                      <div className="col-5 col-sm-2">From Wallet</div>
+                      <div className="col-7 col-sm-10">
+                        {walletsLoaded && Object.keys(availableWallets).length > 0 &&
+                        <select
+                          className="form-control autoWidth"
+                          onChange={e => {
+                            setWallet(wallets[e.target.value]);
+                            setWalletAddress(e.target.value);
+                          }}
+                          value={walletAddress}
+                        >
+                          {Object.keys(availableWallets).map(address =>
+                            <option value={address} key={address} disabled={wallets[address].balance <= 0}>
+                              {maskAddress(address)} ({wallets[address].balance} CCX)
+                            </option>
+                          )}
+                        </select>
+                        }
+                        {walletsLoaded && Object.keys(wallets).length > 0 && Object.keys(availableWallets).length === 0 &&
+                        <div>
+                          Balance too low. Send some funds to your wallet to process this payment.
+                        </div>
+                        }
+                        {walletsLoaded && Object.keys(wallets).length === 0 &&
+                        <div>
+                          You have no wallets yet. Create one
+                          <Button className="btn-uppercase-sm btn-create-wallet" onClick={() => createWallet()}>
+                            here
+                          </Button>
+                        </div>
+                        }
                       </div>
-                    }
-                    {walletsLoaded && Object.keys(wallets).length === 0 &&
-                      <div>
-                        You have no wallets yet. Create one <Button variant="link">here</Button>.
+                    </div>
+                    <div className="row no-gutters">
+                      <div className="col-5 col-sm-2">Amount</div>
+                      <div className="col-7 col-sm-10">
+                        <input
+                          {...bindAmount}
+                          size={2}
+                          className="form-control autoWidth float-left"
+                          placeholder="Amount"
+                          name="amount"
+                          type="number"
+                          min={0}
+                          max={maxValue}
+                          step={Math.pow(10, -coinDecimals).toFixed(coinDecimals)}
+                          disabled={Object.keys(availableWallets).length === 0}
+                        />
+                        <div className="float-left">
+                          BTC: {btcValue.toLocaleString(undefined, btcFormatOptions)}<br/>
+                          USD: {usdValue.toLocaleString(undefined, usdFormatOptions)}
+                        </div>
                       </div>
-                    }
-                  </div>
-                </div>
-                <div className="row no-gutters">
-                  <div className="col-5 col-sm-2">Amount</div>
-                  <div className="col-7 col-sm-10">
-                    <input
-                      {...bindAmount}
-                      size={2}
-                      className="form-control autoWidth float-left"
-                      placeholder="Amount"
-                      name="amount"
-                      type="number"
-                      min={0}
-                      max={maxValue}
-                      step={Math.pow(10, -coinDecimals).toFixed(coinDecimals)}
-                      disabled={Object.keys(availableWallets).length === 0}
-                    />
-                    <div className="float-left">
-                      BTC: {btcValue.toLocaleString(undefined, btcFormatOptions)}<br />
-                      USD: {usdValue.toLocaleString(undefined, usdFormatOptions)}
+                    </div>
+                    <div className="row no-gutters">
+                      <div className="col-5 col-sm-2">Message</div>
+                      <div className="col-7 col-sm-10">
+                        <input
+                          {...bindMessage}
+                          size={6}
+                          className="form-control maxWidth"
+                          placeholder="Message"
+                          name="message"
+                          type="text"
+                          disabled={Object.keys(availableWallets).length === 0}
+                        />
+                      </div>
+                    </div>
+                    <div className="row no-gutters">
+                      {userSettings.twoFAEnabled
+                        ? <>
+                          <div className="col-5 col-sm-2">2FA Code</div>
+                          <div className="col-7 col-sm-10">
+                            <input
+                              {...bindTwoFACode}
+                              size={6}
+                              placeholder="2 Factor Authentication"
+                              className="form-control autoWidth"
+                              name="twoFACode"
+                              type="number"
+                              minLength={6}
+                              maxLength={6}
+                              disabled={Object.keys(availableWallets).length === 0}
+                            />
+                          </div>
+                        </>
+                        : <>
+                          <div className="col-5 col-sm-2">Password</div>
+                          <div className="col-7 col-sm-10">
+                            <input
+                              {...bindPassword}
+                              size={6}
+                              className="form-control"
+                              placeholder="Password"
+                              name="password"
+                              type="password"
+                              minLength={8}
+                              disabled={Object.keys(availableWallets).length === 0}
+                            />
+                          </div>
+                        </>
+                      }
                     </div>
                   </div>
                 </div>
-                <div className="row no-gutters">
-                  <div className="col-5 col-sm-2">Message</div>
-                  <div className="col-7 col-sm-10">
-                    <input
-                      {...bindMessage}
-                      size={6}
-                      className="form-control maxWidth"
-                      placeholder="Message"
-                      name="message"
-                      type="text"
-                      disabled={Object.keys(availableWallets).length === 0}
-                    />
-                  </div>
-                </div>
-                <div className="row no-gutters">
-                  {userSettings.twoFAEnabled
-                    ? <>
-                      <div className="col-5 col-sm-2">2FA Code</div>
-                      <div className="col-7 col-sm-10">
-                        <input
-                          {...bindTwoFACode}
-                          size={6}
-                          placeholder="2 Factor Authentication"
-                          className="form-control autoWidth"
-                          name="twoFACode"
-                          type="number"
-                          minLength={6}
-                          maxLength={6}
-                          disabled={Object.keys(availableWallets).length === 0}
-                        />
-                      </div>
-                    </>
-                    : <>
-                      <div className="col-5 col-sm-2">Password</div>
-                      <div className="col-7 col-sm-10">
-                        <input
-                          {...bindPassword}
-                          size={6}
-                          className="form-control"
-                          placeholder="Password"
-                          name="password"
-                          type="password"
-                          minLength={8}
-                          disabled={Object.keys(availableWallets).length === 0}
-                        />
-                      </div>
-                    </>
-                  }
-                </div>
               </div>
-            </div>
-          </div>
 
-          <div>
-            <button
-              type="submit"
-              className="btn btn-outline-primary btn-uppercase-sm"
-              disabled={formSubmitted || !formValid}
-            >
-              SEND
-            </button>
-          </div>
+              <div>
+                <button
+                  type="submit"
+                  className="btn btn-outline-primary btn-uppercase-sm"
+                  disabled={formSubmitted || !formValid}
+                >
+                  SEND
+                </button>
+              </div>
 
-          {sendTxResponse &&
-            <div className={`${sendTxResponse.status}-message`}>
-              {
-                sendTxResponse.status === 'error'
-                  ? <div className="text-danger">{sendTxResponse.message}</div>
-                  : <>
-                    TX Hash: <a
+              {sendTxResponse &&
+              <div className={`${sendTxResponse.status}-message`}>
+                {
+                  sendTxResponse.status === 'error'
+                    ? <div className="text-danger">{sendTxResponse.message}</div>
+                    : <>
+                      TX Hash: <a
                       href={`${appSettings.explorerURL}/index.html?hash=${sendTxResponse.message.transactionHash}#blockchain_transaction`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       {sendTxResponse.message.transactionHash}
-                    </a><br />
-                    Secret Key: {sendTxResponse.message.transactionSecretKey}
-                  </>
+                    </a><br/>
+                      Secret Key: {sendTxResponse.message.transactionSecretKey}
+                    </>
+                }
+              </div>
               }
-            </div>
-          }
-        </form>
+            </form>
+          </>
+        }
       </div>
     </div>
   )

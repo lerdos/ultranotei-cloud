@@ -188,7 +188,7 @@ const IPNForm = props => {
                 </button>
               </div>
             </form>
-            {wallet.ipn &&
+            {wallet.ipn && wallet.ipn.clientKey &&
               <div>
                 <div className="d-flex flex flex-column">
                   <div className="mg-b-15">

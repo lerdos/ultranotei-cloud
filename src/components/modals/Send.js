@@ -29,7 +29,6 @@ const SendModal = props => {
   const { value: password, bind: bindPassword, reset: resetPassword } = useFormInput('');
   const { value: label, bind: bindLabel, setValue: setLabelValue, reset: resetLabel } = useFormInput('');
 
-
   const parsedAmount = !Number.isNaN(parseFloat(amount)) ? parseFloat(amount) : 0;
   const totalMessageFee = message.length > 0 ? messageFee + message.length * feePerChar : 0;
   const txFee = parsedAmount > 0 || amount !== '' ? defaultFee : 0;

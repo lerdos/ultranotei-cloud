@@ -8,6 +8,7 @@ import Button from 'react-bootstrap/Button';
 
 const Pay = props => {
   const { actions, state } = useContext(AppContext);
+  const { createWallet, sendTx } = actions;
   const { appSettings, layout, marketData, userSettings, wallets } = state;
   const { coinDecimals, defaultFee, messageFee, feePerChar } = appSettings;
   const { ipn, twoFAEnabled } = userSettings;
@@ -107,7 +108,7 @@ const Pay = props => {
       <div className="donateWrapper">
         <h6 className="slim-pagetitle">Conceal Pay</h6>
 
-        {!ipn &&
+        {walletsLoaded && !ipn &&
           <div className="mg-t-15">
             <h5>Invalid Client Key</h5>
             Verify that Client Key is correct or contact shop owner.
@@ -123,7 +124,7 @@ const Pay = props => {
 
             <form
               onSubmit={e =>
-                actions.sendTx(
+                sendTx(
                   {
                     e,
                     wallet: walletAddress,
@@ -170,14 +171,17 @@ const Pay = props => {
                             )}
                           </select>
                         }
-                        {walletsLoaded && Object.keys(availableWallets).length === 0 &&
+                        {walletsLoaded && Object.keys(wallets).length > 0 && Object.keys(availableWallets).length === 0 &&
                           <div>
-                            Not enough funds. Send some CCX to your wallet.
+                            Balance too low. Send some funds to your wallet to process this payment.
                           </div>
                         }
                         {walletsLoaded && Object.keys(wallets).length === 0 &&
                           <div>
-                            You have no wallets yet. Create one <Button variant="link">here</Button>.
+                            You have no wallets yet. Create one
+                            <Button className="btn-uppercase-sm btn-create-wallet" onClick={() => createWallet()}>
+                              here
+                            </Button>
                           </div>
                         }
                       </div>

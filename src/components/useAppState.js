@@ -147,16 +147,12 @@ const useAppState = Auth => {
           },
         };
         break;
-      case 'UPDATE_WALLET':
+      case 'UPDATE_WALLETS':
         result = {
           ...state,
           wallets: {
             ...state.wallets,
-            [action.address]: {
-              ...state.wallets[action.address],
-              ...action.walletData,
-              loaded: true,
-            },
+            ...action.wallets,
           },
         };
         break;
@@ -168,6 +164,12 @@ const useAppState = Auth => {
           wallets: {
             ...state.wallets,
           },
+        };
+        break;
+      case 'DELETE_WALLETS':
+        result = {
+          ...state,
+          wallets: {},
         };
         break;
       case 'SEND_TX':

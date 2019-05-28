@@ -18,7 +18,7 @@ const PrivateRoute = props => {
       render={props =>
         Auth.loggedIn()
           ? <>
-              {(props.location.pathname.startsWith('/donate') || props.location.pathname.startsWith('/pay/'))
+              {(props.location.pathname.startsWith('/donate/') || props.location.pathname.startsWith('/pay/'))
                 ? <Component {...props} />
                 : <>
                     <Header />
