@@ -215,20 +215,20 @@ const AppContextProvider = props => {
     Api.getIPNClient(client)
       .then(res =>
         res.result === 'success' && res.message[0] !== false &&
-        dispatch({ type: 'SET_IPN_CONFIG', ipn: res.message })
+        dispatch({ type: 'UPDATE_IPN_CONFIG', ipn: res.message, client })
       )
       .catch(e => console.error(e));
   };
 
   const updateIPNConfig = options => {
-    const { e, id } = options;
+    const { e, id, IPNWallet } = options;
     e.preventDefault();
     let message;
     dispatch({ type: 'FORM_SUBMITTED', value: true });
     Api.updateIPNConfig(options)
       .then(res => {
         if (res.result === 'success') {
-          dispatch({ type: 'UPDATE_IPN_CONFIG', clientKey: res.message.config })
+          dispatch({ type: 'SET_IPN_CONFIG', ipn: res.message, address: IPNWallet })
         } else {
           message = res.message;
         }
@@ -261,7 +261,7 @@ const AppContextProvider = props => {
         if (res.result === 'success') {
           dispatch({ type: 'UPDATE_WALLET', address, walletData: res.message });
           dispatch({ type: 'APP_UPDATED' });
-          if (!location.pathname.startsWith('/pay') && !location.pathname.startsWith('/donate')) {
+          if (!location.pathname.startsWith('/pay/') && !location.pathname.startsWith('/donate')) {
             getIPNConfig(address);
           }
         } else {
@@ -430,7 +430,7 @@ const AppContextProvider = props => {
       { fn: getMarketData, time: appSettings.updateMarketPricesInterval },
     );
 
-    if (!location.pathname.startsWith('/donate') && !location.pathname.startsWith('/pay')) {
+    if (!location.pathname.startsWith('/donate') && !location.pathname.startsWith('/pay/')) {
       getBlockchainHeight();
       getMarketPrices();
       getPrices();
@@ -441,7 +441,7 @@ const AppContextProvider = props => {
       )
     }
 
-    if (location.pathname.startsWith('/pay')) {
+    if (location.pathname.startsWith('/pay/')) {
       const params = new URLSearchParams(props.location.search);
       const client = params.get('client');
       if (client) getIPNClient(client);

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 import { AppContext } from '../ContextProvider';
 import AvatarForm from '../elements/Settings/AvatarForm';
-import DonationForm from '../elements/Settings/DonationForm';
 import EmailForm from '../elements/Settings/EmailForm';
 import TwoFAForm from '../elements/Settings/TwoFAForm';
 
@@ -71,10 +70,6 @@ const Settings = () => {
                     <div className="col-7 col-sm-8 wallet-address"><TwoFAForm /></div>
                   </div>
 
-                  <div className="row no-gutters">
-                    <div className="col-5 col-sm-4 align-items-start pd-t-25-force">Donation</div>
-                    <div className="col-7 col-sm-8"><DonationForm /></div>
-                  </div>
                 </div>
               </div>
             </div>

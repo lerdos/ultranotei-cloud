@@ -40,7 +40,7 @@ import GettingStarted from './pages/GettingStarted';
 import UpcomingFeatures from './pages/UpcomingFeatures';
 import Donate from './pages/Donate';
 import Pay from './pages/Pay';
-import IPN from './pages/IPN';
+import PaySettings from './pages/PaySettings';
 
 import '../static/css/slim.css';
 import '../static/css/slim.one.css';
@@ -85,7 +85,7 @@ const App = () => (
       <PrivateRoute exact path="/" component={Dashboard} />
       <PrivateRoute exact path="/address_book" component={AddressBook} />
       <PrivateRoute exact path="/settings" component={Settings} />
-      <PrivateRoute exact path="/ipn" component={IPN} />
+      <PrivateRoute exact path="/pay_settings" component={PaySettings} />
       <PrivateRoute exact path="/getting_started" component={GettingStarted} />
       <PrivateRoute exact path="/upcoming_features" component={UpcomingFeatures} />
       <PrivateRoute exact path="/donate/:address/:recipientName?" component={Donate} />

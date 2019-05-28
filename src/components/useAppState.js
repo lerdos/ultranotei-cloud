@@ -103,7 +103,7 @@ const useAppState = Auth => {
             ...state.userSettings,
             ipn: {
               ...state.userSettings.ipn,
-              clientKey: action.clientKey,
+              ...action.ipn,
             },
           }
         };

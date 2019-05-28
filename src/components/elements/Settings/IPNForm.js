@@ -191,7 +191,9 @@ const IPNForm = props => {
             {wallet.ipn &&
               <div>
                 <div className="d-flex flex flex-column">
-                  <div>Use this URL to receive CCX payments from your Website:</div>
+                  <div className="mg-b-15">
+                    Use this URL to receive CCX payments from your Website:
+                  </div>
                   <div className="d-flex flex flex-row align-items-stretch">
                     <pre className="flex-1" onClick={handleIPNKeyFocus}>
                       <input readOnly type="text" value={clientURL(wallet.ipn.clientKey)} />
@@ -199,6 +201,11 @@ const IPNForm = props => {
                     <div>
                       <CopyButton text={clientURL(wallet.ipn.clientKey)} toolTipText="Copy IPN URL" />
                     </div>
+                  </div>
+                  <div>
+                    Modify <code>AMOUNT</code> and <code>REF</code> values to suit your needs.<br />
+                    Callback URL, after successful payment, will include <strong>Transaction Hash</strong>, along with <code>REF</code> value, e.g.<br />
+                    <code>{wallet.ipn.ipnUrl}?tx=TX_HASH&ref=REF</code>.
                   </div>
                 </div>
               </div>

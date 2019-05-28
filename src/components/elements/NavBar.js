@@ -31,8 +31,8 @@ const NavBar = () => {
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink to="/ipn" className="nav-link hot_link" activeClassName="active">
-              <FontAwesomeIcon icon="receipt" fixedWidth /> <span>IPN</span>
+            <NavLink to="/pay_settings" className="nav-link hot_link" activeClassName="active">
+              <FontAwesomeIcon icon="receipt" fixedWidth /> <span>Conceal Pay</span>
             </NavLink>
           </li>
           <li className="nav-item with-sub">
