@@ -102,7 +102,8 @@ export default class ApiHelper {
       .then(res => Promise.resolve(res));
   };
 
-  sendTx = (wallet, address, paymentID, amount, message, twoFACode, password, ref) => {
+  sendTx = options => {
+    const { wallet, address, paymentID, amount, message, twoFACode, password, ref, client } = options;
     let isPayment = '';
     const body = {
       amount: parseFloat(amount),
@@ -114,6 +115,7 @@ export default class ApiHelper {
     if (paymentID && paymentID !== '') body.paymentID = paymentID;
     if (twoFACode && twoFACode !== '') body.code = twoFACode;
     if (password && password !== '') body.password = password;
+    if (client && client !== '') body.client = client;
     if (ref && ref !== '') {
       body.ref = ref;
       isPayment = '/pay';

@@ -31,7 +31,7 @@ const Donate = props => {
   useEffect(() => {
     const availableWallets = Object.keys(wallets)
       .reduce((acc, curr) => {
-        if (wallets[curr].balance > 0) acc[curr] = wallets[curr];
+        if (wallets[curr].balance > 0 && curr !== address) acc[curr] = wallets[curr];
         return acc;
       }, {});
     const selectedAddress = Object.keys(availableWallets)[0];

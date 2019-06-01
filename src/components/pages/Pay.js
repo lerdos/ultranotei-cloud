@@ -15,7 +15,9 @@ const Pay = props => {
   const { formSubmitted, sendTxResponse, walletsLoaded } = layout;
 
   if (sendTxResponse && sendTxResponse.redirect) {
-    setTimeout(() => window.location(sendTxResponse.redirect), 10 * 1000);
+    setTimeout(() => {
+      window.location.href = sendTxResponse.redirect;
+    }, 10 * 1000);
   }
 
   const params = new URLSearchParams(props.location.search);
@@ -276,7 +278,7 @@ const Pay = props => {
                   SEND
                 </button>
               </div>
-              {sendTxResponse &&
+              {sendTxResponse && sendTxResponse.message && sendTxResponse.message.transactionHash &&
                 <div className={`${sendTxResponse.status}-message`}>
                   {
                     sendTxResponse.status === 'error'
@@ -296,7 +298,7 @@ const Pay = props => {
               }
               {sendTxResponse && sendTxResponse.redirect &&
                 <div>
-                  You will be redirected in 10 seconds...
+                  <strong>Payment Successful!</strong> You will be redirected in 10 seconds...
                 </div>
               }
             </form>

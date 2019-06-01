@@ -38,10 +38,7 @@ const Wallet = props => {
       <div className="user-name-address">
         <p>{maskAddress(props.address)}</p>
         <span>
-          Balance: {wallet.loaded
-            ? <>{balanceTotal.toLocaleString(undefined, formatOptions)} CCX&nbsp;</>
-            : <>Loading...</>
-          }
+          Balance: {balanceTotal.toLocaleString(undefined, formatOptions)} CCX&nbsp;
           {locked > 0 &&
             <span className="tx-pending d-inline-block">
               (Locked: {locked.toLocaleString(undefined, formatOptions)})

@@ -327,12 +327,12 @@ const AppContextProvider = props => {
   };
 
   const sendTx = (options, extras) => {
-    const { e, wallet, address, paymentID, amount, message, twoFACode, password, label, ref, id } = options;
+    const { e, address, paymentID, message, label, id } = options;
     e.preventDefault();
     dispatch({ type: 'FORM_SUBMITTED', value: true });
     let layoutMessage;
     let sendTxResponse;
-    Api.sendTx(wallet, address, paymentID, amount, message, twoFACode, password, ref)
+    Api.sendTx(options)
       .then(res => {
         if (res.result === 'error' || res.message.error) {
           sendTxResponse = {
