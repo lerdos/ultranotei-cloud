@@ -45,18 +45,24 @@ const IPNForm = props => {
   return (
     <Card key={address}>
       <Card.Header>
-        <Accordion.Toggle as={Button} variant="link" eventKey={address}>
-          <FontAwesomeIcon icon="caret-down" fixedWidth /> {maskAddress(address)}
-        </Accordion.Toggle>
-        {(wallet.ipn && wallet.ipn.clientKey)
-          ? <div className="fa-pull-right">
-              Client Key: {wallet.ipn.clientKey}&nbsp;
-              <CopyButton text={wallet.ipn.clientKey} toolTipText="Copy Client IPN Key" />
-            </div>
-          : <div className="float-right">
-            IPN not yet configured for this wallet
-          </div>
-        }
+		<div class="row no-gutters">
+			<div class="col-5 col-sm-4">
+				<Accordion.Toggle as={Button} variant="link" eventKey={address}>
+				  <FontAwesomeIcon icon="caret-down" fixedWidth /> {maskAddress(address)}
+				</Accordion.Toggle>			
+			</div>
+			<div class="col-7 col-sm-8 PaymentInfo">
+				{(wallet.ipn && wallet.ipn.clientKey)
+				  ? <div className="fa-pull-right">
+					  Client Key: {wallet.ipn.clientKey}&nbsp;&nbsp;
+					  <CopyButton text={wallet.ipn.clientKey} toolTipText="Copy Client IPN Key" />
+					</div>
+				  : <div className="fa-pull-right">
+					IPN not yet configured for this wallet
+				  </div>
+				}
+			</div>
+		</div>
       </Card.Header>
       <Accordion.Collapse eventKey={address}>
         <Card.Body>
@@ -189,13 +195,13 @@ const IPNForm = props => {
               </div>
             </form>
             {wallet.ipn && wallet.ipn.clientKey &&
-              <div>
+              <div class="paymentInstructions">
                 <div className="d-flex flex flex-column">
                   <div className="mg-b-15">
                     Use this URL to receive CCX payments from your Website:
                   </div>
                   <div className="d-flex flex flex-row align-items-stretch">
-                    <pre className="flex-1" onClick={handleIPNKeyFocus}>
+                    <pre className="flex-1 paymentURL" onClick={handleIPNKeyFocus}>
                       <input readOnly type="text" value={clientURL(wallet.ipn.clientKey)} />
                     </pre>
                     <div>

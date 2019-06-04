@@ -187,9 +187,9 @@ const Donate = props => {
                           step={Math.pow(10, -coinDecimals).toFixed(coinDecimals)}
                           disabled={Object.keys(availableWallets).length === 0}
                         />
-                        <div className="float-left">
-                          BTC: {btcValue.toLocaleString(undefined, btcFormatOptions)}<br/>
-                          USD: {usdValue.toLocaleString(undefined, usdFormatOptions)}
+                        <div className="float-left mg-l-10">
+                          BTC: {btcValue.toLocaleString(undefined, btcFormatOptions)}<br />
+						  USD: {usdValue.toLocaleString(undefined, usdFormatOptions)}
                         </div>
                       </div>
                     </div>

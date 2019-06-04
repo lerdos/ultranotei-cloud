@@ -1603,3 +1603,17 @@ label.codeExample {
   padding: 0.3rem 0.5rem;
   margin: 0 0.3rem;
 }
+
+.PaymentInfo {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+
+.paymentInstructions {
+  margin-top: 15px;
+}
+
+.paymentURL {
+  padding: 0.88em !important;
+}

@@ -65,7 +65,7 @@ const DonationForm = () => {
           ? <div className="d-flex flex flex-column">
               <div>Use this URL as donation endpoint:</div>
               <div className="d-flex flex flex-row align-items-stretch">
-                  <pre className="flex-1" onClick={handleDonationURLFocus}>
+                  <pre className="flex-1 paymentURL" onClick={handleDonationURLFocus}>
                     <input readOnly type="text" value={donationURL} />
                   </pre>
                 <div>
@@ -74,7 +74,7 @@ const DonationForm = () => {
               </div>
               <div>or use HTML code:</div>
               <div className="d-flex flex flex-row align-items-stretch">
-                <pre className="flex-1" onClick={handleDonationURLFocus}>
+                <pre className="flex-1 paymentURL" onClick={handleDonationURLFocus}>
                   <input readOnly type="text" value={donationHTML} />
                 </pre>
                 <div>
