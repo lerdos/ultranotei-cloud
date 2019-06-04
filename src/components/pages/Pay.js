@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 
 import { AppContext } from '../ContextProvider';
-import { maskAddress } from '../../helpers/utils';
 import { useFormInput, useFormValidation } from '../../helpers/hooks';
-import Button from 'react-bootstrap/Button';
+import WalletDropdown from '../elements/WalletDropdown';
 
 
 const Pay = props => {
   const { actions, state } = useContext(AppContext);
-  const { createWallet, sendTx } = actions;
+  const { sendTx } = actions;
   const { appSettings, layout, marketData, userSettings, wallets } = state;
   const { coinDecimals, defaultFee, messageFee, feePerChar } = appSettings;
   const { ipn, twoFAEnabled } = userSettings;
@@ -38,21 +37,6 @@ const Pay = props => {
   useEffect(() => {
     if (amountPredefined) setAmountValue(amountPredefined);
   }, []);
-
-  useEffect(() => {
-    const availableWallets = Object.keys(wallets)
-      .reduce((acc, curr) => {
-        if (wallets[curr].balance > 0) acc[curr] = wallets[curr];
-        return acc;
-      }, {});
-    const selectedAddress = Object.keys(availableWallets)[0];
-    const selectedWallet = wallets[selectedAddress];
-    if (selectedAddress && selectedWallet) {
-      setWalletAddress(selectedAddress);
-      setWallet(selectedWallet);
-    }
-    setAvailableWallets(availableWallets);
-  }, [wallets]);
 
   let formValidation = false;
   let maxValue = 0;
@@ -157,35 +141,15 @@ const Pay = props => {
                     <div className="row no-gutters">
                       <div className="col-5 col-sm-2">From Wallet</div>
                       <div className="col-7 col-sm-10">
-                        {walletsLoaded && Object.keys(availableWallets).length > 0 &&
-                          <select
-                            className="form-control autoWidth"
-                            onChange={e => {
-                              setWallet(wallets[e.target.value]);
-                              setWalletAddress(e.target.value);
-                            }}
-                            value={walletAddress}
-                          >
-                            {Object.keys(availableWallets).map(address =>
-                              <option value={address} key={address}>
-                                {maskAddress(address)} ({wallets[address].balance} CCX)
-                              </option>
-                            )}
-                          </select>
-                        }
-                        {walletsLoaded && Object.keys(wallets).length > 0 && Object.keys(availableWallets).length === 0 &&
-                          <div>
-                            Balance too low. Send some funds to your wallet to process this payment.
-                          </div>
-                        }
-                        {walletsLoaded && Object.keys(wallets).length === 0 &&
-                          <div>
-                            You have no wallets yet. Create one
-                            <Button className="btn-uppercase-sm btn-create-wallet" onClick={() => createWallet()}>
-                              here
-                            </Button>
-                          </div>
-                        }
+                        <WalletDropdown
+                          availableWallets={availableWallets}
+                          setWallet={setWallet}
+                          setWalletAddress={setWalletAddress}
+                          setAvailableWallets={setAvailableWallets}
+                          walletAddress={walletAddress}
+                          wallets={wallets}
+                          walletsLoaded={walletsLoaded}
+                        />
                       </div>
                     </div>
                     <div className="row no-gutters">
