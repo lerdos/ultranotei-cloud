@@ -34,7 +34,7 @@ const TwoFAForm = () => {
             className={`btn btn-uppercase-sm ${twoFAEnabled ? 'btn-outline-danger' : 'btn-outline-success'}`}
             onClick={() => {
               toggle2FADialog(!twoFADialogOpened);
-              if (layout.qrCodeUrl === '') getQRCode();
+              if (layout.qrCodeUrl === '' && !twoFAEnabled) getQRCode();
             }}
           >
             {twoFAEnabled ? 'Disable' : 'Enable'}
@@ -43,110 +43,110 @@ const TwoFAForm = () => {
       </div>
 
       {twoFADialogOpened &&
-      <div className="twofa-dialog">
-        {twoFAEnabled &&
-        <>
-          <p>
-            Enter the passcode from your authenticator app to disable two-factor authentication.
-          </p>
-          <form
-            onSubmit={e =>
-              update2FA(
-                {
-                  e,
-                  twoFACode,
-                  enable: false,
-                  id: 'twoFAForm',
-                },
-                [
-                  resetTwoFACode,
-                  toggle2FADialog,
-                ],
-              )
-            }
-          >
-            <div className="form-layout form-layout-7">
-              <div className="row no-gutters">
-                <div className="col-5 col-sm-4">
-                  2FA Key
-                </div>
-                <div className="col-7 col-sm-8 wallet-address">
-                  <input
-                    {...bindTwoFACode}
-                    placeholder="2 Factor Authentication Key"
-                    type="number"
-                    name="twoFACode"
-                    className="form-control"
-                    minLength={6}
-                    maxLength={6}
-                  />
-                </div>
-              </div>
-              <button
-                type="submit"
-                disabled={formSubmitted || !twoFAFormValid}
-                className="btn btn-primary btn-block btn-signin"
+        <div className="twofa-dialog">
+          {twoFAEnabled &&
+            <>
+              <p>
+                Enter the passcode from your authenticator app to disable two-factor authentication.
+              </p>
+              <form
+                onSubmit={e =>
+                  update2FA(
+                    {
+                      e,
+                      twoFACode,
+                      enable: false,
+                      id: 'twoFAForm',
+                    },
+                    [
+                      resetTwoFACode,
+                      toggle2FADialog,
+                    ],
+                  )
+                }
               >
-                {formSubmitted ? 'Please wait...' : 'Disable'}
-              </button>
-            </div>
-          </form>
-        </>
-        }
-        {!twoFAEnabled &&
-        <>
-          <p>
-            Scan the QR code with your two-factor authentication device to set up your account.
-            Submit the two-factor passcode which your device generates to enable 2FA.
-          </p>
-          <div>
-            <img src={layout.qrCodeUrl} alt="QR Code" />
-
-            <form
-              onSubmit={e =>
-                update2FA(
-                  {
-                    e,
-                    twoFACode,
-                    enable: true,
-                    id: 'twoFAForm',
-                  },
-                  [
-                    resetTwoFACode,
-                    toggle2FADialog,
-                  ],
-                )
-              }
-            >
-              <div className="form-layout form-layout-7">
-                <div className="row no-gutters">
-                  <div className="col-5 col-sm-4">
-                    2FA Key
+                <div className="form-layout form-layout-7">
+                  <div className="row no-gutters">
+                    <div className="col-5 col-sm-4">
+                      2FA Key
+                    </div>
+                    <div className="col-7 col-sm-8 wallet-address">
+                      <input
+                        {...bindTwoFACode}
+                        placeholder="2 Factor Authentication Key"
+                        type="number"
+                        name="twoFACode"
+                        className="form-control"
+                        minLength={6}
+                        maxLength={6}
+                      />
+                    </div>
                   </div>
-                  <div className="col-7 col-sm-8 wallet-address">
-                    <input
-                      {...bindTwoFACode}
-                      placeholder="2 Factor Authentication Key"
-                      type="number"
-                      name="twoFACode"
-                      className="form-control"
-                      max={999999}
-                    />
-                  </div>
+                  <button
+                    type="submit"
+                    disabled={formSubmitted || !twoFAFormValid}
+                    className="btn btn-primary btn-block btn-signin"
+                  >
+                    {formSubmitted ? 'Please wait...' : 'Disable'}
+                  </button>
                 </div>
-                <button
-                  type="submit"
-                  disabled={formSubmitted || !twoFAFormValid}
-                  className="btn btn-primary btn-block btn-signin"
+              </form>
+            </>
+          }
+          {!twoFAEnabled &&
+            <>
+              <p>
+                Scan the QR code with your two-factor authentication device to set up your account.
+                Submit the two-factor passcode which your device generates to enable 2FA.
+              </p>
+              <div>
+                <img src={layout.qrCodeUrl} alt="QR Code" />
+
+                <form
+                  onSubmit={e =>
+                    update2FA(
+                      {
+                        e,
+                        twoFACode,
+                        enable: true,
+                        id: 'twoFAForm',
+                      },
+                      [
+                        resetTwoFACode,
+                        toggle2FADialog,
+                      ],
+                    )
+                  }
                 >
-                  {formSubmitted ? 'Please wait...' : 'Enable'}
-                </button>
+                  <div className="form-layout form-layout-7">
+                    <div className="row no-gutters">
+                      <div className="col-5 col-sm-4">
+                        2FA Key
+                      </div>
+                      <div className="col-7 col-sm-8 wallet-address">
+                        <input
+                          {...bindTwoFACode}
+                          placeholder="2 Factor Authentication Key"
+                          type="number"
+                          name="twoFACode"
+                          className="form-control"
+                          max={999999}
+                        />
+                      </div>
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={formSubmitted || !twoFAFormValid}
+                      className="btn btn-primary btn-block btn-signin"
+                    >
+                      {formSubmitted ? 'Please wait...' : 'Enable'}
+                    </button>
+                  </div>
+                </form>
               </div>
-            </form>
-          </div>
-        </>
-        }
-      </div>
+            </>
+          }
+        </div>
       }
     </>
   )

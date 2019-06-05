@@ -29,7 +29,7 @@ const PaySettings = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="mg-b-15">
-                  Create URL which you can share with others to receive donations.
+                  Create URL which you can share with others to receive payments in CCX.
                 </div>
                 <div className="form-layout form-layout-7">
 
