@@ -2,6 +2,7 @@
   "name": "conceal.cloud",
   "version": "1.0.0",
   "private": true,
+  "homepage": "https://conceal.cloud",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.12",
     "@fortawesome/free-brands-svg-icons": "^5.7.2",

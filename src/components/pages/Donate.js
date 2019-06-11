@@ -97,7 +97,7 @@ const Donate = props => {
   return (
     <div className="donatePage">
       <div className="donateWrapper">
-        <h6 className="slim-pagetitle">Donate</h6>
+        <h6 className="slim-pagetitle">Conceal Pay</h6>
 
         {!addressValid &&
           <div className="mg-t-15">
@@ -134,7 +134,7 @@ const Donate = props => {
                 <div className="col-lg-12">
                   <div className="form-layout form-layout-7">
                     <div className="row no-gutters">
-                      <div className="col-5 col-sm-2">Donating to</div>
+                      <div className="col-5 col-sm-2">Pay to</div>
                       <div
                         className="col-7 col-sm-10 wallet-address">{address} {recipientName && `(${recipientName})`}</div>
                     </div>

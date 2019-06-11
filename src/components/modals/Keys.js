@@ -45,17 +45,17 @@ const KeysModal = props => {
               ? <div className="form-layout form-layout-7">
                   <div className="row no-gutters">
                     <div className="col-5 col-sm-3">
-                      Public Spend Key
+                      Public Key
                     </div>
                     <div className="col-7 col-sm-9 wallet-address">
                       <div className="input-group">
                         <input
-                          value={wallet.keys ? wallet.keys.spendPublicKey : ''}
+                          value={wallet.keys ? wallet.keys['Public Key'] : ''}
                           readOnly
                           className="form-control"
                         />
                         <span className="input-group-btn">
-                          <CopyButton text={wallet.keys ? wallet.keys.spendPublicKey : ''} toolTipText="Copy Key" />
+                          <CopyButton text={wallet.keys ? wallet.keys['Public Key'] : ''} toolTipText="Copy Key" />
                         </span>
                       </div>
                     </div>
@@ -63,17 +63,17 @@ const KeysModal = props => {
 
                   <div className="row no-gutters">
                     <div className="col-5 col-sm-3">
-                      Secret Spend Key
+                      Private Spend Key
                     </div>
                     <div className="col-7 col-sm-9 wallet-address">
                       <div className="input-group">
                         <input
-                          value={wallet.keys ? wallet.keys.spendSecretKey : ''}
+                          value={wallet.keys ? wallet.keys['Private Spend Key'] : ''}
                           readOnly
                           className="form-control"
                         />
                         <span className="input-group-btn">
-                          <CopyButton text={wallet.keys ? wallet.keys.spendSecretKey : ''} toolTipText="Copy Key" />
+                          <CopyButton text={wallet.keys ? wallet.keys['Private Spend Key'] : ''} toolTipText="Copy Key" />
                         </span>
                       </div>
                     </div>
@@ -86,12 +86,12 @@ const KeysModal = props => {
                     <div className="col-7 col-sm-9 wallet-address">
                       <div className="input-group">
                         <input
-                          value={wallet.keys ? wallet.keys.viewSecretKey : ''}
+                          value={wallet.keys ? wallet.keys['Private View Key'] : ''}
                           readOnly
                           className="form-control"
                         />
                         <span className="input-group-btn">
-                          <CopyButton text={wallet.keys ? wallet.keys.viewSecretKey : ''} toolTipText="Copy Key" />
+                          <CopyButton text={wallet.keys ? wallet.keys['Private View Key'] : ''} toolTipText="Copy Key" />
                         </span>
                       </div>
                     </div>

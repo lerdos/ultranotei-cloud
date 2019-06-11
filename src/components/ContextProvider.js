@@ -248,7 +248,7 @@ const AppContextProvider = props => {
         if (res.result === 'success') {
           const wallets = res.message.wallets;
           dispatch({ type: 'UPDATE_WALLETS', wallets });
-          if (!location.pathname.startsWith('/pay/') && !location.pathname.startsWith('/donate/')) {
+          if (!location.pathname.startsWith('/pay/') && !location.pathname.startsWith('/payment/')) {
             Object.keys(wallets).forEach(address => {
               if (!updatedState.current.wallets[address].ipn) getIPNConfig(address);
             });
@@ -431,7 +431,7 @@ const AppContextProvider = props => {
       { fn: getMarketData, time: appSettings.updateMarketPricesInterval },
     );
 
-    if (!location.pathname.startsWith('/donate/') && !location.pathname.startsWith('/pay/')) {
+    if (!location.pathname.startsWith('/payment/') && !location.pathname.startsWith('/pay/')) {
       getBlockchainHeight();
       getMarketPrices();
       getPrices();
@@ -456,7 +456,8 @@ const AppContextProvider = props => {
     dispatch({ type: 'REDIRECT_TO_REFERRER', value: false });
   };
 
-  const onRouteChanged = location => {
+  const onRouteChanged = props => {
+    const { location } = props;
     const isRedirect = props.history.action === 'REPLACE';
     if ((location.pathname !== '/signup' && !location.pathname.startsWith('/reset_password')) || !isRedirect) {
       dispatch({ type: 'DISPLAY_MESSAGE', message: null });
@@ -472,7 +473,7 @@ const AppContextProvider = props => {
     return () => clearApp();
   }, []);
 
-  useEffect(() => onRouteChanged(props.location), [props.location]);
+  useEffect(() => onRouteChanged(props), [props.location]);
 
   return (
     <AppContext.Provider value={{ state, actions }}>

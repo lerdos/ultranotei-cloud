@@ -34,7 +34,7 @@ const PaySettings = () => {
                 <div className="form-layout form-layout-7">
 
                   <div className="row no-gutters">
-                    <div className="col-5 col-sm-4 align-items-start pd-t-25-force">Donation Address</div>
+                    <div className="col-5 col-sm-4 align-items-start pd-t-25-force">Receiving Wallet Address</div>
                     <div className="col-7 col-sm-8"><DonationForm /></div>
                   </div>
 

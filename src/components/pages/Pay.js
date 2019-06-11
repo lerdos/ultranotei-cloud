@@ -104,8 +104,7 @@ const Pay = props => {
         {ipn &&
           <>
             <div className="mg-t-15">
-              A payment processor to accept crypto as payment....<br />
-              Sending {amount} CCX to {ipn.name}.
+              Conceal.Pay provides merchants with a method for accepting $CCX payments without intermediaries and a focus on privacy, security, and censorship-resistance.
             </div>
 
             <form
@@ -168,7 +167,7 @@ const Pay = props => {
                           disabled={Object.keys(availableWallets).length === 0}
                         />
                         <div className="float-left mg-l-10">
-                          BTC: {btcValue.toLocaleString(undefined, btcFormatOptions)}<br /> 
+                          BTC: {btcValue.toLocaleString(undefined, btcFormatOptions)}<br />
 						  USD: {usdValue.toLocaleString(undefined, usdFormatOptions)}
                         </div>
                       </div>
@@ -225,6 +224,12 @@ const Pay = props => {
                   </div>
                 </div>
               </div>
+
+              {amount > 0 &&
+                <div className="mg-b-10">
+                  <>Sending <strong>{amount} CCX</strong> to <strong>{ipn.name}</strong></>
+                </div>
+              }
 
               <div>
                 <button
