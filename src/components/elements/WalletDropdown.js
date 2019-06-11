@@ -28,7 +28,7 @@ const WalletDropdown = props => {
       }, {});
     const selectedAddress = Object.keys(availableWallets)[0];
     const selectedWallet = wallets[selectedAddress];
-    console.log(selectedAddress)
+
     if (selectedAddress && selectedWallet) {
       setWalletAddress(selectedAddress);
       setWallet(selectedWallet);

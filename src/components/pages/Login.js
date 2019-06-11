@@ -22,12 +22,12 @@ const Login = props => {
   );
   const formValid = useFormValidation(formValidation);
 
-  if (user.loggedIn()) return <Redirect to="/" />;
-
-  if (redirectToReferrer && props.location.state) {
+  if (redirectToReferrer && props.location.state && user.loggedIn()) {
     const { from } = props.location.state;
     return <Redirect to={from} />;
   }
+
+  if (user.loggedIn()) return <Redirect to="/" />;
 
   return (
     <div className="signin-wrapper">
