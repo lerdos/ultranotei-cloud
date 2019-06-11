@@ -7,7 +7,8 @@ const PortfolioCCX = () => {
   const { state } = useContext(AppContext);
   const { appSettings, wallets } = state;
 
-  const totalCCX = Object.keys(wallets).reduce((acc, curr) => acc + wallets[curr].balance || acc, 0);
+  const totalCCX = Object.keys(wallets)
+    .reduce((acc, curr) => acc + wallets[curr].balance + wallets[curr].locked || acc, 0);
   const formatOptions = {
     minimumFractionDigits: appSettings.coinDecimals,
     maximumFractionDigits: appSettings.coinDecimals,

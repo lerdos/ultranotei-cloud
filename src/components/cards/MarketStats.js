@@ -14,6 +14,7 @@ const MarketStats = () => {
   const ccxToUSD =  marketData ? marketData.market_data.current_price.usd : 0;
   const ccxToBTC =  marketData ? marketData.market_data.current_price.btc : 0;
   const marketCap =  marketData ? marketData.market_data.market_cap.usd : 0;
+  const marketCapRank =  marketData ? marketData.market_cap_rank : 0;
   const dailyVolume = marketData ? marketData.market_data.total_volume.usd : 0;
 
   const format2Decimals = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
@@ -44,7 +45,6 @@ const MarketStats = () => {
       yAxes: [{
         ticks: {
           maxTicksLimit: 5,
-          beginAtZero: true,
           fontSize: 10,
           callback: value => `$ ${value.toLocaleString(undefined, format2Decimals)}`
         },
@@ -103,7 +103,7 @@ const MarketStats = () => {
           <div className="col-lg-3">
             <div className="dash-content dash-small-info dash-flex">
    			      <div className="info-text">
-				        <label className="tx-primary">CCX to USD</label>
+				        <label>CCX to USD</label>
 				        <h2>$ {ccxToUSD.toLocaleString(undefined, format2Decimals)}</h2>
 			        </div>
               <div className="icon icon-info">
@@ -115,7 +115,7 @@ const MarketStats = () => {
           <div className="col-lg-3">
             <div className="dash-content dash-small-info dash-flex">
    			      <div className="info-text">
-                <label className="tx-primary">CCX to BTC</label>
+                <label>CCX to BTC</label>
                 <h2>{ccxToBTC.toLocaleString(undefined, format8Decimals)}</h2>
 			        </div>
               <div className="icon icon-info">
@@ -127,11 +127,11 @@ const MarketStats = () => {
           <div className="col-lg-3">
             <div className="dash-content dash-small-info dash-flex">
    			      <div className="info-text">
-                <label className="tx-primary">Marketcap</label>
+                <label>Marketcap (Rank {marketCapRank})</label>
                 <h2>$ {parseInt(marketCap).toLocaleString()}</h2>
               </div>
               <div className="icon icon-info">
-                <FontAwesomeIcon icon={['far', 'money-bill-alt']} fixedWidth />
+                <FontAwesomeIcon icon="trophy" fixedWidth />
               </div>
             </div>
           </div>
@@ -139,7 +139,7 @@ const MarketStats = () => {
           <div className="col-lg-3">
             <div className="dash-content dash-small-info dash-flex">
               <div className="info-text">
-                <label className="tx-primary">Daily Volume</label>
+                <label>Daily Volume</label>
                 <h2>$ {parseInt(dailyVolume).toLocaleString()}</h2>
 			        </div>
               <div className="icon icon-info">

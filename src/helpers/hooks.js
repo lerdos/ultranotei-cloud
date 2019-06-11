@@ -16,8 +16,20 @@ export const useFormValidation = (init) => {
 
 export const useTypeaheadInput = (init) => {
   const [defaultInputValue, setDefaultInputValue] = useState(init);
+  const [paymentIDValue, setPaymentIDValue] = useState('');
   const onInputChange = value => setDefaultInputValue(value);
-  const onChange = value => value.length > 0 && setDefaultInputValue(value[0].address);
+  const onChange = value => {
+    if (value.length > 0) {
+      value[0].address ? setDefaultInputValue(value[0].address) : setDefaultInputValue(value[0]);
+      if (value[0].paymentID !== '') setPaymentIDValue(value[0].paymentID)
+    }
+  };
   const reset = () => setDefaultInputValue('');
-  return { bind: { defaultInputValue, onInputChange, onChange }, reset, setDefaultInputValue, value: defaultInputValue };
+  return {
+    bind: { defaultInputValue, onInputChange, onChange },
+    paymentIDValue,
+    reset,
+    setDefaultInputValue,
+    value: defaultInputValue,
+  };
 };

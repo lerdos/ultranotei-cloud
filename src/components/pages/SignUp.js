@@ -32,11 +32,11 @@ const SignUp = () => {
         <h2 className="slim-logo"><a href="/">Conceal Cloud</a></h2>
         <h3 className="signin-title-secondary">Sign Up</h3>
 
-        {message &&
-          <div className="alert alert-outline alert-danger text-center">{message}</div>
+        {message.signUpForm &&
+          <div className="alert alert-outline alert-danger text-center">{message.signUpForm}</div>
         }
 
-        <form onSubmit={e => signUpUser(e, userName, email, password)}>
+        <form onSubmit={e => signUpUser({ e, userName, email, password, id: 'signUpForm' })}>
           <div className="form-group">
             <input
               {...bindUserName}

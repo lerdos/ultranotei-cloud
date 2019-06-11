@@ -12,9 +12,9 @@ export const constants = {
   medium: 'https://medium.com/@ConcealNetwork',
   coinGecko: 'https://coingecko.com/en/coins/conceal',
   coinMarketCap: 'https://coinmarketcap.com/currencies/conceal',
-  updateBlockchainHeightInterval: 15,  // seconds
-  updateMarketPricesInterval: 30,  // seconds
-  maxWallets: 10,
+  updateBlockchainHeightInterval: 30,  // seconds
+  updateMarketPricesInterval: 120,  // seconds
+  maxWallets: 2,
   coinDecimals: 5,
   defaultFee: 0.0001,
   messageFee: 0.001,
@@ -24,4 +24,6 @@ export const constants = {
   investmentFee: 0.001,
   withdrawalFee: 0.0001,
   qrCodePrefix: 'conceal',
+  donationURL: 'https://conceal.cloud/payment',
+  IPNURL: 'https://conceal.cloud/pay',
 };

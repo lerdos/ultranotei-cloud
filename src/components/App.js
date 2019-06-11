@@ -7,6 +7,7 @@ import {
   faAddressBook,
   faArrowUp,
   faArrowDown,
+  faCaretDown,
   faCheck,
   faCopy,
   faCog,
@@ -19,8 +20,10 @@ import {
   faLink,
   faListAlt,
   faNetworkWired,
+  faReceipt,
   faSignOutAlt,
   faTrashAlt,
+  faTrophy,
   faUserEdit,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -35,6 +38,9 @@ import AddressBook from './pages/AddressBook';
 import Settings from './pages/Settings';
 import GettingStarted from './pages/GettingStarted';
 import UpcomingFeatures from './pages/UpcomingFeatures';
+import Donate from './pages/Donate';
+import Pay from './pages/Pay';
+import PaySettings from './pages/PaySettings';
 
 import '../static/css/slim.css';
 import '../static/css/slim.one.css';
@@ -46,6 +52,7 @@ library.add(
   faAddressBook,
   faArrowUp,
   faArrowDown,
+  faCaretDown,
   faCheck,
   faCopy,
   faCog,
@@ -58,8 +65,10 @@ library.add(
   faLink,
   faListAlt,
   faNetworkWired,
+  faReceipt,
   faSignOutAlt,
   faTrashAlt,
+  faTrophy,
   faUserEdit,
 );
 
@@ -76,8 +85,11 @@ const App = () => (
       <PrivateRoute exact path="/" component={Dashboard} />
       <PrivateRoute exact path="/address_book" component={AddressBook} />
       <PrivateRoute exact path="/settings" component={Settings} />
+      <PrivateRoute exact path="/pay_settings" component={PaySettings} />
       <PrivateRoute exact path="/getting_started" component={GettingStarted} />
       <PrivateRoute exact path="/upcoming_features" component={UpcomingFeatures} />
+      <PrivateRoute exact path="/payment/:address/:recipientName?" component={Donate} />
+      <PrivateRoute exact strict path="/pay/" component={Pay} />
 
     </AppContextProvider>
   </Router>

@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import Modal from 'react-bootstrap/Modal';
+import WAValidator from 'multicoin-address-validator';
 
 import { AppContext } from '../ContextProvider';
 import { useFormInput, useFormValidation } from '../../helpers/hooks';
@@ -17,15 +18,13 @@ const ContactModal = props => {
   const formValidation = contact
     ? (
         label.length > 0 &&
-        address.length === 98 &&
-        address.startsWith('ccx7') &&
+        WAValidator.validate(address, 'CCX') &&
         (paymentID === '' || paymentID.length === 64) &&
         !(label === contact.label && address === contact.address && paymentID === contact.paymentID)
       )
     : (
         label.length > 0 &&
-        address.length === 98 &&
-        address.startsWith('ccx7') &&
+        WAValidator.validate(address, 'CCX') &&
         (paymentID === '' || paymentID.length === 64)
       );
   const formValid = useFormValidation(formValidation);
@@ -51,6 +50,7 @@ const ContactModal = props => {
                 paymentID,
                 entryID: contact ? contact.entryID : null,
                 edit: !!props.contact,
+                id: 'contactForm',
               },
               [
                 resetLabel,

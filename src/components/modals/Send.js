@@ -1,7 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import QrReader from 'react-qr-reader';
+import WAValidator from 'multicoin-address-validator';
 
 import { AppContext } from '../ContextProvider';
 import { useFormInput, useFormValidation, useTypeaheadInput } from '../../helpers/hooks';
@@ -20,14 +21,13 @@ const SendModal = props => {
 
   const [qrReaderOpened, setQrReaderOpened] = useState(false);
 
-  const { value: address, bind: bindAddress, reset: resetAddress } = useTypeaheadInput('');
+  const { value: address, bind: bindAddress, reset: resetAddress, paymentIDValue } = useTypeaheadInput('');
   const { value: paymentID, bind: bindPaymentID, setValue: setPaymentIDValue, reset: resetPaymentID } = useFormInput('');
   const { value: amount, bind: bindAmount, setValue: setAmountValue, reset: resetAmount } = useFormInput('');
   const { value: message, bind: bindMessage, setValue: setMessageValue, reset: resetMessage } = useFormInput('');
   const { value: twoFACode, bind: bindTwoFACode, reset: resetTwoFACode } = useFormInput('');
   const { value: password, bind: bindPassword, reset: resetPassword } = useFormInput('');
   const { value: label, bind: bindLabel, setValue: setLabelValue, reset: resetLabel } = useFormInput('');
-
 
   const parsedAmount = !Number.isNaN(parseFloat(amount)) ? parseFloat(amount) : 0;
   const totalMessageFee = message.length > 0 ? messageFee + message.length * feePerChar : 0;
@@ -39,15 +39,18 @@ const SendModal = props => {
     : (wallet.balance - defaultFee).toFixed(coinDecimals);
 
   const walletBalanceValid = totalAmount <= wallet.balance;
-  const messageAmountValid = totalMessageFee > 0 && totalTxFee.toFixed(coinDecimals) <= wallet.balance;
-  const totalAmountValid = (parsedAmount.toFixed(coinDecimals) >= defaultFee && totalAmount > 0) || messageAmountValid;
+  const messageAmountValid = totalMessageFee > 0 && totalTxFee <= wallet.balance;
+  const totalAmountValid = (parsedAmount >= defaultFee && totalAmount > 0) || messageAmountValid;
+
+  useEffect(() => {
+    if (paymentIDValue) setPaymentIDValue(paymentIDValue);
+  }, [paymentIDValue]);
 
   const formValidation = (
     address !== props.address &&
-    address.length === 98 &&
-    address.startsWith('ccx7') &&
+    WAValidator.validate(address, 'CCX') &&
     walletBalanceValid &&
-    totalAmountValid && amount.toString().length <= 7 &&
+    totalAmountValid &&
     (paymentID === '' || paymentID.length === 64) &&
     (userSettings.twoFAEnabled
       ? (parseInt(twoFACode) && twoFACode.toString().length === 6)
@@ -128,6 +131,7 @@ const SendModal = props => {
                 twoFACode,
                 password,
                 label,
+                id: 'sendForm',
               },
               [
                 resetAddress,
@@ -203,7 +207,7 @@ const SendModal = props => {
                     type="number"
                     min={0}
                     max={maxValue}
-                    step={Math.pow(10, -coinDecimals)}
+                    step={Math.pow(10, -coinDecimals).toFixed(coinDecimals)}
                   />
                   <span className="input-group-btn">
                       <button className="btn btn-outline-secondary btn-max" onClick={calculateMax} type="button">
@@ -355,22 +359,22 @@ const SendModal = props => {
               </span>
           </div>
           {sendTxResponse &&
-          <div className={`${sendTxResponse.status}-message`}>
-            {
-              sendTxResponse.status === 'error'
-                ? <div className="text-danger">{sendTxResponse.message}</div>
-                : <>
-                    TX Hash: <a
-                      href={`${appSettings.explorerURL}/?hash=${sendTxResponse.message.transactionHash}#blockchain_transaction`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {sendTxResponse.message.transactionHash}
-                    </a><br />
-                    Secret Key: {sendTxResponse.message.transactionSecretKey}
-                  </>
-            }
-          </div>
+            <div className={`${sendTxResponse.status}-message`}>
+              {
+                sendTxResponse.status === 'error'
+                  ? <div className="text-danger">{sendTxResponse.message}</div>
+                  : <>
+                      TX Hash: <a
+                        href={`${appSettings.explorerURL}/index.html?hash=${sendTxResponse.message.transactionHash}#blockchain_transaction`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {sendTxResponse.message.transactionHash}
+                      </a><br />
+                      Secret Key: {sendTxResponse.message.transactionSecretKey}
+                    </>
+              }
+            </div>
           }
         </form>
       </Modal.Body>

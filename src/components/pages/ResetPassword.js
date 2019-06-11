@@ -33,12 +33,21 @@ const ResetPassword = props => {
         <h2 className="slim-logo"><a href="/">Conceal Cloud</a></h2>
         <h3 className="signin-title-secondary">Reset Password</h3>
 
-        {message &&
-          <div className="alert alert-outline alert-danger text-center">{message}</div>
+        {message.resetPasswordForm &&
+          <div className="alert alert-outline alert-danger text-center">{message.resetPasswordForm}</div>
         }
 
         {props.match.params.token
-          ? <form onSubmit={e => resetPasswordConfirm(e, password, props.match.params.token)}>
+          ? <form
+              onSubmit={e =>
+                resetPasswordConfirm({
+                  e,
+                  password,
+                  token: props.match.params.token,
+                  id: 'resetPasswordConfirmForm',
+                })
+              }
+            >
               <div className="form-group">
                 <input
                   {...bindPassword}
@@ -60,8 +69,8 @@ const ResetPassword = props => {
                 />
               </div>
 
-              {message &&
-                <div className="text-danger text-center">{message}</div>
+              {message.resetPasswordConfirmForm &&
+                <div className="text-danger text-center">{message.resetPasswordConfirmForm}</div>
               }
 
               <button
@@ -72,26 +81,30 @@ const ResetPassword = props => {
                 {formSubmitted ? 'Please wait...' : 'Submit'}
               </button>
             </form>
-          : <form onSubmit={e => resetPassword(e, email)}>
-            <div className="form-group mg-b-50">
-              <input
-                {...bindEmail}
-                placeholder="Enter your email"
-                type="email"
-                name="email"
-                className="form-control"
-                minLength={3}
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={formSubmitted || !formValid}
-              className="btn btn-primary btn-block btn-signin"
+          : <form
+              onSubmit={e =>
+                resetPassword({ e, email, id: 'resetPasswordForm' })
+              }
             >
-              {formSubmitted ? 'Please wait...' : 'Submit'}
-            </button>
-          </form>
+              <div className="form-group mg-b-50">
+                <input
+                  {...bindEmail}
+                  placeholder="Enter your email"
+                  type="email"
+                  name="email"
+                  className="form-control"
+                  minLength={3}
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={formSubmitted || !formValid}
+                className="btn btn-primary btn-block btn-signin"
+              >
+                {formSubmitted ? 'Please wait...' : 'Submit'}
+              </button>
+            </form>
         }
 
         <p className="mg-b-0">Don't have an account? <Link to="/signup">Sign Up</Link></p>

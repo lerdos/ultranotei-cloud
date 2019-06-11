@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import QRCode from'qrcode.react';
 import Modal from 'react-bootstrap/Modal';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { AppContext } from '../ContextProvider';
 import { useFormInput } from '../../helpers/hooks';
+import CopyButton from '../elements/CopyButton';
 
 
 const ReceiveModal = props => {
@@ -13,7 +12,6 @@ const ReceiveModal = props => {
   const { appSettings } = state;
   const { toggleModal, ...rest } = props;
 
-  const [addressCopied, setAddressCopied] = useState(false);
   const [qrCodeLarge, setQRCodeLarge] = useState(false);
   const [qrCodeString, setQrCodeString] = useState(`${appSettings.qrCodePrefix}:${props.address}`);
   const { value: amount, bind: bindAmount } = useFormInput('');
@@ -32,11 +30,6 @@ const ReceiveModal = props => {
       : '';
     setQrCodeString(`${appSettings.qrCodePrefix}:${props.address}${params}`);
   });
-
-  const copyClipboard = () => {
-    setAddressCopied(true);
-    setTimeout(() => setAddressCopied(false), 400);
-  };
 
   return (
     <Modal
@@ -63,17 +56,7 @@ const ReceiveModal = props => {
                   className="form-control"
                 />
                 <span className="input-group-btn">
-                  <CopyToClipboard
-                    text={props.address}
-                    onCopy={copyClipboard}
-                  >
-                    <button
-                      className={`btn btn-no-focus ${addressCopied ? 'btn-outline-success' : 'btn-outline-dark'}`}
-                      type="button"
-                    >
-                      <FontAwesomeIcon icon={addressCopied ? 'check' : 'copy'} fixedWidth />
-                    </button>
-                  </CopyToClipboard>
+                  <CopyButton text={props.address} toolTipText="Copy Address" />
                 </span>
               </div>
             </div>

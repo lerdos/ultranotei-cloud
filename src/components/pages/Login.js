@@ -22,12 +22,12 @@ const Login = props => {
   );
   const formValid = useFormValidation(formValidation);
 
-  if (user.loggedIn()) return <Redirect to="/" />;
-
-  if (redirectToReferrer && props.location.state) {
+  if (redirectToReferrer && props.location.state && user.loggedIn()) {
     const { from } = props.location.state;
     return <Redirect to={from} />;
   }
+
+  if (user.loggedIn()) return <Redirect to="/" />;
 
   return (
     <div className="signin-wrapper">
@@ -37,11 +37,13 @@ const Login = props => {
         <h2 className="signin-title-primary">Welcome back!</h2>
         <h3 className="signin-title-secondary">Sign in to continue.</h3>
 
-        {message &&
-          <div className="alert alert-outline alert-danger text-center">{message}</div>
+        {(message.loginForm || message.signUpForm) &&
+          <div className="alert alert-outline alert-danger text-center">
+            {message.signUpForm || message.loginForm}
+          </div>
         }
 
-        <form onSubmit={e => loginUser(e, email, password, twoFACode)}>
+        <form onSubmit={e => loginUser({ e, email, password, twoFACode, id: 'loginForm' })}>
           <div className="form-group">
             <input
               {...bindEmail}

@@ -13,7 +13,8 @@ import KeysModal from '../modals/Keys';
 const Wallet = props => {
   const { actions, state } = useContext(AppContext);
   const { deleteWallet } = actions;
-  const { appSettings } = state;
+  const { appSettings, layout } = state;
+  const { walletsLoaded } = layout;
 
   const [sendModalOpen, toggleSendModal] = useState(false);
   const [receiveModalOpen, toggleReceiveModal] = useState(false);
@@ -37,10 +38,7 @@ const Wallet = props => {
       <div className="user-name-address">
         <p>{maskAddress(props.address)}</p>
         <span>
-          Balance: {wallet.loaded
-            ? <>{balanceTotal.toLocaleString(undefined, formatOptions)} CCX&nbsp;</>
-            : <>Loading...</>
-          }
+          Balance: {balanceTotal.toLocaleString(undefined, formatOptions)} CCX&nbsp;
           {locked > 0 &&
             <span className="tx-pending d-inline-block">
               (Locked: {locked.toLocaleString(undefined, formatOptions)})
@@ -54,9 +52,9 @@ const Wallet = props => {
         <OverlayTrigger overlay={<Tooltip id={`${props.address}-send`}>Send CCX</Tooltip>}>
           <span>
             <button
-              className={`btn btn-outline-dark ${!wallet.loaded || balanceTotal === 0 || balanceTotal === locked ? 'disabled' : ''}`}
+              className={`btn btn-outline-dark ${!walletsLoaded || balanceTotal === 0 || balanceTotal === locked ? 'disabled' : ''}`}
               onClick={() => toggleSendModal(!sendModalOpen)}
-              disabled={!wallet.loaded || balanceTotal === 0 || balanceTotal === locked}
+              disabled={!walletsLoaded || balanceTotal === 0 || balanceTotal === locked}
             >
               <FontAwesomeIcon icon="arrow-up" fixedWidth />
             </button>
@@ -65,9 +63,9 @@ const Wallet = props => {
 
         <OverlayTrigger overlay={<Tooltip id={`${props.address}-receive`}>Receive CCX</Tooltip>}>
           <button
-            className={`btn btn-outline-dark ${!wallet.loaded ? 'disabled' : ''}`}
+            className={`btn btn-outline-dark ${!walletsLoaded ? 'disabled' : ''}`}
             onClick={() => toggleReceiveModal(!receiveModalOpen)}
-            disabled={!wallet.loaded}
+            disabled={!walletsLoaded}
           >
             <FontAwesomeIcon icon="arrow-down" fixedWidth />
           </button>
@@ -76,9 +74,9 @@ const Wallet = props => {
         <OverlayTrigger overlay={<Tooltip id={`${props.address}-txs`}>Transactions</Tooltip>}>
           <span>
             <button
-              className={`btn btn-outline-dark ${!wallet.loaded || txs.length === 0 ? 'disabled' : ''}`}
+              className={`btn btn-outline-dark ${!walletsLoaded || txs.length === 0 ? 'disabled' : ''}`}
               onClick={() => toggleDetailsModal(!detailsModalOpen)}
-              disabled={!wallet.loaded || txs.length === 0}
+              disabled={!walletsLoaded || txs.length === 0}
             >
               <FontAwesomeIcon icon="list-alt" fixedWidth />
             </button>
@@ -87,9 +85,9 @@ const Wallet = props => {
 
         <OverlayTrigger overlay={<Tooltip id={`${props.address}-keys`}>Export Keys</Tooltip>}>
           <button
-            className={`btn btn-outline-dark ${!wallet.loaded ? 'disabled' : ''}`}
+            className={`btn btn-outline-dark ${!walletsLoaded ? 'disabled' : ''}`}
             onClick={() => toggleKeysModal(!keysModalOpen)}
-            disabled={!wallet.loaded}
+            disabled={!walletsLoaded}
           >
             <FontAwesomeIcon icon="key" fixedWidth />
           </button>
@@ -98,12 +96,12 @@ const Wallet = props => {
         <OverlayTrigger overlay={<Tooltip id={`${props.address}-delete`}>Delete Wallet</Tooltip>}>
           <span>
             <button
-              className={`btn btn-outline-dark ${!wallet.loaded || balanceTotal !== 0 ? 'disabled' : ''}`}
+              className={`btn btn-outline-dark ${!walletsLoaded || balanceTotal !== 0 ? 'disabled' : ''}`}
               onClick={() => {
                 window.confirm('You are about to delete this wallet PERMANENTLY! Do you really wish to proceed?') &&
                 deleteWallet(props.address);
               }}
-              disabled={!wallet.loaded || balanceTotal !== 0}
+              disabled={!walletsLoaded || balanceTotal !== 0}
             >
               <FontAwesomeIcon icon="trash-alt" fixedWidth/>
             </button>
