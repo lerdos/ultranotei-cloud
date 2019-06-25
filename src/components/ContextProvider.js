@@ -326,6 +326,31 @@ const AppContextProvider = props => {
       .finally(() => getWallets());
   };
 
+  const importWallet = (options, extras) => {
+    const { e, privateSpendKey, id } = options;
+    e.preventDefault();
+    let message;
+    dispatch({ type: 'FORM_SUBMITTED', value: true });
+    Api.importWallet(privateSpendKey)
+      .then(res => {
+        if (res.result === 'success') {
+          const address = res.message.wallet;
+          if (!(address in updatedState.current.wallets)) {
+            dispatch({type: 'CREATE_WALLET', address});
+            getWallets();
+            extras.forEach(fn => fn());
+          }
+        } else {
+          message = res.message;
+        }
+      })
+      .catch(err => { message = `ERROR ${err}` })
+      .finally(() => {
+        dispatch({ type: 'FORM_SUBMITTED', value: false });
+        if (message) dispatch({ type: 'DISPLAY_MESSAGE', message, id });
+      });
+  };
+
   const sendTx = (options, extras) => {
     const { e, address, paymentID, message, label, id } = options;
     e.preventDefault();
@@ -403,6 +428,7 @@ const AppContextProvider = props => {
     createWallet,
     getWallets,
     deleteWallet,
+    importWallet,
     getWalletKeys,
     downloadWalletKeys,
     updateIPNConfig,

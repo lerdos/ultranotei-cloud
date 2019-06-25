@@ -1305,12 +1305,8 @@ hr {
   border: 1px solid #343a40;
 }
 
-#dlgExportKeys {
-  width: 80%;
-  max-width: 900px;
-  border: 1px solid #343a40;
-}
-
+#dlgExportKeys,
+#dlgImportKeys,
 #dlgAddContact {
   width: 80%;
   max-width: 900px;
