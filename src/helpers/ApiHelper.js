@@ -102,6 +102,12 @@ export default class ApiHelper {
       .then(res => Promise.resolve(res));
   };
 
+  importWallet = privateSpendKey => {
+    const body = JSON.stringify({ privateSpendKey });
+    return this.fetch(`${this.apiURL}/wallet/import`, { method: 'POST', body })
+      .then(res => Promise.resolve(res));
+  };
+
   sendTx = options => {
     const { wallet, address, paymentID, amount, message, twoFACode, password, ref, client } = options;
     let isPayment = '';
