@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { AppContext } from '../ContextProvider';
@@ -8,13 +8,16 @@ import Transactions from '../cards/Transactions';
 import Height from '../cards/Height';
 import Wallet from '../elements/Wallet';
 import MarketStats from '../cards/MarketStats';
+import ImportWalletModal from '../modals/ImportWallet';
 
 
-const Dashboard = () => {
-  const { actions, state } = useContext(AppContext);
+const Dashboard = props => {
+  const { actions, state, ...rest } = useContext(AppContext);
   const { createWallet } = actions;
   const { appSettings, layout, wallets } = state;
   const { walletsLoaded } = layout;
+
+  const [importWalletModalOpen, toggleImportWalletModalOpen] = useState(false);
 
   const walletsKeys = Object.keys(wallets);
 
@@ -42,17 +45,27 @@ const Dashboard = () => {
         <div className="section-wrapper mg-t-20">
           <div className="d-flex flex-row width-100 justify-content-between mg-b-10">
             <label className="section-title d-inline-block">Your Wallets</label>
-            {walletsLoaded && (walletsKeys.length < appSettings.maxWallets || walletsKeys.length === 0) &&
-              <button
-                className="btn btn-primary btn-sm"
-                onClick={() => {
-                  window.confirm('You are about to create a new wallet. Proceed?') &&
-                  createWallet()
-                }}
-              >
-                CREATE NEW WALLET
-              </button>
-            }
+            <div>
+              {walletsLoaded && (walletsKeys.length < appSettings.maxWallets || walletsKeys.length === 0) &&
+                <button
+                  className="btn btn-primary btn-sm"
+                  onClick={() => {
+                    window.confirm('You are about to create a new wallet. Proceed?') &&
+                    createWallet()
+                  }}
+                >
+                  CREATE NEW WALLET
+                </button>
+              }
+              {walletsLoaded && (walletsKeys.length < appSettings.maxWallets + 1 || walletsKeys.length === 0) &&
+                <button
+                  className="btn btn-primary btn-sm mg-l-10"
+                  onClick={() => toggleImportWalletModalOpen(!importWalletModalOpen)}
+                >
+                  IMPORT WALLET
+                </button>
+              }
+            </div>
           </div>
           <div className="row">
             <div className="col-lg-12">
@@ -76,6 +89,12 @@ const Dashboard = () => {
         <div className="row row-sm mg-t-20 flex-stretch-vertical">
           <div className="col-lg-12"><MarketStats /></div>
         </div>
+
+        <ImportWalletModal
+          {...rest}
+          show={importWalletModalOpen}
+          toggleModal={() => toggleImportWalletModalOpen(!importWalletModalOpen)}
+        />
 
       </div>
     </div>

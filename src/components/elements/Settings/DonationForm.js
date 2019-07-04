@@ -10,9 +10,12 @@ import CopyButton from '../CopyButton';
 const DonationForm = () => {
   const { state } = useContext(AppContext);
   const { appSettings, wallets } = state;
+  const { coinDecimals } = appSettings;
 
   const { value: donationWallet, bind: bindDonationWallet } = useTypeaheadInput('');
   const { value: recipientName, bind: bindRecipientName } = useFormInput('');
+  const { value: amount, bind: bindAmount } = useFormInput('');
+  const { value: message, bind: bindMessage } = useFormInput('');
   const [donationHTML, setDonationHTML] = useState(null);
   const [donationURL, setDonationURL] = useState(null);
 
@@ -20,8 +23,10 @@ const DonationForm = () => {
 
   useEffect(() => {
     let url = appSettings.donationURL;
-    if (donationWallet) url = `${url}/${donationWallet}`;
-    if (donationWallet && recipientName) url = `${url}/${encodeURIComponent(recipientName)}`;
+    if (donationWallet) url = `${url}/?address=${donationWallet}`;
+    if (recipientName) url = `${url}&recipientName=${encodeURIComponent(recipientName)}`;
+    if (amount) url = `${url}&amount=${encodeURIComponent(amount)}`;
+    if (message) url = `${url}&message=${encodeURIComponent(message)}`;
     if (donationWallet === '') url = null;
     let donateHTML = url
       ? `<a href="${url}" target="_blank">DONATE</a>`
@@ -57,6 +62,23 @@ const DonationForm = () => {
             name="recipientName"
             className="form-control rbt-input-main"
             maxLength={64}
+          />
+        </div>
+        <div className="input-group donationInfo">
+          <input
+            {...bindAmount}
+            type="number"
+            placeholder="Amount"
+            name="amount"
+            className="form-control rbt-input-main"
+            step={Math.pow(10, -coinDecimals).toFixed(coinDecimals)}
+          />
+          <input
+            {...bindMessage}
+            type="text"
+            placeholder="Message"
+            name="message"
+            className="form-control rbt-input-main"
           />
         </div>
       </form>

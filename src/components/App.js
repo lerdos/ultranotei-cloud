@@ -88,7 +88,7 @@ const App = () => (
       <PrivateRoute exact path="/pay_settings" component={PaySettings} />
       <PrivateRoute exact path="/getting_started" component={GettingStarted} />
       <PrivateRoute exact path="/upcoming_features" component={UpcomingFeatures} />
-      <PrivateRoute exact path="/payment/:address/:recipientName?" component={Donate} />
+      <PrivateRoute exact path="/payment/:address?/:recipientName?" component={Donate} />
       <PrivateRoute exact strict path="/pay/" component={Pay} />
 
     </AppContextProvider>

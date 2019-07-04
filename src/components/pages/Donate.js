@@ -14,12 +14,13 @@ const Donate = props => {
   const { coinDecimals, defaultFee, messageFee, feePerChar } = appSettings;
   const { formSubmitted, sendTxResponse, walletsLoaded } = layout;
 
-  const address = props.match.params.address;
+  const params = new URLSearchParams(props.location.search);
+  const address = params.get('address') || props.match.params.address;
   const addressValid = WAValidator.validate(address, 'CCX');
-  const recipientName = props.match.params.recipientName;
+  const recipientName = params.get('recipientName') || props.match.params.recipientName;
 
-  const { value: amount, bind: bindAmount, reset: resetAmount } = useFormInput('');
-  const { value: message, bind: bindMessage, reset: resetMessage } = useFormInput('');
+  const { value: amount, bind: bindAmount, reset: resetAmount } = useFormInput(params.get('amount') || '');
+  const { value: message, bind: bindMessage, reset: resetMessage } = useFormInput(params.get('message') || '');
   const { value: twoFACode, bind: bindTwoFACode, reset: resetTwoFACode } = useFormInput('');
   const { value: password, bind: bindPassword, reset: resetPassword } = useFormInput('');
   const [availableWallets, setAvailableWallets] = useState({});
