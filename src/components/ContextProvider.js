@@ -117,7 +117,7 @@ const AppContextProvider = props => {
       })
       .catch(err => { message = `ERROR ${err}` })
       .finally(() => {
-        dispatch({ type: 'DISPLAY_MESSAGE', message, id });
+        if (message) dispatch({ type: 'DISPLAY_MESSAGE', message, id });
         dispatch({ type: 'FORM_SUBMITTED', value: false });
       });
   };

@@ -1,13 +1,25 @@
-#### 1.0.1
+#### 1.2.0 (2019-07-04)
 
- **Bug Fixes**
+**Features**
  
- - CCX Portfolio card now includes locked balance too
- - Fixed bug when sending larger amounts
- - Payment ID is now properly filled in if sending address is selected from Address Book in sending form
+ - Ability to import wallet from keys
+ - Added "Amount" and "Message" options to Payment Request
 
-#### 1.0.0 (2018-03-28)
+#### 1.1.0 (2019-06-11)
 
- **Features**
+**Features**
+
+ - Added Conceal Pay - Instant Payment Notification and Payment Request features
+ - Ability to download wallet keys as file
+
+**Bug Fixes**
+ 
+ - Fixed tons of formatting inconsistencies
+ - Improved forms functionality
+ - Improved API communication
+
+#### 1.0.0 (2019-03-28)
+
+**Features**
  
  - Initial release
