@@ -15,9 +15,6 @@ if [[ "$3" == "" ]]; then
     exit 1;
 fi
 
-npm install
-export REACT_APP_API_ENDPOINT="$3" && npm run-script build
-
 if [[ "$1" == "live" ]]; then
     DOMAIN="conceal.cloud"
     DISTR="E1GRNOKTY1DVG"
@@ -36,6 +33,9 @@ if [[ "$1" == "live" ]]; then
     # Fetch branch changes
     git pull origin $2
 fi
+
+npm install
+export REACT_APP_API_ENDPOINT="$3" && npm run-script build
 
 if [[ "$1" == "staging" ]]; then
     DOMAIN="staging.conceal.cloud"
