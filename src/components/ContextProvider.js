@@ -468,6 +468,12 @@ const AppContextProvider = props => {
       )
     }
 
+    if (location.state && location.state.from.pathname.startsWith('/pay/')) {
+      const params = new URLSearchParams(location.state.from.search);
+      const client = params.get('client');
+      if (client) getIPNClient(client);
+    }
+
     if (location.pathname.startsWith('/pay/')) {
       const params = new URLSearchParams(props.location.search);
       const client = params.get('client');
