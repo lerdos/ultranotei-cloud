@@ -62,6 +62,7 @@ const AppContextProvider = props => {
           message = 'Please check your email and follow instructions to reset password.';
           Auth.logout();
           clearApp();
+          props.history.replace('/');
         }
       })
       .catch(err => { message = `ERROR ${err}` })
