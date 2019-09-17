@@ -155,16 +155,13 @@ const Pay = props => {
                       <div className="col-5 col-sm-2">Amount</div>
                       <div className="col-7 col-sm-10">
                         <input
-                          {...bindAmount}
+                          readOnly
+                          value={amount}
                           size={2}
                           className="form-control autoWidth float-left"
                           placeholder="Amount"
                           name="amount"
                           type="number"
-                          min={0}
-                          max={maxValue}
-                          step={Math.pow(10, -coinDecimals).toFixed(coinDecimals)}
-                          disabled={Object.keys(availableWallets).length === 0}
                         />
                         <div className="float-left mg-l-10">
                           BTC: {btcValue.toLocaleString(undefined, btcFormatOptions)}<br />

@@ -62,6 +62,7 @@ const AppContextProvider = props => {
           message = 'Please check your email and follow instructions to reset password.';
           Auth.logout();
           clearApp();
+          props.history.replace('/');
         }
       })
       .catch(err => { message = `ERROR ${err}` })
@@ -466,6 +467,12 @@ const AppContextProvider = props => {
         { fn: getMarketPrices, time: appSettings.updateMarketPricesInterval },
         { fn: getPrices, time: appSettings.updateMarketPricesInterval },
       )
+    }
+
+    if (location.state && location.state.from.pathname.startsWith('/pay/')) {
+      const params = new URLSearchParams(location.state.from.search);
+      const client = params.get('client');
+      if (client) getIPNClient(client);
     }
 
     if (location.pathname.startsWith('/pay/')) {

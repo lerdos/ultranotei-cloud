@@ -57,9 +57,14 @@ const Settings = () => {
                           className="btn btn-outline-primary btn-uppercase-sm"
                           onClick={e =>
                             window.confirm('Send reset password email? You will be logged out!') &&
-                            resetPassword(e, user.email)}
+                            resetPassword({
+                              e,
+                              email: user.email,
+                              id: 'loginForm',
+                            })
+                          }
                         >
-                          Reset Password
+                          Change Password
                         </button>
                       </div>
                     </div>

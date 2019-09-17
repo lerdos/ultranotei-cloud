@@ -33,7 +33,7 @@ const DonationForm = () => {
       : null;
     setDonationHTML(donateHTML);
     setDonationURL(url);
-  }, [donationWallet, recipientName]);
+  }, [donationWallet, recipientName, amount, message]);
 
   const handleDonationURLFocus = event => event.target.firstChild
     ? event.target.firstChild.select()

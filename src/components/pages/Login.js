@@ -39,7 +39,7 @@ const Login = props => {
 
         {(message.loginForm || message.signUpForm) &&
           <div className="alert alert-outline alert-danger text-center">
-            {message.signUpForm || message.loginForm}
+            {message.loginForm || message.signUpForm}
           </div>
         }
 
