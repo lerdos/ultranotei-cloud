@@ -12,6 +12,7 @@ const useAppState = Auth => {
       formSubmitted: false,
       message: {},
       userLoaded: false,
+      messagesLoaded: false,
       walletsLoaded: false,
       sendTxResponse: null,
       qrCodeUrl: '',
@@ -24,12 +25,14 @@ const useAppState = Auth => {
     },
     userSettings: {
       updateWalletsInterval: 60,  // seconds
+      updateMessagesInterval: 60,  // seconds
       qrCodeURL: '',
       twoFACode: '',
       twoFAEnabled: false,
       minimumPasswordLength: 8,
     },
     wallets: {},
+    messages: {},
     network: {
       blockchainHeight: 0,
     },
@@ -178,6 +181,25 @@ const useAppState = Auth => {
           layout: {
             ...state.layout,
             sendTxResponse: action.sendTxResponse,
+          },
+        };
+        break;
+      case 'SET_MESSAGES':
+        result = {
+          ...state,
+          layout: {
+            ...state.layout,
+            messagesLoaded: true,
+          },
+          messages: { ...action.messages },
+        };
+        break;
+      case 'SEND_MESSAGE':
+        result = {
+          ...state,
+          layout: {
+            ...state.layout,
+            sendMessageResponse: action.sendMessageResponse,
           },
         };
         break;

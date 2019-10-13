@@ -141,6 +141,20 @@ export default class ApiHelper {
       .then(res => Promise.resolve(res));
   };
 
+  getMessages = () => {
+    return this.fetch(`${this.apiURL}/wallet/messages`, { method: 'GET' })
+      .then(res => Promise.resolve(res));
+  };
+
+  sendMessage = options => {
+    const { address, message, password, sdm, twoFACode, wallet } = options;
+    const body = { address, message, sdm, wallet };
+    if (twoFACode && twoFACode !== '') body.code = twoFACode;
+    if (password && password !== '') body.password = password;
+    return this.fetch(`${this.apiURL}/wallet/send-message`, { method: 'POST', body: JSON.stringify(body) })
+      .then(res => Promise.resolve(res));
+  };
+
   getIPNConfig = address => {
     return this.fetch(`${this.apiURL}/ipn/config/?wallet=${address}`, { method: 'GET' })
       .then(res => Promise.resolve(res));

@@ -1299,7 +1299,7 @@ hr {
 
 /******************** dialogs widths should be larger *********************/
 
-#dlgReceiveCoins, #dlgSendCoins {
+#dlgReceiveCoins, #dlgSendCoins, #dlgMessages {
   width: 80%;
   max-width: 1100px;
   border: 1px solid #343a40;

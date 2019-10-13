@@ -385,6 +385,43 @@ const AppContextProvider = props => {
       });
   };
 
+  const getMessages = () => {
+    Api.getMessages()
+      .then(res => {
+        if (res.result === 'success') {
+          dispatch({ type: 'SET_MESSAGES', messages: res.message });
+        }
+      })
+      .catch(err => console.error(err));
+  };
+
+  const sendMessage = (options, extras) => {
+    const { e } = options;
+    e.preventDefault();
+    dispatch({ type: 'FORM_SUBMITTED', value: true });
+    Api.sendMessage(options)
+      .then(res => {
+        let sendMessageResponse;
+        if (res.result === 'error' || res.message.error) {
+          sendMessageResponse = {
+            status: 'error',
+            message: `Error: ${res.message.error ? res.message.error.message : res.message}`,
+          };
+          dispatch({ type: 'SEND_MESSAGE', sendMessageResponse });
+          return;
+        }
+        sendMessageResponse = {
+          status: 'success',
+          message: res.message.result,
+          redirect: res.message.redirect,
+        };
+        dispatch({ type: 'SEND_MESSAGE', sendMessageResponse });
+        extras.forEach(fn => fn());
+      })
+      .catch(err => console.error(err))
+      .finally(() => dispatch({ type: 'FORM_SUBMITTED', value: false }));
+  };
+
   const getBlockchainHeight = () => {
     Api.getBlockchainHeight()
       .then(res => dispatch({ type: 'UPDATE_BLOCKCHAIN_HEIGHT', blockchainHeight: res.message.height }))
@@ -435,6 +472,8 @@ const AppContextProvider = props => {
     updateIPNConfig,
     getIPNClient,
     sendTx,
+    getMessages,
+    sendMessage,
     getBlockchainHeight,
     getMarketPrices,
     getPrices,
@@ -450,11 +489,13 @@ const AppContextProvider = props => {
     getUser();
     check2FA();
     getWallets();
+    getMessages();
     getMarketData();
 
     const intervals = [];
     intervals.push(
       { fn: getWallets, time: userSettings.updateWalletsInterval },
+      { fn: getMessages, time: userSettings.updateMessagesInterval },
       { fn: getMarketData, time: appSettings.updateMarketPricesInterval },
     );
 

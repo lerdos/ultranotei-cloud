@@ -19,7 +19,7 @@ export const constants = {
   defaultFee: 0.0001,
   messageFee: 0.001,
   selfDestructMessageFee: 0.0001,
-  feePerChar: 0.00001,
+  feePerChar: 0.00010,
   depositFee: 0.001,
   investmentFee: 0.001,
   withdrawalFee: 0.0001,
