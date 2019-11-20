@@ -385,6 +385,67 @@ const AppContextProvider = props => {
       });
   };
 
+  const getId = () => {
+    Api.getId()
+      .then(res => {
+        if (res.result === 'success') {
+          dispatch({ type: 'SET_ID', id: res.message });
+        }
+      })
+      .catch(e => console.error(e));
+  };
+
+  const checkId = id =>
+    Api.checkId(id)
+      .then(res => {
+        if (res.result === 'success') {
+          dispatch({ type: 'SET_ID_CHECK', idAvailable: res.message[0] });
+        } else {
+          dispatch({ type: 'DISPLAY_MESSAGE', message: 'Error checking for ID.', id: 'idForm' });
+        }
+      })
+      .catch(e => console.error(e));
+
+  const createId = (options, extras) => {
+    const { e, idAddress, idAddressToCreate, idName, idValue, id } = options;
+    e.preventDefault();
+    let message;
+    dispatch({ type: 'FORM_SUBMITTED', value: true });
+    Api.createId({ address: idAddress, id: idValue, addressToCreate: idAddressToCreate || idAddress, name: idName })
+      .then(res => {
+        if (res.result === 'success') {
+          getId();
+        } else {
+          message = res.message;
+        }
+        extras.forEach(fn => fn());
+      })
+      .catch(e => console.error(e))
+      .finally(() => {
+        dispatch({ type: 'FORM_SUBMITTED', value: false });
+        if (message) dispatch({ type: 'DISPLAY_MESSAGE', message, id });
+      });
+  };
+
+  const deleteId = options => {
+    const { id, address, name } = options;
+    let { addressToCreate } = options;
+    if (!addressToCreate || addressToCreate === '') addressToCreate = address;
+    let message;
+    Api.deleteId(id, address, addressToCreate, name)
+      .then(res => {
+        if (res.result === 'success') {
+          getId();
+        } else {
+          message = res.message;
+        }
+      })
+      .catch(e => console.error(e))
+      .finally(() => {
+        if (message) dispatch({ type: 'DISPLAY_MESSAGE', message, id: 'idForm' });
+      });
+  };
+
   const getMessages = () => {
     Api.getMessages()
       .then(res => {
@@ -472,6 +533,10 @@ const AppContextProvider = props => {
     updateIPNConfig,
     getIPNClient,
     sendTx,
+    getId,
+    checkId,
+    createId,
+    deleteId,
     getMessages,
     sendMessage,
     getBlockchainHeight,
@@ -487,6 +552,7 @@ const AppContextProvider = props => {
     const { appSettings, userSettings } = state;
 
     getUser();
+    getId();
     check2FA();
     getWallets();
     getMessages();
@@ -494,6 +560,7 @@ const AppContextProvider = props => {
 
     const intervals = [];
     intervals.push(
+      { fn: getId, time: userSettings.updateIdInterval },
       { fn: getWallets, time: userSettings.updateWalletsInterval },
       { fn: getMessages, time: userSettings.updateMessagesInterval },
       { fn: getMarketData, time: appSettings.updateMarketPricesInterval },

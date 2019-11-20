@@ -23,6 +23,8 @@ export const constants = {
   depositFee: 0.001,
   investmentFee: 0.001,
   withdrawalFee: 0.0001,
+  idFee: 20,
+  messageLimit: 280,
   qrCodePrefix: 'conceal',
   donationURL: 'https://conceal.cloud/payment',
   IPNURL: 'https://conceal.cloud/pay',

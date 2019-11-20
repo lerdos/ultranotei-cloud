@@ -30,7 +30,7 @@ const ImportWalletModal = props => {
       <Modal.Body>
 
         {message.importWalletForm &&
-        <div className="alert alert-outline alert-danger text-center">{message.importWalletForm}</div>
+          <div className="alert alert-outline alert-danger text-center">{message.importWalletForm}</div>
         }
 
         <div className="mg-b-20">

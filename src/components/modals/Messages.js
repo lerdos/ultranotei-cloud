@@ -9,13 +9,14 @@ import { useFormInput, useFormValidation, useTypeaheadInput } from '../../helper
 import { maskAddress } from '../../helpers/utils';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 
 const MessagesModal = props => {
   const { actions, state } = useContext(AppContext);
   const { sendMessage } = actions;
   const { appSettings, layout, user, userSettings } = state;
-  const { coinDecimals, defaultFee, messageFee, feePerChar } = appSettings;
+  const { coinDecimals, messageFee, messageLimit } = appSettings;
   const { formSubmitted, sendMessageResponse } = layout;
   const { messages, toggleModal, wallet, ...rest } = props;
 
@@ -25,27 +26,17 @@ const MessagesModal = props => {
   const { value: password, bind: bindPassword, reset: resetPassword } = useFormInput('');
 
   let addressInput = null;
-  const [amount, setAmount] = useState(messageFee);
   const [sdm, setSdm] = useState(43200);
 
-  const parsedAmount = !Number.isNaN(parseFloat(amount)) ? parseFloat(amount) : 0;
-  const totalMessageFee = message.length > 0 ? message.length * feePerChar : 0;
-  const txFee = parsedAmount > 0 || amount !== '' ? defaultFee : 0;
-  const totalTxFee = txFee + totalMessageFee;
-  const totalAmount = parsedAmount > 0 ? (parsedAmount + totalTxFee).toFixed(coinDecimals) : totalTxFee;
-
-  const walletBalanceValid = totalAmount <= wallet.balance;
-  const messageAmountValid = totalMessageFee > 0 && totalTxFee <= wallet.balance;
-  // const totalAmountValid = (parsedAmount >= defaultFee && totalAmount > 0) || messageAmountValid;
-
+  const totalMessageFee = message.length > 0 ? messageFee : 0;
 
   const formValidation = (
     address !== props.address &&
     WAValidator.validate(address, 'CCX') &&
     message.length > 0 &&
-    messageAmountValid &&
-    walletBalanceValid /*&&
-    totalAmountValid*/ &&
+    message.length <= messageLimit &&
+    totalMessageFee > 0 &&
+    totalMessageFee <= wallet.balance &&
     (userSettings.twoFAEnabled
         ? (parseInt(twoFACode) && twoFACode.toString().length === 6)
         : (password !== '' && password.length >= 8)
@@ -76,6 +67,12 @@ const MessagesModal = props => {
             .map(message =>
               <div key={new Date(message.timestamp).getTime()} className="list-group-item pd-y-20">
                 <div className="media">
+                  <div className="d-flex mg-r-10 wd-50">
+                    {message.type === 'in'
+                      ? <FontAwesomeIcon icon="arrow-down" className="text-success tx-icon" />
+                      : <FontAwesomeIcon icon="arrow-up" className="text-danger tx-icon" />
+                    }
+                  </div>
                   <div className="media-body">
                     <small className="mg-b-10 tx-timestamp"><Moment>{message.timestamp}</Moment></small>
                     <p className="mg-b-5">
@@ -239,8 +236,8 @@ const MessagesModal = props => {
               <span className="tx-right sendSummary">
                 <h2>
                   <span className="tx-total-text">TOTAL</span>&nbsp;
-                  <span className={`${totalAmount > wallet.balance ? 'text-danger' : ''}`}>
-                    {totalAmount.toLocaleString(undefined, formatOptions)} CCX
+                  <span className={`${totalMessageFee > wallet.balance ? 'text-danger' : ''}`}>
+                    {totalMessageFee.toLocaleString(undefined, formatOptions)} CCX
                   </span>
                 </h2>
                 <div>
@@ -248,12 +245,6 @@ const MessagesModal = props => {
                   <strong>
                     {wallet.balance && wallet.balance.toLocaleString(undefined, formatOptions)}
                   </strong> CCX
-                </div>
-                <div className="tx-default-fee-text">
-                    MESSAGE FEE: {messageFee.toLocaleString(undefined, formatOptions)} CCX
-                </div>
-                <div className="tx-default-fee-text">
-                    TRANSACTION FEE: {defaultFee.toLocaleString(undefined, formatOptions)} CCX
                 </div>
               </span>
             </div>

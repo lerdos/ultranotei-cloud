@@ -26,6 +26,11 @@ const NavBar = () => {
             </NavLink>
           </li>
           <li className="nav-item">
+            <NavLink to="/id" className="nav-link hot_link" activeClassName="active">
+              <FontAwesomeIcon icon="id-card" fixedWidth /> <span>Id</span>
+            </NavLink>
+          </li>
+          <li className="nav-item">
             <NavLink to="/settings" className="nav-link hot_link" activeClassName="active">
               <FontAwesomeIcon icon="cog" fixedWidth /> <span>Settings</span>
             </NavLink>

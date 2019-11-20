@@ -26,6 +26,7 @@ const useAppState = Auth => {
     userSettings: {
       updateWalletsInterval: 60,  // seconds
       updateMessagesInterval: 60,  // seconds
+      updateIdInterval: 60,  // seconds
       qrCodeURL: '',
       twoFACode: '',
       twoFAEnabled: false,
@@ -33,6 +34,7 @@ const useAppState = Auth => {
     },
     wallets: {},
     messages: {},
+    id: [],
     network: {
       blockchainHeight: 0,
     },
@@ -181,6 +183,21 @@ const useAppState = Auth => {
           layout: {
             ...state.layout,
             sendTxResponse: action.sendTxResponse,
+          },
+        };
+        break;
+      case 'SET_ID':
+        result = {
+          ...state,
+          id: action.id,
+        };
+        break;
+      case 'SET_ID_CHECK':
+        result = {
+          ...state,
+          layout: {
+            ...state.layout,
+            idAvailable: action.idAvailable,
           },
         };
         break;

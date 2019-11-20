@@ -14,15 +14,18 @@ import {
   faCog,
   faDollarSign,
   faExternalLinkAlt,
+  faExclamationTriangle,
   faGlobe,
   faHashtag,
   faHome,
+  faIdCard,
   faKey,
   faLink,
   faListAlt,
   faNetworkWired,
   faReceipt,
   faSignOutAlt,
+  faSpinner,
   faTrashAlt,
   faTrophy,
   faUserEdit,
@@ -42,6 +45,7 @@ import UpcomingFeatures from './pages/UpcomingFeatures';
 import Donate from './pages/Donate';
 import Pay from './pages/Pay';
 import PaySettings from './pages/PaySettings';
+import Id from './pages/Id';
 
 import '../static/css/slim.css';
 import '../static/css/slim.one.css';
@@ -59,16 +63,19 @@ library.add(
   faCopy,
   faCog,
   faDollarSign,
+  faExclamationTriangle,
   faExternalLinkAlt,
   faGlobe,
   faHashtag,
   faHome,
+  faIdCard,
   faKey,
   faLink,
   faListAlt,
   faNetworkWired,
   faReceipt,
   faSignOutAlt,
+  faSpinner,
   faTrashAlt,
   faTrophy,
   faUserEdit,
@@ -85,6 +92,7 @@ const App = () => (
       <Route exact path="/terms" component={Terms} />
 
       <PrivateRoute exact path="/" component={Dashboard} />
+      <PrivateRoute exact path="/id" component={Id} />
       <PrivateRoute exact path="/address_book" component={AddressBook} />
       <PrivateRoute exact path="/settings" component={Settings} />
       <PrivateRoute exact path="/pay_settings" component={PaySettings} />
