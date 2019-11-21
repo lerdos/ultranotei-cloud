@@ -644,7 +644,7 @@ h1, h2, h3, h4, h5,
     background: -webkit-gradient(linear, left top, right top, from(orange), color-stop(70%, orange));
     background: -webkit-linear-gradient(left, orange, orange 70%);
     background: -o-linear-gradient(left, orange, orange 70%);
-    background: linear-gradient(to right, c70039, orange 70%);
+    background: linear-gradient(to right, orange, orange 70%);
     border-radius: 5px;
     content: "";
     position: absolute;
@@ -796,7 +796,7 @@ h1, h2, h3, h4, h5,
   background: -moz-linear-gradient(left, #282d31 0%, #212529 50%, #282d31 100%);
   background: -webkit-gradient(left top, right top, color-stop(0%, #282d31), color-stop(50%, #212529), color-stop(100%, #282d31));
   background: -webkit-linear-gradient(left, #282d31 0%, #212529 50%, orange 100%);
-  background: -o-linear-gradient(left, #282d31 0%, #212529 50%, orangee 100%);
+  background: -o-linear-gradient(left, #282d31 0%, #212529 50%, orange 100%);
   background: -ms-linear-gradient(left, #282d31 0%, #212529 50%, #282d31 100%);
   background: linear-gradient(to right, #282d31 0%, #212529 50%, #282d31 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3dced', endColorstr='#bce0ee', GradientType=1 );
@@ -811,7 +811,7 @@ img.rounded {
   width: 100%;
   height: 100%;
   margin: 0;
-  background: 282d31 !important; /* Old Browsers */
+  background: #282d31 !important; /* Old Browsers */
 }
 
 .btn-custom {

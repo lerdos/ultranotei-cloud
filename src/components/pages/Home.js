@@ -13,6 +13,7 @@ import landingImg4 from '../../static/img/landing_img4.jpg';
 import landingImg5 from '../../static/img/landing_img5.jpg';
 import landingImg6 from '../../static/img/landing_img6.jpg';
 
+import '../../static/css/bootstrap.min.css';
 import '../../static/css/aos.css';
 import '../../static/css/style.css';
 
@@ -215,21 +216,21 @@ const Home = props => {
             <div className="col-md-3 ml-auto">
               <h2 className="footer-heading text-uppercase mb-4">Quick Links</h2>
               <ul className="list-unstyled">
-                <Link to="https://conceal.network/" className="p-2">Website</Link>
-                <Link to="https://conceal.network/wiki/doku.php" className="p-2">Documentation</Link>
-                <Link to="https://discord.conceal.network" className="p-2">Discord</Link>
-                <Link to="https://t.co/55klBHKGUR" className="p-2">Telegram</Link>
-                <Link to="https://www.reddit.com/r/ConcealNetwork/" className="p-2">Reddit</Link>
-                <Link to="https://bitcointalk.org/index.php?topic=5086106" className="p-2">Bitcointalk</Link>
+                <a href="https://conceal.network/" className="p-2">Website</a>
+                <a href="https://conceal.network/wiki/doku.php" className="p-2">Documentation</a>
+                <a href="https://discord.conceal.network" className="p-2">Discord</a>
+                <a href="https://t.co/55klBHKGUR" className="p-2">Telegram</a>
+                <a href="https://www.reddit.com/r/ConcealNetwork/" className="p-2">Reddit</a>
+                <a href="https://bitcointalk.org/index.php?topic=5086106" className="p-2">Bitcointalk</a>
               </ul>
             </div>
             <div className="col-md-4">
               <h2 className="footer-heading text-uppercase mb-4">Connect with Us</h2>
               <p>
-                <Link to="https://www.facebook.com/concealnetwork" className="p-2 pl-0"><FontAwesomeIcon icon={['fab', 'facebook']} fixedWidth /></Link>
-                <Link to="https://twitter.com/ConcealNetwork" className="p-2"><FontAwesomeIcon icon={['fab', 'twitter']} fixedWidth /></Link>
-                <Link to="https://medium.com/@ConcealNetwork" className="p-2"><FontAwesomeIcon icon={['fab', 'medium']} fixedWidth /></Link>
-                <Link to="https://github.com/ConcealNetwork" className="p-2"><FontAwesomeIcon icon={['fab', 'github']} fixedWidth /></Link>
+                <a href="https://www.facebook.com/concealnetwork" className="p-2 pl-0"><FontAwesomeIcon icon={['fab', 'facebook']} fixedWidth /></a>
+                <a href="https://twitter.com/ConcealNetwork" className="p-2"><FontAwesomeIcon icon={['fab', 'twitter']} fixedWidth /></a>
+                <a href="https://medium.com/@ConcealNetwork" className="p-2"><FontAwesomeIcon icon={['fab', 'medium']} fixedWidth /></a>
+                <a href="https://github.com/ConcealNetwork" className="p-2"><FontAwesomeIcon icon={['fab', 'github']} fixedWidth /></a>
               </p>
             </div>
           </div>
@@ -249,6 +250,6 @@ const Home = props => {
 
     </div>
   );
-}
+};
 
 export default Home;
