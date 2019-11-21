@@ -14,7 +14,7 @@ import ImportWalletModal from '../modals/ImportWallet';
 const Dashboard = props => {
   const { actions, state, ...rest } = useContext(AppContext);
   const { createWallet } = actions;
-  const { appSettings, layout, wallets } = state;
+  const { appSettings, layout, messages, wallets } = state;
   const { walletsLoaded } = layout;
 
   const [importWalletModalOpen, toggleImportWalletModalOpen] = useState(false);
@@ -74,7 +74,13 @@ const Dashboard = props => {
                 <>
                   {
                     walletsKeys.length > 0 &&
-                    walletsKeys.map(address => <Wallet key={address} wallet={wallets[address]} address={address} />)
+                    walletsKeys.map(address =>
+                      <Wallet
+                        key={address}
+                        wallet={wallets[address]}
+                        messages={messages[address] || []}
+                        address={address} />
+                      )
                   }
                   {walletsKeys.length === 0 &&
                     <div className="section-title text-center">You don't have any wallets. Please create one</div>

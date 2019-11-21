@@ -15,7 +15,7 @@ const SendModal = props => {
   const { actions, state } = useContext(AppContext);
   const { sendTx } = actions;
   const { appSettings, layout, user, userSettings } = state;
-  const { coinDecimals, defaultFee, messageFee, feePerChar } = appSettings;
+  const { coinDecimals, defaultFee, messageFee } = appSettings;
   const { formSubmitted, sendTxResponse } = layout;
   const { toggleModal, wallet, ...rest } = props;
 
@@ -30,7 +30,7 @@ const SendModal = props => {
   const { value: label, bind: bindLabel, setValue: setLabelValue, reset: resetLabel } = useFormInput('');
 
   const parsedAmount = !Number.isNaN(parseFloat(amount)) ? parseFloat(amount) : 0;
-  const totalMessageFee = message.length > 0 ? messageFee + message.length * feePerChar : 0;
+  const totalMessageFee = message.length > 0 ? messageFee : 0;
   const txFee = parsedAmount > 0 || amount !== '' ? defaultFee : 0;
   const totalTxFee = txFee + totalMessageFee;
   const totalAmount = parsedAmount > 0 ? (parsedAmount + totalTxFee).toFixed(coinDecimals) : totalTxFee;
