@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import AOS from 'aos';
 
 import { AppContext } from '../ContextProvider';
 import { ReactComponent as Logo } from '../../static/img/logo.svg';
@@ -12,6 +13,7 @@ import landingImg4 from '../../static/img/landing_img4.jpg';
 import landingImg5 from '../../static/img/landing_img5.jpg';
 import landingImg6 from '../../static/img/landing_img6.jpg';
 
+import '../../static/css/aos.css';
 import '../../static/css/style.css';
 
 
@@ -19,6 +21,14 @@ const Home = props => {
   const { state } = useContext(AppContext);
   const { layout, user } = state;
   const { redirectToReferrer } = layout;
+
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      easing: 'slide',
+      once: true,
+    })
+  }, []);
 
   if (redirectToReferrer && props.location.state && user.loggedIn()) {
     const { from } = props.location.state;
@@ -28,7 +38,7 @@ const Home = props => {
   if (user.loggedIn()) return <Redirect to="/dashboard" />;
 
   return (
-    <div className="site-wrap">
+    <div className="landing-site-wrap">
 
       <div className="site-mobile-menu">
         <div className="site-mobile-menu-header">
@@ -56,9 +66,11 @@ const Home = props => {
                 </ul>
               </nav>
             </div>
-            {/*<div className="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;">
-            <a href="#" className="site-menu-toggle js-menu-toggle text-white"><span className="icon-menu h3" /></a>
-          </div>*/}
+            {/*
+            <div className="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;">
+              <a href="#" className="site-menu-toggle js-menu-toggle text-white"><span className="icon-menu h3" /></a>
+            </div>
+            */}
           </div>
         </div>
       </header>
@@ -67,12 +79,12 @@ const Home = props => {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-md-10">
-              <span className="d-block mb-3 caption">WELCOME TO CONCEAL CLOUD</span>
-              <h1 className="d-block mb-4">A secure, feature rich, and fast Conceal
+              <span className="d-block mb-3 caption" data-aos="fade-up" data-aos-delay="100">WELCOME TO CONCEAL CLOUD</span>
+              <h1 className="d-block mb-4" data-aos="fade-up" data-aos-delay="200">A secure, feature rich, and fast Conceal
                 Wallet</h1>
-              <span className="d-block mb-5 caption" />
-              <Link to="/signup" className="btn-custom btnSignMain"><span>SIGN UP</span></Link>
-              <Link to="/login" className="btn-custom btnSignMain"><span>SIGN IN</span></Link>
+              <span className="d-block mb-5 caption" data-aos="fade-up" data-aos-delay="300" />
+              <Link to="/signup" className="btn-custom btnSignMain" data-aos="fade-up" data-aos-delay="400"><span>SIGN UP</span></Link>
+              <Link to="/login" className="btn-custom btnSignMain" data-aos="fade-up" data-aos-delay="400"><span>SIGN IN</span></Link>
             </div>
           </div>
           <div className="downArrowWrapper">
@@ -84,108 +96,108 @@ const Home = props => {
       <div className="site-section" id="mainSection">
         <div className="container">
           <div className="row mb-5 aboutSection">
-            <div className="col-lg-4">
+            <div className="col-lg-4" data-aos="fade-up" data-aos-delay="100">
               <div className="site-section-heading">
                 <h2>About</h2>
               </div>
             </div>
-            <div className="col-lg-5 mt-5 pl-lg-5">
+            <div className="col-lg-5 mt-5 pl-lg-5" data-aos="fade-up" data-aos-delay="200">
               <p>We aim to make the Conceal crypto-currency as easy to use as possible. With Conceal Cloud you have a wallet
                 that is secure, fast, and easy to use. All you need to get started is an account.</p>
             </div>
           </div>
 
           <div className="row align-items-center speaker">
-            <div className="col-lg-6 mb-5 mb-lg-0 imageWrapper_rounded">
-              <img src={landingImg1} alt="Image" className="img-fluid rounded" />
+            <div className="col-lg-6 mb-5 mb-lg-0 imageWrapper_rounded" data-aos="fade" data-aos-delay="100">
+              <img src={landingImg1} alt="Multiple Wallets" className="img-fluid rounded" />
             </div>
             <div className="col-lg-6 ml-auto">
 
               <div className="bio pl-lg-5">
-                <h2 className="text-uppercase text-primary d-block mb-3">Multiple
+                <h2 className="text-uppercase text-primary d-block mb-3" data-aos="fade-right" data-aos-delay="300">Multiple
                   Wallets</h2>
-                <p className="mb-4">You can have multiple wallets on a single account. Each wallet has its own address so you can use them for different purposes. Up to 3 wallets per user are allowed.</p>
+                <p className="mb-4" data-aos="fade-right" data-aos-delay="400">You can have multiple wallets on a single account. Each wallet has its own address so you can use them for different purposes. Up to 3 wallets per user are allowed.</p>
 
               </div>
             </div>
           </div>
 
           <div className="row align-items-center speaker">
-            <div className="col-lg-6 mb-5 mb-lg-0 order-lg-2 imageWrapper_rounded">
-              <img src={landingImg2} alt="Image" className="img-fluid rounded" />
+            <div className="col-lg-6 mb-5 mb-lg-0 order-lg-2 imageWrapper_rounded" data-aos="fade" data-aos-delay="100">
+              <img src={landingImg2} alt="Encrypted Messages" className="img-fluid rounded" />
             </div>
             <div className="col-lg-6 ml-auto order-lg-1">
               <div className="bio pr-lg-5">
-                <h2 className="text-uppercase text-primary d-block mb-3">Encrypted
+                <h2 className="text-uppercase text-primary d-block mb-3" data-aos="fade-left" data-aos-delay="300">Encrypted
                   Messages</h2>
-                <p className="mb-4">Try sending encrypted messages over the chain to the target user. The messages work in the cloud, deasktop and mobile wallets. Nobody but you and the recipient can see what is being sent.</p>
+                <p className="mb-4" data-aos="fade-left" data-aos-delay="400">Try sending encrypted messages over the chain to the target user. The messages work in the cloud, deasktop and mobile wallets. Nobody but you and the recipient can see what is being sent.</p>
 
               </div>
             </div>
           </div>
 
           <div className="row align-items-center speaker">
-            <div className="col-lg-6 mb-5 mb-lg-0 imageWrapper_rounded">
-              <img src={landingImg3} alt="Image" className="img-fluid rounded" />
+            <div className="col-lg-6 mb-5 mb-lg-0 imageWrapper_rounded" data-aos="fade" data-aos-delay="100">
+              <img src={landingImg3} alt="Accept Payments" className="img-fluid rounded" />
             </div>
             <div className="col-lg-6 ml-auto">
               <div className="bio pl-lg-5">
                 <h2 className="text-uppercase text-primary d-block mb-3" data-aos="fade-right" data-aos-delay="300">Accept
                   Payments</h2>
-                <p className="mb-4">Accept payments from anywhere. You can also set up your own payment solution with Conceal Pay. This can be use in multiple scenarios like donations, web shops...</p>
+                <p className="mb-4" data-aos="fade-right" data-aos-delay="400">Accept payments from anywhere. You can also set up your own payment solution with Conceal Pay. This can be use in multiple scenarios like donations, web shops...</p>
               </div>
             </div>
           </div>
 
 
           <div className="row align-items-center speaker">
-            <div className="col-lg-6 mb-5 mb-lg-0 order-lg-2 imageWrapper_rounded">
-              <img src={landingImg4} alt="Image" className="img-fluid rounded" />
+            <div className="col-lg-6 mb-5 mb-lg-0 order-lg-2 imageWrapper_rounded" data-aos="fade" data-aos-delay="100">
+              <img src={landingImg4} alth="Address Book" className="img-fluid rounded" />
             </div>
             <div className="col-lg-6 ml-auto order-lg-1">
               <div className="bio pr-lg-5">
-                <h2 className="text-uppercase text-primary d-block mb-3">Address Book
+                <h2 className="text-uppercase text-primary d-block mb-3" data-aos="fade-left" data-aos-delay="300">Address Book
                 </h2>
-                <p className="mb-4">No need to copy / paste addresses every time. Maintain your address book for easy sending and receiving of funds.</p>
+                <p className="mb-4" data-aos="fade-left" data-aos-delay="400">No need to copy / paste addresses every time. Maintain your address book for easy sending and receiving of funds.</p>
               </div>
             </div>
           </div>
 
           <div className="row align-items-center speaker">
-            <div className="col-lg-6 mb-5 mb-lg-0 imageWrapper_rounded">
-              <img src={landingImg1} alt="Image" className="img-fluid rounded" />
+            <div className="col-lg-6 mb-5 mb-lg-0 imageWrapper_rounded" data-aos="fade" data-aos-delay="100">
+              <img src={landingImg1} alt="Maintain Aliases" className="img-fluid rounded" />
             </div>
             <div className="col-lg-6 ml-auto">
               <div className="bio pl-lg-5">
                 <h2 className="text-uppercase text-primary d-block mb-3" data-aos="fade-right" data-aos-delay="300">Maintain
                   Aliases</h2>
-                <p className="mb-4">You can create aliases for your wallet addresses, so your friends and partners can use easy to memorize aliases intead of long addresses.</p>
+                <p className="mb-4" data-aos="fade-right" data-aos-delay="400">You can create aliases for your wallet addresses, so your friends and partners can use easy to memorize aliases intead of long addresses.</p>
               </div>
             </div>
           </div>
 
           <div className="row align-items-center speaker">
-            <div className="col-lg-6 mb-5 mb-lg-0 order-lg-2 imageWrapper_rounded">
-              <img src={landingImg6} alt="Image" className="img-fluid rounded" />
+            <div className="col-lg-6 mb-5 mb-lg-0 order-lg-2 imageWrapper_rounded" data-aos="fade" data-aos-delay="100">
+              <img src={landingImg6} alt="Export Private Keys" className="img-fluid rounded" />
             </div>
             <div className="col-lg-6 ml-auto order-lg-1">
               <div className="bio pr-lg-5">
-                <h2 className="text-uppercase text-primary d-block mb-3">Export
+                <h2 className="text-uppercase text-primary d-block mb-3" data-aos="fade-left" data-aos-delay="300">Export
                   Private Keys</h2>
-                <p className="mb-4">Your keys your money. You can export your private keys anytime and import them for instance to Desktop Wallet. This means you are in control of your funds. Even if the cloud would not be working you still always have access to your funds.</p>
+                <p className="mb-4" data-aos="fade-left" data-aos-delay="400">Your keys your money. You can export your private keys anytime and import them for instance to Desktop Wallet. This means you are in control of your funds. Even if the cloud would not be working you still always have access to your funds.</p>
               </div>
             </div>
           </div>
 
           <div className="row align-items-center speaker">
-            <div className="col-lg-6 mb-5 mb-lg-0 imageWrapper_rounded">
-              <img src={landingImg5} alt="Image" className="img-fluid rounded" />
+            <div className="col-lg-6 mb-5 mb-lg-0 imageWrapper_rounded" data-aos="fade" data-aos-delay="100">
+              <img src={landingImg5} alt="2-Factor Authentication" className="img-fluid rounded" />
             </div>
             <div className="col-lg-6 ml-auto">
               <div className="bio pl-lg-5">
                 <h2 className="text-uppercase text-primary d-block mb-3" data-aos="fade-right" data-aos-delay="300">2-Factor
                   Authentication</h2>
-                <p className="mb-4">2FA is a standard in todays web security. Our cloud wallet supports 2FA out of the box.
+                <p className="mb-4" data-aos="fade-right" data-aos-delay="400">2FA is a standard in todays web security. Our cloud wallet supports 2FA out of the box.
                 </p>
               </div>
             </div>
@@ -193,7 +205,7 @@ const Home = props => {
         </div>
       </div>
 
-      <footer className="site-footer">
+      <footer className="landing-site-footer">
         <div className="container">
           <div className="row mb-5">
             <div className="col-md-4">
@@ -227,7 +239,7 @@ const Home = props => {
               <div className="border-top pt-5">
                 <p>
                   Copyright &copy;
-                  <script>document.write(new Date().getFullYear());</script> All rights reserved | Conceal Network
+                  <script>{new Date().getFullYear()}</script> All rights reserved | Conceal Network
                 </p>
               </div>
             </div>
