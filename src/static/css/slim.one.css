@@ -1299,7 +1299,7 @@ hr {
 
 /******************** dialogs widths should be larger *********************/
 
-#dlgReceiveCoins, #dlgSendCoins {
+#dlgReceiveCoins, #dlgSendCoins, #dlgMessages {
   width: 80%;
   max-width: 1100px;
   border: 1px solid #343a40;
@@ -1612,4 +1612,40 @@ label.codeExample {
 
 .paymentURL {
   padding: 0.88em !important;
+}
+
+/******************** WalletInput component *********************/
+
+.wallet-input-group .input-group-append * {
+  font-size: 0.68rem !important;
+  font-weight: bold !important;
+}
+
+.wallet-input-group .input-group-append .ckbox {
+  margin-bottom: 0;
+}
+
+.wallet-input-group .input-group-append .ckbox input {
+  margin-right: 0;
+}
+
+.wallet-input-group .input-group-append .ckbox span:before,
+.wallet-input-group .input-group-append .ckbox span:after {
+  width: 12px;
+  height: 12px;
+}
+
+.wallet-input-group .input-group-append .ckbox {
+  line-height: 12px;
+}
+
+
+/******************** 2FA Warning *********************/
+
+.twofa-warning {
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 10px;
+  background-color: rgb(265, 165, 0);
+  color: rgb(0, 0, 0);
 }

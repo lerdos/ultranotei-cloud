@@ -9,25 +9,30 @@ import {
   faArrowDown,
   faCaretDown,
   faCheck,
+  faComments,
   faCopy,
   faCog,
   faDollarSign,
   faExternalLinkAlt,
+  faExclamationTriangle,
   faGlobe,
   faHashtag,
   faHome,
+  faIdCard,
   faKey,
   faLink,
   faListAlt,
   faNetworkWired,
   faReceipt,
   faSignOutAlt,
+  faSpinner,
   faTrashAlt,
   faTrophy,
   faUserEdit,
 } from '@fortawesome/free-solid-svg-icons';
 
 import AppContextProvider from './ContextProvider';
+import Home from './pages/Home';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import ResetPassword from './pages/ResetPassword';
@@ -41,6 +46,7 @@ import UpcomingFeatures from './pages/UpcomingFeatures';
 import Donate from './pages/Donate';
 import Pay from './pages/Pay';
 import PaySettings from './pages/PaySettings';
+import Id from './pages/Id';
 
 import '../static/css/slim.css';
 import '../static/css/slim.one.css';
@@ -54,19 +60,23 @@ library.add(
   faArrowDown,
   faCaretDown,
   faCheck,
+  faComments,
   faCopy,
   faCog,
   faDollarSign,
+  faExclamationTriangle,
   faExternalLinkAlt,
   faGlobe,
   faHashtag,
   faHome,
+  faIdCard,
   faKey,
   faLink,
   faListAlt,
   faNetworkWired,
   faReceipt,
   faSignOutAlt,
+  faSpinner,
   faTrashAlt,
   faTrophy,
   faUserEdit,
@@ -76,13 +86,15 @@ const App = () => (
   <Router>
     <AppContextProvider>
 
+      <Route exact path="/" component={Home} />
       <Route exact path="/signup" component={SignUp} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/reset_password" component={ResetPassword} />
       <Route exact path="/reset_password/:token" component={ResetPassword} />
       <Route exact path="/terms" component={Terms} />
 
-      <PrivateRoute exact path="/" component={Dashboard} />
+      <PrivateRoute exact path="/dashboard" component={Dashboard} />
+      <PrivateRoute exact path="/id" component={Id} />
       <PrivateRoute exact path="/address_book" component={AddressBook} />
       <PrivateRoute exact path="/settings" component={Settings} />
       <PrivateRoute exact path="/pay_settings" component={PaySettings} />
