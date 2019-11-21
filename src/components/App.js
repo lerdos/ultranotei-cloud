@@ -32,6 +32,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import AppContextProvider from './ContextProvider';
+import Home from './pages/Home';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import ResetPassword from './pages/ResetPassword';
@@ -85,13 +86,14 @@ const App = () => (
   <Router>
     <AppContextProvider>
 
+      <Route exact path="/" component={Home} />
       <Route exact path="/signup" component={SignUp} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/reset_password" component={ResetPassword} />
       <Route exact path="/reset_password/:token" component={ResetPassword} />
       <Route exact path="/terms" component={Terms} />
 
-      <PrivateRoute exact path="/" component={Dashboard} />
+      <PrivateRoute exact path="/dashboard" component={Dashboard} />
       <PrivateRoute exact path="/id" component={Id} />
       <PrivateRoute exact path="/address_book" component={AddressBook} />
       <PrivateRoute exact path="/settings" component={Settings} />

@@ -16,7 +16,7 @@ const NavBar = () => {
 
         <ul className="nav">
           <li className="nav-item">
-            <NavLink exact to="/" className="nav-link hot_link" activeClassName="active">
+            <NavLink exact to="/dashboard" className="nav-link hot_link" activeClassName="active">
               <FontAwesomeIcon icon="home" fixedWidth /> <span>Dashboard</span>
             </NavLink>
           </li>
