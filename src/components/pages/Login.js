@@ -27,7 +27,7 @@ const Login = props => {
     return <Redirect to={from} />;
   }
 
-  if (user.loggedIn()) return <Redirect to="/" />;
+  if (user.loggedIn()) return <Redirect to="/dashboard" />;
 
   return (
     <div className="signin-wrapper">
@@ -39,7 +39,7 @@ const Login = props => {
 
         {(message.loginForm || message.signUpForm) &&
           <div className="alert alert-outline alert-danger text-center">
-            {message.signUpForm || message.loginForm}
+            {message.loginForm || message.signUpForm}
           </div>
         }
 

@@ -6,6 +6,7 @@ import { AppContext } from '../ContextProvider';
 import { maskAddress } from '../../helpers/utils';
 import SendModal from '../modals/Send';
 import ReceiveModal from '../modals/Receive';
+import MessagesModal from '../modals/Messages';
 import DetailsModal from '../modals/Details';
 import KeysModal from '../modals/Keys';
 
@@ -14,10 +15,11 @@ const Wallet = props => {
   const { actions, state } = useContext(AppContext);
   const { deleteWallet } = actions;
   const { appSettings, layout } = state;
-  const { walletsLoaded } = layout;
+  const { messagesLoaded, walletsLoaded } = layout;
 
   const [sendModalOpen, toggleSendModal] = useState(false);
   const [receiveModalOpen, toggleReceiveModal] = useState(false);
+  const [messagesModalOpen, toggleMessagesModal] = useState(false);
   const [detailsModalOpen, toggleDetailsModal] = useState(false);
   const [keysModalOpen, toggleKeysModal] = useState(false);
 
@@ -71,6 +73,16 @@ const Wallet = props => {
           </button>
         </OverlayTrigger>
 
+        <OverlayTrigger overlay={<Tooltip id={`${props.address}-messages`}>Messages</Tooltip>}>
+          <button
+            className={`btn btn-outline-dark ${!messagesLoaded ? 'disabled' : ''}`}
+            onClick={() => toggleMessagesModal(!messagesModalOpen)}
+            disabled={!messagesLoaded}
+          >
+            <FontAwesomeIcon icon="comments" fixedWidth />
+          </button>
+        </OverlayTrigger>
+
         <OverlayTrigger overlay={<Tooltip id={`${props.address}-txs`}>Transactions</Tooltip>}>
           <span>
             <button
@@ -120,6 +132,12 @@ const Wallet = props => {
         {...props}
         show={receiveModalOpen}
         toggleModal={() => toggleReceiveModal(!receiveModalOpen)}
+      />
+
+      <MessagesModal
+        {...props}
+        show={messagesModalOpen}
+        toggleModal={() => toggleMessagesModal(!messagesModalOpen)}
       />
 
       <DetailsModal

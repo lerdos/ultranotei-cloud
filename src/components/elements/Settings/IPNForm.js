@@ -43,15 +43,15 @@ const IPNForm = props => {
   const clientURL = client => `${appSettings.IPNURL}/?client=${client}&amount=AMOUNT&ref=REF`;
 
   return (
-    <Card key={address}>
+    <Card key={`ipn-${address}`}>
       <Card.Header>
-		<div class="row no-gutters">
-			<div class="col-5 col-sm-4">
-				<Accordion.Toggle as={Button} variant="link" eventKey={address}>
+		<div className="row no-gutters">
+			<div className="col-5 col-sm-4">
+				<Accordion.Toggle as={Button} variant="link" eventKey={`ipn-${address}`}>
 				  <FontAwesomeIcon icon="caret-down" fixedWidth /> {maskAddress(address)}
-				</Accordion.Toggle>			
+				</Accordion.Toggle>
 			</div>
-			<div class="col-7 col-sm-8 PaymentInfo">
+			<div className="col-7 col-sm-8 PaymentInfo">
 				{(wallet.ipn && wallet.ipn.clientKey)
 				  ? <div className="fa-pull-right">
 					  Client Key: {wallet.ipn.clientKey}&nbsp;&nbsp;
@@ -64,7 +64,7 @@ const IPNForm = props => {
 			</div>
 		</div>
       </Card.Header>
-      <Accordion.Collapse eventKey={address}>
+      <Accordion.Collapse eventKey={`ipn-${address}`}>
         <Card.Body>
           <div className="form-layout form-layout-7">
             {message.ipnForm &&
@@ -195,7 +195,7 @@ const IPNForm = props => {
               </div>
             </form>
             {wallet.ipn && wallet.ipn.clientKey &&
-              <div class="paymentInstructions">
+              <div className="paymentInstructions">
                 <div className="d-flex flex flex-column">
                   <div className="mg-b-15">
                     Use this URL to receive CCX payments from your Website:
