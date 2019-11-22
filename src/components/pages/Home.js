@@ -13,7 +13,6 @@ import landingImg4 from '../../static/img/landing_img4.jpg';
 import landingImg5 from '../../static/img/landing_img5.jpg';
 import landingImg6 from '../../static/img/landing_img6.jpg';
 
-import '../../static/css/bootstrap.min.css';
 import '../../static/css/aos.css';
 import '../../static/css/style.css';
 
@@ -215,7 +214,7 @@ const Home = props => {
             </div>
             <div className="col-md-3 ml-auto">
               <h2 className="footer-heading text-uppercase mb-4">Quick Links</h2>
-              <ul className="list-unstyled">
+              <ul className="list-unstyled" id="listQuickLinks">
                 <a href="https://conceal.network/" className="p-2">Website</a>
                 <a href="https://conceal.network/wiki/doku.php" className="p-2">Documentation</a>
                 <a href="https://discord.conceal.network" className="p-2">Discord</a>

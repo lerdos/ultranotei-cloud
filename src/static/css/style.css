@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
 
 /* Base */
-body {
+.landing-site-wrap {
   line-height: 1.7;
   color: #cfcfd1;
   font-weight: 300;
@@ -846,7 +846,6 @@ div.downArrow {
   box-sizing: border-box;
   position: absolute;
   left: 50%;
-  bottom: 5%;
   transform: rotate(-225deg);
 }
 
@@ -886,4 +885,10 @@ div.downArrow:hover:before {
 
 .btnSignMain {
   margin-right: 20px;
+}
+
+#listQuickLinks {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 0 50%;
 }
