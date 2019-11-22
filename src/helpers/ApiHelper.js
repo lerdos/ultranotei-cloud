@@ -141,6 +141,42 @@ export default class ApiHelper {
       .then(res => Promise.resolve(res));
   };
 
+  getId = () => {
+    return this.fetch(`${this.apiURL}/id`, { method: 'GET' })
+      .then(res => Promise.resolve(res));
+  };
+
+  checkId = id => {
+    return this.fetch(`${this.apiURL}/id/check?id=${id}`, { method: 'GET' })
+      .then(res => Promise.resolve(res));
+  };
+
+  createId = options => {
+    const body = JSON.stringify(options);
+    return this.fetch(`${this.apiURL}/id`, { method: 'POST', body })
+      .then(res => Promise.resolve(res));
+  };
+
+  deleteId = (id, address, addressToCreate, name) => {
+    const qs = `?id=${id}&address=${address}&addressToCreate=${addressToCreate}&name=${name}`;
+    return this.fetch(`${this.apiURL}/id/delete${qs}`, { method: 'DELETE' })
+      .then(res => Promise.resolve(res));
+  };
+
+  getMessages = () => {
+    return this.fetch(`${this.apiURL}/wallet/messages`, { method: 'GET' })
+      .then(res => Promise.resolve(res));
+  };
+
+  sendMessage = options => {
+    const { address, message, password, sdm, twoFACode, wallet } = options;
+    const body = { address, message, sdm, wallet };
+    if (twoFACode && twoFACode !== '') body.code = twoFACode;
+    if (password && password !== '') body.password = password;
+    return this.fetch(`${this.apiURL}/wallet/send-message`, { method: 'POST', body: JSON.stringify(body) })
+      .then(res => Promise.resolve(res));
+  };
+
   getIPNConfig = address => {
     return this.fetch(`${this.apiURL}/ipn/config/?wallet=${address}`, { method: 'GET' })
       .then(res => Promise.resolve(res));

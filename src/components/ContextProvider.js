@@ -385,6 +385,104 @@ const AppContextProvider = props => {
       });
   };
 
+  const getId = () => {
+    Api.getId()
+      .then(res => {
+        if (res.result === 'success') {
+          dispatch({ type: 'SET_ID', id: res.message });
+        }
+      })
+      .catch(e => console.error(e));
+  };
+
+  const checkId = id =>
+    Api.checkId(id)
+      .then(res => {
+        if (res.result === 'success') {
+          dispatch({ type: 'SET_ID_CHECK', idAvailable: res.message[0] });
+        } else {
+          dispatch({ type: 'DISPLAY_MESSAGE', message: 'Error checking for ID.', id: 'idForm' });
+        }
+      })
+      .catch(e => console.error(e));
+
+  const createId = (options, extras) => {
+    const { e, idAddress, idAddressToCreate, idName, idValue, id } = options;
+    e.preventDefault();
+    let message;
+    dispatch({ type: 'FORM_SUBMITTED', value: true });
+    Api.createId({ address: idAddress, id: idValue, addressToCreate: idAddressToCreate || idAddress, name: idName })
+      .then(res => {
+        if (res.result === 'success') {
+          getId();
+        } else {
+          message = res.message;
+        }
+        extras.forEach(fn => fn());
+      })
+      .catch(e => console.error(e))
+      .finally(() => {
+        dispatch({ type: 'FORM_SUBMITTED', value: false });
+        if (message) dispatch({ type: 'DISPLAY_MESSAGE', message, id });
+      });
+  };
+
+  const deleteId = options => {
+    const { id, address, name } = options;
+    let { addressToCreate } = options;
+    if (!addressToCreate || addressToCreate === '') addressToCreate = address;
+    let message;
+    Api.deleteId(id, address, addressToCreate, name)
+      .then(res => {
+        if (res.result === 'success') {
+          getId();
+        } else {
+          message = res.message;
+        }
+      })
+      .catch(e => console.error(e))
+      .finally(() => {
+        if (message) dispatch({ type: 'DISPLAY_MESSAGE', message, id: 'idForm' });
+      });
+  };
+
+  const getMessages = () => {
+    Api.getMessages()
+      .then(res => {
+        if (res.result === 'success') {
+          dispatch({ type: 'SET_MESSAGES', messages: res.message });
+        }
+      })
+      .catch(err => console.error(err));
+  };
+
+  const sendMessage = (options, extras) => {
+    const { e } = options;
+    e.preventDefault();
+    dispatch({ type: 'FORM_SUBMITTED', value: true });
+    Api.sendMessage(options)
+      .then(res => {
+        let sendMessageResponse;
+        if (res.result === 'error' || res.message.error) {
+          sendMessageResponse = {
+            status: 'error',
+            message: `Error: ${res.message.error ? res.message.error.message : res.message}`,
+          };
+          dispatch({ type: 'SEND_MESSAGE', sendMessageResponse });
+          return;
+        }
+        sendMessageResponse = {
+          status: 'success',
+          message: res.message.result,
+          redirect: res.message.redirect,
+        };
+        dispatch({ type: 'SEND_MESSAGE', sendMessageResponse });
+        extras.forEach(fn => fn());
+      })
+      .catch(err => console.error(err))
+      .finally(() => dispatch({ type: 'FORM_SUBMITTED', value: false }));
+  };
+
   const getBlockchainHeight = () => {
     Api.getBlockchainHeight()
       .then(res => dispatch({ type: 'UPDATE_BLOCKCHAIN_HEIGHT', blockchainHeight: res.message.height }))
@@ -435,6 +533,12 @@ const AppContextProvider = props => {
     updateIPNConfig,
     getIPNClient,
     sendTx,
+    getId,
+    checkId,
+    createId,
+    deleteId,
+    getMessages,
+    sendMessage,
     getBlockchainHeight,
     getMarketPrices,
     getPrices,
@@ -448,13 +552,17 @@ const AppContextProvider = props => {
     const { appSettings, userSettings } = state;
 
     getUser();
+    getId();
     check2FA();
     getWallets();
+    getMessages();
     getMarketData();
 
     const intervals = [];
     intervals.push(
+      { fn: getId, time: userSettings.updateIdInterval },
       { fn: getWallets, time: userSettings.updateWalletsInterval },
+      { fn: getMessages, time: userSettings.updateMessagesInterval },
       { fn: getMarketData, time: appSettings.updateMarketPricesInterval },
     );
 

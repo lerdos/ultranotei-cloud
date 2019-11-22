@@ -1,3 +1,11 @@
+#### 1.3.0 (2019-11-21)
+
+**Features**
+ 
+ - Added Messages
+ - Added ID
+ - Added new landing page
+
 #### 1.2.1 (2019-09-12)
 
 **Features**

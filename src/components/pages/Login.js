@@ -27,7 +27,7 @@ const Login = props => {
     return <Redirect to={from} />;
   }
 
-  if (user.loggedIn()) return <Redirect to="/" />;
+  if (user.loggedIn()) return <Redirect to="/dashboard" />;
 
   return (
     <div className="signin-wrapper">
