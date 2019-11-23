@@ -14,8 +14,7 @@ import landingImg5 from '../../static/img/landing_img5.jpg';
 import landingImg6 from '../../static/img/landing_img6.jpg';
 
 import '../../static/css/aos.css';
-import '../../static/css/style.css';
-
+import '../../static/css/landing.css';
 
 const Home = props => {
   const { state } = useContext(AppContext);
@@ -29,7 +28,16 @@ const Home = props => {
       once: true,
     })
   }, []);
+  
+  // create a scroll element to which we scroll
+  const scrollElement = React.createRef()
 
+  const onScrollToContent = () =>
+    scrollElement.current.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+    
   if (redirectToReferrer && props.location.state && user.loggedIn()) {
     const { from } = props.location.state;
     return <Redirect to={from} />;
@@ -88,12 +96,12 @@ const Home = props => {
             </div>
           </div>
           <div className="downArrowWrapper">
-            <div className="downArrow" id="downArrowBtn" />
+            <div className="downArrow" id="downArrowBtn" onClick={onScrollToContent} />
           </div>
         </div>
       </div>
 
-      <div className="site-section" id="mainSection">
+      <div className="site-section" id="mainSection" ref={scrollElement}>
         <div className="container">
           <div className="row mb-5 aboutSection">
             <div className="col-lg-4" data-aos="fade-up" data-aos-delay="100">

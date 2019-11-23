@@ -12,6 +12,7 @@
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  margin-bottom: -80px;
 }
 
 ::-moz-selection {
