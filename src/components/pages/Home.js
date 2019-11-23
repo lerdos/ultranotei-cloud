@@ -14,7 +14,7 @@ import landingImg5 from '../../static/img/landing_img5.jpg';
 import landingImg6 from '../../static/img/landing_img6.jpg';
 
 import '../../static/css/aos.css';
-import '../../static/css/style.css';
+import '../../static/css/landing.css';
 
 
 const Home = props => {
