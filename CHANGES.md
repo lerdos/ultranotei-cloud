@@ -1,3 +1,10 @@
+#### 1.3.1 (2019-11-23)
+
+**Fixes**
+ 
+ - Fixed CSS issues with landing page
+ - Set default Self-Destruct Message time to 0
+
 #### 1.3.0 (2019-11-21)
 
 **Features**

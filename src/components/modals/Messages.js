@@ -26,7 +26,7 @@ const MessagesModal = props => {
   const { value: password, bind: bindPassword, reset: resetPassword } = useFormInput('');
 
   let addressInput = null;
-  const [sdm, setSdm] = useState(43200);
+  const [sdm, setSdm] = useState(0);
 
   const totalMessageFee = message.length > 0 ? messageFee : 0;
 
