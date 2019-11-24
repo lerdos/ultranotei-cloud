@@ -238,6 +238,8 @@ const Home = props => {
                 <a href="https://twitter.com/ConcealNetwork" className="p-2"><FontAwesomeIcon icon={['fab', 'twitter']} fixedWidth /></a>
                 <a href="https://medium.com/@ConcealNetwork" className="p-2"><FontAwesomeIcon icon={['fab', 'medium']} fixedWidth /></a>
                 <a href="https://github.com/ConcealNetwork" className="p-2"><FontAwesomeIcon icon={['fab', 'github']} fixedWidth /></a>
+                <a href="https://discord.conceal.network" className="p-2"><FontAwesomeIcon icon={['fab', 'discord']} fixedWidth /></a>
+                <a href="https://t.co/55klBHKGUR" className="p-2"><FontAwesomeIcon icon={['fab', 'telegram']} fixedWidth /></a>
               </p>
             </div>
           </div>
