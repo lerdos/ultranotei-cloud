@@ -9,7 +9,7 @@ import Accordion from 'react-bootstrap/Accordion';
 
 const Id = () => {
   const { state } = useContext(AppContext);
-  const { id, layout, wallets } = state;
+  const { id, layout } = state;
   const { message } = layout;
 
   const [showForm, setShowForm] = useState(false);
@@ -31,13 +31,13 @@ const Id = () => {
             <div className="d-flex flex-row width-100 justify-content-between mg-b-10">
               <label className="section-title d-inline-block">Your Conceal IDs</label>
               <div>
-                {/*walletsLoaded && (walletsKeys.length < appSettings.maxWallets || walletsKeys.length === 0) &&*/
-                <button
-                  className="btn btn-primary btn-sm"
-                  onClick={() => setShowForm(!showForm)}
-                >
-                  {showForm ? 'CANCEL' : 'CREATE ID'}
-                </button>
+                {layout.idLoaded && id.length > 0 &&
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={() => setShowForm(!showForm)}
+                  >
+                    {showForm ? 'CANCEL' : 'CREATE ID'}
+                  </button>
                 }
               </div>
             </div>
@@ -52,11 +52,14 @@ const Id = () => {
 
             <div className="row">
               <div className="col-lg-12">
-                {id.length === 0
+                {layout.idLoaded && id.length === 0
                   ? (!showForm
-                      ? <div>
-                          You have no ID set up yet. Create your first ID by clicking the button.
-                        </div>
+                      ? <>
+                          <div className="mg-b-15">
+                            You have no ID set up yet. Create your first ID by filling up the form below.
+                          </div>
+                          <IdForm/>
+                        </>
                       : <></>
                     )
                   : <Accordion>

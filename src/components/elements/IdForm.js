@@ -17,7 +17,7 @@ const IdForm = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [idAddress, setIdAddress] = useState(false);
-  const { value: idValue, bind: bindIdValue, setValue: setIdValue, reset: resetId } = useFormInput('');
+  const { value: idValue, bind: bindIdValue, reset: resetId } = useFormInput('');
   const { value: idName, bind: bindIdName, reset: resetName } = useFormInput('');
   const { value: idAddressToCreate, bind: bindIdAddressToCreate, reset: resetIdAddressToCreate } = useFormInput('');
 
@@ -140,12 +140,12 @@ const IdForm = () => {
         </div>
 
         <div className="row no-gutters">
-          <div className="col-5 col-sm-4">ID Name</div>
+          <div className="col-5 col-sm-4">ID Label</div>
           <div className="col-7 col-sm-8 wallet-address">
             <input
               {...bindIdName}
               type="text"
-              placeholder="ID Name"
+              placeholder="ID Label"
               name="idName"
               className="form-control rbt-input-main"
             />

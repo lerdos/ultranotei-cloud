@@ -67,9 +67,9 @@ const Home = props => {
               <nav className="site-navigation position-relative text-right" role="navigation">
                 <ul className="site-menu js-clone-nav mx-auto d-none d-lg-block">
                   <li className="active"><Link to="/">CLOUD</Link></li>
-                  <li><a href="https://conceal.pay/">PAY</a></li>
-                  <li><a href="https://conceal.id/">ID</a></li>
-                  <li><a href="https://conceal.mobile/">MOBILE</a></li>
+                  <li><a href="#">PAY</a></li>
+                  <li><a href="#">ID</a></li>
+                  <li><a href="#">MOBILE</a></li>
                   <li className="cta"><Link to="/login">SIGN IN</Link></li>
                 </ul>
               </nav>

@@ -12,6 +12,7 @@ const useAppState = Auth => {
       formSubmitted: false,
       message: {},
       userLoaded: false,
+      idLoaded: false,
       messagesLoaded: false,
       walletsLoaded: false,
       sendTxResponse: null,
@@ -190,6 +191,10 @@ const useAppState = Auth => {
         result = {
           ...state,
           id: action.id,
+          layout: {
+            ...state.layout,
+            idLoaded: true,
+          },
         };
         break;
       case 'SET_ID_CHECK':
