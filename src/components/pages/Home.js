@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useAddToHomescreenPrompt } from "../../helpers/HomeScreen";
 import AOS from 'aos';
 
 import { AppContext } from '../ContextProvider';
@@ -17,6 +18,7 @@ import '../../static/css/aos.css';
 import '../../static/css/landing.css';
 
 const Home = props => {
+  const [getIsVisible, promptToInstall] = useAddToHomescreenPrompt();
   const { state } = useContext(AppContext);
   const { layout, user } = state;
   const { redirectToReferrer } = layout;
@@ -37,6 +39,14 @@ const Home = props => {
       behavior: 'smooth',
       block: 'start',
     });
+
+  const onHomeScreenClick = (e) => {
+    try {
+      promptToInstall();
+    } finally {
+      e && e.preventDefault()
+    }
+  }
 
   if (redirectToReferrer && props.location.state && user.loggedIn()) {
     const { from } = props.location.state;
@@ -67,9 +77,9 @@ const Home = props => {
               <nav className="site-navigation position-relative text-right" role="navigation">
                 <ul className="site-menu js-clone-nav mx-auto d-none d-lg-block">
                   <li className="active"><Link to="/">CLOUD</Link></li>
-                  <li><a href="#">PAY</a></li>
-                  <li><a href="#">ID</a></li>
-                  <li><a href="#">MOBILE</a></li>
+                  <li><a href="https://conceal.pay/">PAY</a></li>
+                  <li><a href="https://conceal.id/">ID</a></li>
+                  <li><a href="https://conceal.mobile/">MOBILE</a></li>
                   <li className="cta"><Link to="/login">SIGN IN</Link></li>
                 </ul>
               </nav>
@@ -93,6 +103,9 @@ const Home = props => {
               <span className="d-block mb-5 caption" data-aos="fade-up" data-aos-delay="300" />
               <Link to="/signup" className="btn-custom btnSignMain" data-aos="fade-up" data-aos-delay="400"><span>SIGN UP</span></Link>
               <Link to="/login" className="btn-custom btnSignMain" data-aos="fade-up" data-aos-delay="400"><span>SIGN IN</span></Link>
+              {getIsVisible() && (
+                <button className="btn-custom btnAddToHomepage" data-aos="fade-up" data-aos-delay="400" onClick={() => promptToInstall()}>ADD TO HOMEPAGE</button>
+              )}
             </div>
           </div>
           <div className="downArrowWrapper">
