@@ -28,7 +28,7 @@ const Home = props => {
       once: true,
     })
   }, []);
-  
+
   // create a scroll element to which we scroll
   const scrollElement = React.createRef()
 
@@ -37,7 +37,7 @@ const Home = props => {
       behavior: 'smooth',
       block: 'start',
     });
-    
+
   if (redirectToReferrer && props.location.state && user.loggedIn()) {
     const { from } = props.location.state;
     return <Redirect to={from} />;
@@ -67,9 +67,9 @@ const Home = props => {
               <nav className="site-navigation position-relative text-right" role="navigation">
                 <ul className="site-menu js-clone-nav mx-auto d-none d-lg-block">
                   <li className="active"><Link to="/">CLOUD</Link></li>
-                  <li><a href="https://conceal.pay/">PAY</a></li>
-                  <li><a href="https://conceal.id/">ID</a></li>
-                  <li><a href="https://conceal.mobile/">MOBILE</a></li>
+                  <li><a href="#">PAY</a></li>
+                  <li><a href="#">ID</a></li>
+                  <li><a href="#">MOBILE</a></li>
                   <li className="cta"><Link to="/login">SIGN IN</Link></li>
                 </ul>
               </nav>
@@ -138,7 +138,7 @@ const Home = props => {
               <div className="bio pr-lg-5">
                 <h2 className="text-uppercase text-primary d-block mb-3" data-aos="fade-left" data-aos-delay="300">Encrypted
                   Messages</h2>
-                <p className="mb-4" data-aos="fade-left" data-aos-delay="400">Try sending encrypted messages over the chain to the target user. The messages work in the cloud, deasktop and mobile wallets. Nobody but you and the recipient can see what is being sent.</p>
+                <p className="mb-4" data-aos="fade-left" data-aos-delay="400">Try sending encrypted messages over the chain to the target user. The messages work in the cloud, desktop and mobile wallets. Nobody but you and the recipient can see what is being sent.</p>
 
               </div>
             </div>
@@ -152,7 +152,7 @@ const Home = props => {
               <div className="bio pl-lg-5">
                 <h2 className="text-uppercase text-primary d-block mb-3" data-aos="fade-right" data-aos-delay="300">Accept
                   Payments</h2>
-                <p className="mb-4" data-aos="fade-right" data-aos-delay="400">Accept payments from anywhere. You can also set up your own payment solution with Conceal Pay. This can be use in multiple scenarios like donations, web shops...</p>
+                <p className="mb-4" data-aos="fade-right" data-aos-delay="400">Accept payments from anywhere. You can also set up your own payment solution with Conceal Pay. This can be used in multiple scenarios like donations, web shops...</p>
               </div>
             </div>
           </div>
@@ -179,7 +179,7 @@ const Home = props => {
               <div className="bio pl-lg-5">
                 <h2 className="text-uppercase text-primary d-block mb-3" data-aos="fade-right" data-aos-delay="300">Maintain
                   Aliases</h2>
-                <p className="mb-4" data-aos="fade-right" data-aos-delay="400">You can create aliases for your wallet addresses, so your friends and partners can use easy to memorize aliases intead of long addresses.</p>
+                <p className="mb-4" data-aos="fade-right" data-aos-delay="400">You can create aliases for your wallet addresses, so your friends and partners can use easy to memorize aliases instead of long addresses.</p>
               </div>
             </div>
           </div>
@@ -205,7 +205,7 @@ const Home = props => {
               <div className="bio pl-lg-5">
                 <h2 className="text-uppercase text-primary d-block mb-3" data-aos="fade-right" data-aos-delay="300">2-Factor
                   Authentication</h2>
-                <p className="mb-4" data-aos="fade-right" data-aos-delay="400">2FA is a standard in todays web security. Our cloud wallet supports 2FA out of the box.
+                <p className="mb-4" data-aos="fade-right" data-aos-delay="400">2FA is a standard in today's web security. Our cloud wallet supports 2FA out of the box.
                 </p>
               </div>
             </div>
@@ -238,6 +238,8 @@ const Home = props => {
                 <a href="https://twitter.com/ConcealNetwork" className="p-2"><FontAwesomeIcon icon={['fab', 'twitter']} fixedWidth /></a>
                 <a href="https://medium.com/@ConcealNetwork" className="p-2"><FontAwesomeIcon icon={['fab', 'medium']} fixedWidth /></a>
                 <a href="https://github.com/ConcealNetwork" className="p-2"><FontAwesomeIcon icon={['fab', 'github']} fixedWidth /></a>
+                <a href="https://discord.conceal.network" className="p-2"><FontAwesomeIcon icon={['fab', 'discord']} fixedWidth /></a>
+                <a href="https://t.co/55klBHKGUR" className="p-2"><FontAwesomeIcon icon={['fab', 'telegram']} fixedWidth /></a>
               </p>
             </div>
           </div>

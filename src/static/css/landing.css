@@ -89,12 +89,12 @@ h1, h2, h3, h4, h5,
 .bg-black {
   background: #000; }
 
-.form-control {
+.landing-form-control {
   height: 43px;
   border-radius: 0; }
-  .form-control:active, .form-control:focus {
+  .landing-form-control:active, .landing-form-control:focus {
     border-color: orange; }
-  .form-control:hover, .form-control:active, .form-control:focus {
+  .landing-form-control:hover, .landing-form-control:active, .landing-form-control:focus {
     -webkit-box-shadow: none !important;
     box-shadow: none !important; }
 
@@ -688,11 +688,11 @@ h1, h2, h3, h4, h5,
   .testimony .text-muted {
     color: #e9e9ea; }
 
-.form-group .form-control {
+.landing-form-group .landing-form-control {
   color: #fff !important;
   background: none;
   border: 2px solid #fff; }
-  .form-group .form-control:active, .form-group .form-control:focus {
+  .landing-form-group .landing-form-control:active, .landing-form-group .landing-form-control:focus {
     background: none; }
 
 .pricing {

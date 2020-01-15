@@ -18,13 +18,13 @@ const ContactModal = props => {
   const formValidation = contact
     ? (
         label.length > 0 &&
-        WAValidator.validate(address, 'CCX') &&
+        (WAValidator.validate(address, 'CCX') || new RegExp(/^[a-z0-9]*\.conceal\.id/).test(address)) &&
         (paymentID === '' || paymentID.length === 64) &&
         !(label === contact.label && address === contact.address && paymentID === contact.paymentID)
       )
     : (
         label.length > 0 &&
-        WAValidator.validate(address, 'CCX') &&
+        (WAValidator.validate(address, 'CCX') || new RegExp(/^[a-z0-9]*\.conceal\.id/).test(address)) &&
         (paymentID === '' || paymentID.length === 64)
       );
   const formValid = useFormValidation(formValidation);
@@ -91,7 +91,7 @@ const ContactModal = props => {
                   className="form-control"
                   name="address"
                   type="text"
-                  minLength={98}
+                  minLength={12}
                   maxLength={98}
                 />
               </div>

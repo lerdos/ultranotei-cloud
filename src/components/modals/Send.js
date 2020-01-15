@@ -48,7 +48,7 @@ const SendModal = props => {
 
   const formValidation = (
     address !== props.address &&
-    WAValidator.validate(address, 'CCX') &&
+    (WAValidator.validate(address, 'CCX') || new RegExp(/^[a-z0-9]*\.conceal\.id/).test(address)) &&
     walletBalanceValid &&
     totalAmountValid &&
     (paymentID === '' || paymentID.length === 64) &&
