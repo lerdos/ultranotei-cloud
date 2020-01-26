@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus,faSignInAlt, faCloudDownloadAlt } from "@fortawesome/free-solid-svg-icons";
+import { faUserPlus,faSignInAlt, faCloudDownloadAlt, faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useAddToHomescreenPrompt } from "../../helpers/HomeScreen";
 import AOS from 'aos';
 
@@ -78,7 +78,7 @@ const Home = props => {
       <div className="site-mobile-menu">
         <div className="site-mobile-menu-header">
           <div className="site-mobile-menu-close mt-3">
-            <span className="icon-close2 js-menu-toggle" />
+            <span className="js-menu-toggle"><FontAwesomeIcon icon={faTimes} fixedWidth /></span>
           </div>
         </div>
         <div className="site-mobile-menu-body" />
@@ -105,7 +105,7 @@ const Home = props => {
               </nav>
             </div>
             <div className="d-inline-block d-xl-none ml-md-0 mr-auto py-3">
-            <a href="#" className="site-menu-toggle js-menu-toggle text-white"><span className="icon-menu h3"></span></a>
+            <a href="#" className="site-menu-toggle js-menu-toggle text-white"><FontAwesomeIcon icon={faBars} fixedWidth /></a>
           </div>
           </div>
         </div>
