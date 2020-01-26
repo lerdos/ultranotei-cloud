@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserPlus,faSignInAlt, faCloudDownloadAlt } from "@fortawesome/free-solid-svg-icons";
 import { useAddToHomescreenPrompt } from "../../helpers/HomeScreen";
 import AOS from 'aos';
 
@@ -99,7 +100,7 @@ const Home = props => {
                 <li><a href="https://conceal.network/messaging/">MESSAGING</a></li>
                 <li><a href="https://conceal.network/mobile">MOBILE</a></li>
                 <li><a href="https://conceal.network/pay/">PAY</a></li>
-                  <li className="cta"><Link to="/login">SIGN IN</Link></li>
+                  <li className="cta"><Link to="/login"><FontAwesomeIcon icon={faSignInAlt} fixedWidth /> SIGN IN</Link></li>
                 </ul>
               </nav>
             </div>
@@ -117,11 +118,10 @@ const Home = props => {
               <span className="d-block mb-3 caption" data-aos="fade-up" data-aos-delay="100">WELCOME TO CONCEAL CLOUD</span>
               <h1 className="d-block mb-4" data-aos="fade-up" data-aos-delay="200">A secure, feature rich, and fast Conceal
                 Wallet</h1>
-              <span className="d-block mb-5 caption" data-aos="fade-up" data-aos-delay="300" />
-              <Link to="/signup" className="btn-custom btnSignMain" data-aos="fade-up" data-aos-delay="400"><span>SIGN UP</span></Link>
-              <Link to="/login" className="btn-custom btnSignMain" data-aos="fade-up" data-aos-delay="400"><span>SIGN IN</span></Link>
+              <Link to="/signup" className="btn-custom btnSignMain" data-aos="fade-up"><span><FontAwesomeIcon icon={faUserPlus} fixedWidth />&nbsp; SIGN UP</span></Link>
+              <Link to="/login" className="btn-custom btnSignMain" data-aos="fade-up"><span><FontAwesomeIcon icon={faSignInAlt} fixedWidth />&nbsp; SIGN IN</span></Link>
               {getIsVisible() && (
-                <button className="btn-custom btnAddToHomepage" data-aos="fade-up" data-aos-delay="400" onClick={() => promptToInstall()}><span>ADD TO HOME SCREEN</span></button>
+                <button className="btn-custom btnAddToHomepage" data-aos="fade-up" onClick={() => promptToInstall()}><span><FontAwesomeIcon icon={faCloudDownloadAlt} fixedWidth />&nbsp; Install</span></button>
               )}
             </div>
           </div>
@@ -133,13 +133,13 @@ const Home = props => {
 
       <div className="site-section" id="mainSection" ref={scrollElement}>
         <div className="container">
-          <div className="row mb-5 aboutSection">
+          <div className="row mb-12 aboutSection">
             <div className="col-lg-4" data-aos="fade-up" data-aos-delay="100">
               <div className="site-section-heading">
                 <h2>About</h2>
               </div>
             </div>
-            <div className="col-lg-5 mt-5 pl-lg-5" data-aos="fade-up" data-aos-delay="200">
+            <div className="col-lg-8 mt-5 pl-lg-5" id="aboutDesc" data-aos="fade-up" data-aos-delay="200">
               <p>We aim to make the Conceal crypto-currency as easy to use as possible. With Conceal Cloud you have a wallet
                 that is secure, fast, and easy to use. All you need to get started is an account.</p>
             </div>

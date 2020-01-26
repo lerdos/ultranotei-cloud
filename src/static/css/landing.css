@@ -7,3 +7,6 @@
   flex-wrap: wrap;
   flex: 0 50%;
 }
+#aboutDesc {
+  margin-top:0 !important;
+}
