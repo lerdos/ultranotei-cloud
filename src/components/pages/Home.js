@@ -76,19 +76,20 @@ const Home = props => {
             <div className="col-12 col-md-8 d-none d-xl-block">
               <nav className="site-navigation position-relative text-right" role="navigation">
                 <ul className="site-menu js-clone-nav mx-auto d-none d-lg-block">
-                  <li className="active"><Link to="/">CLOUD</Link></li>
-                  <li><a href="https://conceal.pay/">PAY</a></li>
-                  <li><a href="https://conceal.id/">ID</a></li>
-                  <li><a href="https://conceal.mobile/">MOBILE</a></li>
+                <li><a href="https://conceal.network/banking/">BANKING</a></li>
+                <li><a className="active" href="https://conceal.cloud">CLOUD</a></li>
+                <li><a href="https://conceal.network/id/">ID</a></li>
+                <li><a href="https://conceal.network/labs/">LABS</a></li>
+                <li><a href="https://conceal.network/messaging/">MESSAGING</a></li>
+                <li><a href="https://conceal.network/mobile">MOBILE</a></li>
+                <li><a href="https://conceal.network/pay/">PAY</a></li>
                   <li className="cta"><Link to="/login">SIGN IN</Link></li>
                 </ul>
               </nav>
             </div>
-            {/*
-            <div className="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;">
-              <a href="#" className="site-menu-toggle js-menu-toggle text-white"><span className="icon-menu h3" /></a>
-            </div>
-            */}
+            <div className="d-inline-block d-xl-none ml-md-0 mr-auto py-3">
+            <a href="#" className="site-menu-toggle js-menu-toggle text-white"><span className="icon-menu h3"></span></a>
+          </div>
           </div>
         </div>
       </header>
@@ -104,7 +105,7 @@ const Home = props => {
               <Link to="/signup" className="btn-custom btnSignMain" data-aos="fade-up" data-aos-delay="400"><span>SIGN UP</span></Link>
               <Link to="/login" className="btn-custom btnSignMain" data-aos="fade-up" data-aos-delay="400"><span>SIGN IN</span></Link>
               {getIsVisible() && (
-                <button className="btn-custom btnAddToHomepage" data-aos="fade-up" data-aos-delay="400" onClick={() => promptToInstall()}>ADD TO HOMEPAGE</button>
+                <button className="btn-custom btnAddToHomepage" data-aos="fade-up" data-aos-delay="400" onClick={() => promptToInstall()}><span>ADD TO HOME SCREEN</span></button>
               )}
             </div>
           </div>
