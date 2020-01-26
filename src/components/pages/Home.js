@@ -29,6 +29,22 @@ const Home = props => {
       easing: 'slide',
       once: true,
     })
+
+    const script = document.createElement('script');
+    script.src = "https://code.jquery.com/jquery-3.2.1.slim.min.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    const jQuery = document.createElement('script');
+    jQuery.src = "https://conceal.network/landing/js/main.js";
+    jQuery.async = true;
+    document.body.appendChild(jQuery);
+
+    return () => {
+      document.body.removeChild(script);
+      document.body.removeChild(jQuery);
+    }
+
   }, []);
 
   // create a scroll element to which we scroll
@@ -110,7 +126,7 @@ const Home = props => {
             </div>
           </div>
           <div className="downArrowWrapper">
-            <div className="downArrow" id="downArrowBtn" onClick={onScrollToContent} />
+            <a href="#downArrowBtn" className="downArrow" id="downArrowBtn"></a>
           </div>
         </div>
       </div>
