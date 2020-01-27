@@ -94,7 +94,7 @@ const Home = props => {
               <nav className="site-navigation position-relative text-right" role="navigation">
                 <ul className="site-menu js-clone-nav mx-auto d-none d-lg-block">
                 <li><a href="https://conceal.network/banking/">BANKING</a></li>
-                <li><a className="active" href="https://conceal.cloud">CLOUD</a></li>
+                <li className="active"><a href="https://conceal.cloud">CLOUD</a></li>
                 <li><a href="https://conceal.network/id/">ID</a></li>
                 <li><a href="https://conceal.network/labs/">LABS</a></li>
                 <li><a href="https://conceal.network/messaging/">MESSAGING</a></li>
