@@ -88,7 +88,7 @@ const Home = props => {
         <div className="container-fluid">
           <div className="row align-items-center">
             <div className="col-12 col-md-4 logoDiv">
-              <Logo className="logo" id="logo" />
+              <a href="https://conceal.network/"><Logo className="logo" id="logo" /></a>
             </div>
             <div className="col-12 col-md-8 d-none d-xl-block">
               <nav className="site-navigation position-relative text-right" role="navigation">
