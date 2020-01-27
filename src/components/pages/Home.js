@@ -116,12 +116,11 @@ const Home = props => {
           <div className="row align-items-center">
             <div className="col-md-10">
               <span className="d-block mb-3 caption" data-aos="fade-up" data-aos-delay="100">WELCOME TO CONCEAL CLOUD</span>
-              <h1 className="d-block mb-4" data-aos="fade-up" data-aos-delay="200">A secure, feature rich, and fast Conceal
-                Wallet</h1>
+              <h1 className="d-block mb-4" data-aos="fade-up" data-aos-delay="200"><strong>Simple</strong> web-based wallet &amp; dashboard</h1>
               <Link to="/signup" className="btn-custom btnSignMain" data-aos="fade-up"><span><FontAwesomeIcon icon={faUserPlus} fixedWidth />&nbsp; SIGN UP</span></Link>
               <Link to="/login" className="btn-custom btnSignMain" data-aos="fade-up"><span><FontAwesomeIcon icon={faSignInAlt} fixedWidth />&nbsp; SIGN IN</span></Link>
               {getIsVisible() && (
-                <button className="btn-custom btnAddToHomepage" data-aos="fade-up" onClick={() => promptToInstall()}><span><FontAwesomeIcon icon={faCloudDownloadAlt} fixedWidth />&nbsp; Install</span></button>
+                <button className="btn-custom btnSignMain btnAddToHomepage" data-aos="fade-up" onClick={() => promptToInstall()}><span><FontAwesomeIcon icon={faCloudDownloadAlt} fixedWidth />&nbsp; Install</span></button>
               )}
             </div>
           </div>
