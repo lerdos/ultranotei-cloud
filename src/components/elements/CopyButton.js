@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 const CopyButton = props => {
-  const { text, toolTipText } = props;
+  const { disabled, text, toolTipText } = props;
   const id = props.id || text;
   const [textCopied, setTextCopied] = useState({});
 
@@ -21,6 +21,7 @@ const CopyButton = props => {
         <button
           className={`btn btn-no-focus ${textCopied[id] ? 'btn-outline-success' : 'btn-outline-dark'}`}
           type="button"
+          disabled={disabled}
         >
           <FontAwesomeIcon icon={textCopied[id] ? 'check' : 'copy'} fixedWidth />
         </button>

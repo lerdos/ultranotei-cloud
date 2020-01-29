@@ -25,6 +25,7 @@ const Contact = props => {
 
       <div className="btn-group" role="group">
         <CopyButton text={contact.address} toolTipText="Copy Contact's Address" />
+        <CopyButton text={contact.paymentID} toolTipText="Copy Contact's Payment ID" disabled={!contact.paymentID} />
 
         <OverlayTrigger overlay={<Tooltip id={`${contact.address}-send`} trigger={['hover']}>Edit Contact</Tooltip>}>
           <button
