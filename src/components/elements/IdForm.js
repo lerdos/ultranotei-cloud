@@ -90,7 +90,7 @@ const IdForm = () => {
                 placeholder="Conceal ID"
                 name="id"
                 className="form-control"
-                onKeyDown={() => setIsTyping(true)}
+                onKeyDown={e => e.keyCode !== 9 && setIsTyping(true)}
               />
               <div className="input-group-append">
                 <span className="input-group-text">
