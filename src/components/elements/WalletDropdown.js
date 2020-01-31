@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react';
+import Button from 'react-bootstrap/Button';
 
 import { AppContext } from '../ContextProvider';
 import { maskAddress } from '../../helpers/utils';
-import Button from 'react-bootstrap/Button';
 
 
 const WalletDropdown = props => {
@@ -18,7 +18,6 @@ const WalletDropdown = props => {
     setWalletAddress,
     walletsLoaded,
   } = props;
-
 
   useEffect(() => {
     const availableWallets = Object.keys(wallets)

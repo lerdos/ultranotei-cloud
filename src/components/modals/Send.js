@@ -5,6 +5,7 @@ import QrReader from 'react-qr-reader';
 import WAValidator from 'multicoin-address-validator';
 
 import { AppContext } from '../ContextProvider';
+import WalletDropdown from '../elements/WalletDropdown';
 import { useFormInput, useFormValidation, useTypeaheadInput } from '../../helpers/hooks';
 import { maskAddress } from '../../helpers/utils';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
@@ -14,11 +15,14 @@ import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 const SendModal = props => {
   const { actions, state } = useContext(AppContext);
   const { sendTx } = actions;
-  const { appSettings, layout, user, userSettings } = state;
+  const { appSettings, layout, user, userSettings, wallets } = state;
   const { coinDecimals, defaultFee, messageFee } = appSettings;
-  const { formSubmitted, sendTxResponse } = layout;
+  const { formSubmitted, sendTxResponse, walletsLoaded } = layout;
   const { toggleModal, wallet, ...rest } = props;
 
+  const [availableWallets, setAvailableWallets] = useState({});
+  const [selectedWallet, setSelectedWallet] = useState(wallet || {});
+  const [walletAddress, setWalletAddress] = useState('');
   const [qrReaderOpened, setQrReaderOpened] = useState(false);
 
   const { value: address, bind: bindAddress, reset: resetAddress, paymentIDValue } = useTypeaheadInput('');
@@ -35,11 +39,11 @@ const SendModal = props => {
   const totalTxFee = txFee + totalMessageFee;
   const totalAmount = parsedAmount > 0 ? (parsedAmount + totalTxFee).toFixed(coinDecimals) : totalTxFee;
   const maxValue = totalTxFee > 0
-    ? (wallet.balance - totalTxFee).toFixed(coinDecimals)
-    : (wallet.balance - defaultFee).toFixed(coinDecimals);
+    ? (selectedWallet.balance - totalTxFee).toFixed(coinDecimals)
+    : (selectedWallet.balance - defaultFee).toFixed(coinDecimals);
 
-  const walletBalanceValid = totalAmount <= wallet.balance;
-  const messageAmountValid = totalMessageFee > 0 && totalTxFee <= wallet.balance;
+  const walletBalanceValid = totalAmount <= selectedWallet.balance;
+  const messageAmountValid = totalMessageFee > 0 && totalTxFee <= selectedWallet.balance;
   const totalAmountValid = (parsedAmount >= defaultFee && totalAmount > 0) || messageAmountValid;
 
   useEffect(() => {
@@ -123,7 +127,7 @@ const SendModal = props => {
             sendTx(
               {
                 e,
-                wallet: props.address,
+                wallet: selectedWallet,
                 address,
                 paymentID,
                 amount,
@@ -152,7 +156,17 @@ const SendModal = props => {
                 From
               </div>
               <div className="col-7 col-sm-9 wallet-address">
-                {props.address}
+                {props.address ||
+                  <WalletDropdown
+                    availableWallets={availableWallets}
+                    setWallet={setSelectedWallet}
+                    setWalletAddress={setWalletAddress}
+                    setAvailableWallets={setAvailableWallets}
+                    walletAddress={walletAddress}
+                    wallets={wallets}
+                    walletsLoaded={walletsLoaded}
+                  />
+                }
               </div>
             </div>
 
@@ -340,14 +354,14 @@ const SendModal = props => {
             <span className="tx-right sendSummary">
                 <h2>
                   <span className="tx-total-text">TOTAL</span>&nbsp;
-                  <span className={`${totalAmount > wallet.balance ? 'text-danger' : ''}`}>
+                  <span className={`${totalAmount > selectedWallet.balance ? 'text-danger' : ''}`}>
                     {totalAmount.toLocaleString(undefined, formatOptions)} CCX
                   </span>
                 </h2>
                 <div>
                   <span className="tx-available-text">AVAILABLE</span>&nbsp;
                   <strong>
-                    {wallet.balance && wallet.balance.toLocaleString(undefined, formatOptions)}
+                    {selectedWallet.balance && selectedWallet.balance.toLocaleString(undefined, formatOptions)}
                   </strong> CCX
                 </div>
                 <div className="tx-default-fee-text">
