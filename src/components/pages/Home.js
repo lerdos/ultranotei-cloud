@@ -15,9 +15,6 @@ import landingImg4 from '../../static/img/landing_img4.jpg';
 import landingImg5 from '../../static/img/landing_img5.jpg';
 import landingImg6 from '../../static/img/landing_img6.jpg';
 
-import '../../static/css/aos.css';
-import '../../static/css/landing.css';
-
 const Home = props => {
   const [getIsVisible, promptToInstall] = useAddToHomescreenPrompt();
   const { state } = useContext(AppContext);
@@ -41,9 +38,22 @@ const Home = props => {
     jQuery.async = true;
     document.body.appendChild(jQuery);
 
+    const landingCSS=document.createElement('link');
+    landingCSS.href='https://conceal.network/landing/css/cloud-landing.css';
+    landingCSS.rel='stylesheet';
+    landingCSS.type="text/css"
+    document.getElementsByTagName('head')[0].appendChild(landingCSS);
+
+    const AOSCSS=document.createElement('link');
+    AOSCSS.href='https://conceal.network/landing/css/aos.css';
+    AOSCSS.rel='stylesheet';
+    AOSCSS.type="text/css"
+    document.getElementsByTagName('head')[0].appendChild(AOSCSS);
+
     return () => {
       document.body.removeChild(script);
       document.body.removeChild(jQuery);
+      document.getElementsByTagName('head')[0].appendChild(landingCSS);
     }
 
   }, []);
