@@ -30,12 +30,10 @@ const Home = props => {
 
     const script = document.createElement('script');
     script.src = "https://code.jquery.com/jquery-3.2.1.slim.min.js";
-    script.async = true;
     document.body.appendChild(script);
 
     const jQuery = document.createElement('script');
     jQuery.src = "https://conceal.network/landing/js/main.js";
-    jQuery.async = true;
     document.body.appendChild(jQuery);
 
     const landingCSS=document.createElement('link');
