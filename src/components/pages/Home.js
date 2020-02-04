@@ -28,30 +28,31 @@ const Home = props => {
       once: true,
     })
 
-    const script = document.createElement('script');
-    script.src = "https://code.jquery.com/jquery-3.2.1.slim.min.js";
+    const script=document.createElement('script');
+    script.src='https://code.jquery.com/jquery-3.2.1.slim.min.js';
     document.body.appendChild(script);
 
-    const jQuery = document.createElement('script');
-    jQuery.src = "https://conceal.network/landing/js/main.js";
+    const jQuery=document.createElement('script');
+    jQuery.src='https://conceal.network/landing/js/main.js';
     document.body.appendChild(jQuery);
 
     const landingCSS=document.createElement('link');
     landingCSS.href='https://conceal.network/landing/css/cloud-landing.css';
     landingCSS.rel='stylesheet';
-    landingCSS.type="text/css"
+    landingCSS.type='text/css';
     document.getElementsByTagName('head')[0].appendChild(landingCSS);
 
     const AOSCSS=document.createElement('link');
     AOSCSS.href='https://conceal.network/landing/css/aos.css';
     AOSCSS.rel='stylesheet';
-    AOSCSS.type="text/css"
+    AOSCSS.type='text/css';
     document.getElementsByTagName('head')[0].appendChild(AOSCSS);
 
     return () => {
       document.body.removeChild(script);
       document.body.removeChild(jQuery);
-      document.getElementsByTagName('head')[0].appendChild(landingCSS);
+      document.getElementsByTagName('head')[0].removeChild(landingCSS);
+      document.getElementsByTagName('head')[0].removeChild(AOSCSS);
     }
 
   }, []);
