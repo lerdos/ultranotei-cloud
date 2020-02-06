@@ -1,20 +1,13 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Moment from 'react-moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { AppContext } from '../ContextProvider';
+import { CCXAmount, CCXExplorerLink } from '../../helpers/utils';
 
 
 const DetailsModal = props => {
   const { toggleModal, wallet, ...rest } = props;
-  const { state } = useContext(AppContext);
-  const { appSettings } = state;
-
-  const formatOptions = {
-    minimumFractionDigits: appSettings.coinDecimals,
-    maximumFractionDigits: appSettings.coinDecimals,
-  };
 
   return (
     <Modal
@@ -42,17 +35,11 @@ const DetailsModal = props => {
                   <div className="media-body">
                     <small className="mg-b-10 tx-timestamp"><Moment>{tx.timestamp}</Moment></small>
                     <p className="mg-b-5">
-                      <span className="tx-amount">{tx.amount.toLocaleString(undefined, formatOptions)} CCX</span>&nbsp;
-                      <small className="tx-fee">FEE: {tx.fee.toLocaleString(undefined, formatOptions)}</small>
+                      <span className="tx-amount"><CCXAmount amount={tx.amount} /></span>&nbsp;
+                      <small className="tx-fee">FEE: <CCXAmount amount={tx.fee} /></small>
                     </p>
                     <p className="mg-b-5">
-                      <a
-                        href={`${appSettings.explorerURL}/index.html?hash=${tx.hash}#blockchain_transaction`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {tx.hash} <FontAwesomeIcon icon="external-link-alt" className="tx-link-icon" />
-                      </a>
+                      <CCXExplorerLink hash={tx.hash} />
                     </p>
                     {tx.status === 'pending' &&
                       <p className="tx-pending">

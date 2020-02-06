@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import ReactNotification from 'react-notifications-component'
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
@@ -31,6 +32,8 @@ import {
   faTrophy,
   faUserEdit,
 } from '@fortawesome/free-solid-svg-icons';
+import 'react-notifications-component/dist/theme.css';
+import 'animate.css/animate.min.css';
 
 import AppContextProvider from './ContextProvider';
 import Home from './pages/Home';
@@ -87,6 +90,7 @@ library.add(
 const App = () => (
   <Router>
     <AppContextProvider>
+      <ReactNotification />
 
       <Route exact path="/" component={Home} />
       <Route exact path="/signup" component={SignUp} />

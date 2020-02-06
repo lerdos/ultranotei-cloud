@@ -4,6 +4,8 @@ import { withRouter } from 'react-router';
 import AuthHelper from '../helpers/AuthHelper';
 import ApiHelper from '../helpers/ApiHelper';
 import useAppState from './useAppState';
+import { NewTxMessage } from './elements/NotificationMessages';
+import { showNotification } from '../helpers/utils';
 
 
 export const AppContext = React.createContext();
@@ -248,7 +250,23 @@ const AppContextProvider = props => {
       .then(res => {
         if (res.result === 'success') {
           const wallets = res.message.wallets;
+          const currWallets = { ...updatedState.current.wallets };
           dispatch({ type: 'UPDATE_WALLETS', wallets });
+
+          Object.keys(wallets).forEach(address => {
+            if (currWallets[address] && currWallets[address].transactions.length < wallets[address].transactions.length) {
+              const currentHashes = currWallets[address].transactions.map(ct => ct.hash);
+              const newTx = wallets[address].transactions.filter(t => !currentHashes.includes(t.hash));
+              newTx.forEach(tx => {
+                showNotification({
+                  message: <NewTxMessage tx={tx} />,
+                  title: `NEW ${tx.type === 'received' ? 'INCOMING' : 'OUTGOING'} TRANSACTION`,
+                  type: tx.type === 'received' ? 'success' : 'danger',
+                });
+              });
+            }
+          });
+
           if (!location.pathname.startsWith('/pay/') && !location.pathname.startsWith('/payment/')) {
             Object.keys(wallets).forEach(address => {
               if (!updatedState.current.wallets[address].ipn) getIPNConfig(address);
@@ -257,7 +275,7 @@ const AppContextProvider = props => {
         } else {
           message = res.message;
           if (Object.keys(updatedState.current.wallets).length > 0) {
-            dispatch({ type: 'DELETE_WALLETS' });
+            dispatch({ type: 'CLEAR_WALLETS' });
           }
         }
       })
@@ -286,7 +304,7 @@ const AppContextProvider = props => {
   };
 
   const getWalletKeys = options => {
-    const { e, address, code, id } = options;
+    const { e, address, code } = options;
     e.preventDefault();
     const { wallets } = state;
     let message;
@@ -300,10 +318,10 @@ const AppContextProvider = props => {
             message = res.message;
           }
         })
-        .catch(err => { message = `ERROR ${err}` })
+        .catch(err => { message = err })
         .finally(() => {
           dispatch({ type: 'FORM_SUBMITTED', value: false });
-          if (message) dispatch({ type: 'DISPLAY_MESSAGE', message, id });
+          if (message) showNotification({ message: Array.isArray(message) ? message[0] : message });
         });
     }
   };

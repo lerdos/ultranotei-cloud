@@ -12,7 +12,7 @@ const KeysModal = props => {
   const { actions, state } = useContext(AppContext);
   const { downloadWalletKeys, getWalletKeys } = actions;
   const { layout, userSettings } = state;
-  const { formSubmitted, message } = layout;
+  const { formSubmitted } = layout;
 
   const { value: twoFACode, bind: bindTwoFACode } = useFormInput('');
 
@@ -30,9 +30,6 @@ const KeysModal = props => {
         <Modal.Title>Export Keys</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {message.walletKeysForm &&
-          <div className="alert alert-outline alert-danger text-center">{message.walletKeysForm}</div>
-        }
         {!userSettings.twoFAEnabled &&
           <div className="text-center">
             <h5>You must enable 2-Factor Authentication to retrieve your keys.</h5>
