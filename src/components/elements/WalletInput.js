@@ -25,7 +25,7 @@ const WalletInput = (props) => {
   let addressInput = null;
   const options = wallets || user.addressBook;
 
-  useEffect(() => { setAddress(address) }, [address]);
+  useEffect(() => { setAddress(address) }, [address, setAddress]);
 
   return (
     <div className="input-group wallet-input-group">

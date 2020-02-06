@@ -24,7 +24,7 @@ const Pay = props => {
   const ref = params.get('ref');
   const amountPredefined = params.get('amount');
 
-  const { value: amount, bind: bindAmount, reset: resetAmount, setValue: setAmountValue } = useFormInput('');
+  const { value: amount, reset: resetAmount, setValue: setAmountValue } = useFormInput('');
   const { value: message, bind: bindMessage, reset: resetMessage } = useFormInput('');
   const { value: twoFACode, bind: bindTwoFACode, reset: resetTwoFACode } = useFormInput('');
   const { value: password, bind: bindPassword, reset: resetPassword } = useFormInput('');
@@ -36,10 +36,9 @@ const Pay = props => {
 
   useEffect(() => {
     if (amountPredefined) setAmountValue(amountPredefined);
-  }, []);
+  }, [amountPredefined, setAmountValue]);
 
   let formValidation = false;
-  let maxValue = 0;
 
   if (wallet) {
     const parsedAmount = !Number.isNaN(parseFloat(amount)) ? parseFloat(amount) : 0;
@@ -47,9 +46,6 @@ const Pay = props => {
     const txFee = parsedAmount > 0 || amount !== '' ? defaultFee : 0;
     const totalTxFee = txFee + totalMessageFee;
     const totalAmount = parsedAmount > 0 ? (parsedAmount + totalTxFee).toFixed(coinDecimals) : totalTxFee;
-    maxValue = totalTxFee > 0
-      ? (wallet.balance - totalTxFee).toFixed(coinDecimals)
-      : (wallet.balance - defaultFee).toFixed(coinDecimals);
 
     const walletBalanceValid = totalAmount <= wallet.balance;
     const messageAmountValid = totalMessageFee > 0 && totalTxFee <= wallet.balance;
@@ -77,7 +73,7 @@ const Pay = props => {
       setBtcValue(0);
       setUsdValue(0);
     }
-  }, [amount]);
+  }, [amount, ccxToBTC, ccxToUSD]);
 
   const btcFormatOptions = {
     minimumFractionDigits: 8,

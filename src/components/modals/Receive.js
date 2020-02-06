@@ -29,7 +29,7 @@ const ReceiveModal = props => {
       ? `?${Object.keys(paramsObject).map(param => `${param}=${paramsObject[param]}`).join('&')}`
       : '';
     setQrCodeString(`${appSettings.qrCodePrefix}:${props.address}${params}`);
-  });
+  }, [amount, appSettings.qrCodePrefix, label, message, paymentID, props.address]);
 
   return (
     <Modal

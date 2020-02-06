@@ -48,7 +48,7 @@ const SendModal = props => {
 
   useEffect(() => {
     if (paymentIDValue) setPaymentIDValue(paymentIDValue);
-  }, [paymentIDValue]);
+  }, [paymentIDValue, setPaymentIDValue]);
 
   const formValidation = (
     address !== props.address &&

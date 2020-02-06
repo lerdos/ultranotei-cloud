@@ -42,7 +42,7 @@ const Donate = props => {
       setWallet(selectedWallet);
     }
     setAvailableWallets(availableWallets);
-  }, [wallets]);
+  }, [address, wallets]);
 
   let formValidation = false;
   let maxValue = 0;
@@ -83,7 +83,7 @@ const Donate = props => {
       setBtcValue(0);
       setUsdValue(0);
     }
-  }, [amount]);
+  }, [amount, ccxToBTC, ccxToUSD]);
 
   const btcFormatOptions = {
     minimumFractionDigits: 8,

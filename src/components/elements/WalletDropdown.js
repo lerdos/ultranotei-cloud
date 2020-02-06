@@ -33,7 +33,7 @@ const WalletDropdown = props => {
       setWallet(selectedWallet);
     }
     setAvailableWallets(availableWallets);
-  }, [wallets]);
+  }, [setAvailableWallets, setWallet, setWalletAddress, wallets]);
 
   return (
     <>

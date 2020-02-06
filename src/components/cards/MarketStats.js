@@ -88,7 +88,7 @@ const MarketStats = () => {
           .reverse()
       );
     }
-  }, [marketData]);
+  }, [data.labels.length, marketData]);
 
   return (
     <div>

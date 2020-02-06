@@ -31,7 +31,7 @@ const IdForm = () => {
         setIsTyping(false);
       });
     }
-  }, [debouncedSearchTerm]);
+  }, [checkId, debouncedSearchTerm, idValue]);
 
   const idFormValidation = (
     idAddress &&

@@ -10,7 +10,7 @@ export const useFormInput = (init) => {
 
 export const useFormValidation = (init) => {
   const [formValid, setFormValid] = useState(false);
-  useEffect(() => { setFormValid(init) });
+  useEffect(() => { setFormValid(init) }, [init]);
   return formValid;
 };
 
@@ -39,7 +39,7 @@ export const useDebounce = (value, delay) => {
   useEffect(() => {
     const handler = setTimeout(() => { setDebouncedValue(value) }, delay);
     return () => { clearTimeout(handler) };
-  }, [value],
+  }, [delay, value],
   );
   return debouncedValue;
 };
