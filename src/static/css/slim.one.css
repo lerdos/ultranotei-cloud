@@ -1133,6 +1133,7 @@ hr {
   transition: background-color .3s, box-shadow .3s, color .3s;
 }
 
+.donatePage .input-group-append .input-group-text,
 .send-form .input-group-append .input-group-text {
   border: none;
   background-color: rgb(33, 37, 41);

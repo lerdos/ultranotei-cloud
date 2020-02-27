@@ -17,7 +17,7 @@ const SendModal = props => {
   const { actions, state } = useContext(AppContext);
   const { sendTx } = actions;
   const { appSettings, layout, user, userSettings, wallets } = state;
-  const { coinDecimals, defaultFee, messageFee } = appSettings;
+  const { coinDecimals, defaultFee, messageFee, messageLimit } = appSettings;
   const { formSubmitted, sendTxResponse, walletsLoaded } = layout;
   const { toggleModal, wallet, ...rest } = props;
 
@@ -56,6 +56,7 @@ const SendModal = props => {
     (WAValidator.validate(address, 'CCX') || new RegExp(/^[a-z0-9]*\.conceal\.id/).test(address)) &&
     walletBalanceValid &&
     totalAmountValid &&
+    (message && message.length > 0 && message.length <= messageLimit) &&
     (paymentID === '' || paymentID.length === 64) &&
     (userSettings.twoFAEnabled
       ? (parseInt(twoFACode) && twoFACode.toString().length === 6)
@@ -269,15 +270,16 @@ const SendModal = props => {
                     className="form-control"
                     name="message"
                     type="text"
+                    maxLength={messageLimit}
                   />
                   <div className="input-group-append">
-                      <span className="input-group-text">
-                        <small>
-                          <strong>
-                            MESSAGE FEE: {(totalMessageFee).toLocaleString(undefined, formatOptions)} CCX
-                          </strong>
-                        </small>
-                      </span>
+                    <span className="input-group-text">
+                      <small>
+                        <strong>
+                          {message.length}/{messageLimit} Characters
+                        </strong>
+                      </small>
+                    </span>
                   </div>
                 </div>
               </div>

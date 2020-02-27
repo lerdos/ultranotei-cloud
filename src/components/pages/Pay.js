@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import { AppContext } from '../ContextProvider';
 import { useFormInput, useFormValidation } from '../../helpers/hooks';
+import FormLabelDescription from '../elements/FormLabelDescription';
 import WalletDropdown from '../elements/WalletDropdown';
 
 
@@ -9,7 +10,7 @@ const Pay = props => {
   const { actions, state } = useContext(AppContext);
   const { sendTx } = actions;
   const { appSettings, layout, marketData, userSettings, wallets } = state;
-  const { coinDecimals, defaultFee, messageFee, feePerChar } = appSettings;
+  const { coinDecimals, defaultFee, messageFee, messageLimit, feePerChar } = appSettings;
   const { ipn, twoFAEnabled } = userSettings;
   const { formSubmitted, sendTxResponse, walletsLoaded } = layout;
 
@@ -130,11 +131,17 @@ const Pay = props => {
                 <div className="col-lg-12">
                   <div className="form-layout form-layout-7">
                     <div className="row no-gutters">
-                      <div className="col-5 col-sm-2">Client ID</div>
+                      <div className="col-5 col-sm-2">
+                        Client ID
+                        <FormLabelDescription>ID of a client to send funds to</FormLabelDescription>
+                      </div>
                       <div className="col-7 col-sm-10 wallet-address">{client}</div>
                     </div>
                     <div className="row no-gutters">
-                      <div className="col-5 col-sm-2">From Wallet</div>
+                      <div className="col-5 col-sm-2">
+                        From Wallet
+                        <FormLabelDescription>Wallet from which funds will be sent</FormLabelDescription>
+                      </div>
                       <div className="col-7 col-sm-10">
                         <WalletDropdown
                           availableWallets={availableWallets}
@@ -148,7 +155,10 @@ const Pay = props => {
                       </div>
                     </div>
                     <div className="row no-gutters">
-                      <div className="col-5 col-sm-2">Amount</div>
+                      <div className="col-5 col-sm-2">
+                        Amount
+                        <FormLabelDescription>Amount to send</FormLabelDescription>
+                      </div>
                       <div className="col-7 col-sm-10">
                         <input
                           readOnly
@@ -161,57 +171,77 @@ const Pay = props => {
                         />
                         <div className="float-left mg-l-10">
                           BTC: {btcValue.toLocaleString(undefined, btcFormatOptions)}<br />
-						  USD: {usdValue.toLocaleString(undefined, usdFormatOptions)}
+						              USD: {usdValue.toLocaleString(undefined, usdFormatOptions)}
                         </div>
                       </div>
                     </div>
                     <div className="row no-gutters">
-                      <div className="col-5 col-sm-2">Message</div>
+                      <div className="col-5 col-sm-2">
+                        Message
+                        <FormLabelDescription>Optional message to include in this transaction</FormLabelDescription>
+                      </div>
                       <div className="col-7 col-sm-10">
-                        <input
-                          {...bindMessage}
-                          size={6}
-                          className="form-control maxWidth"
-                          placeholder="Message"
-                          name="message"
-                          type="text"
-                          disabled={Object.keys(availableWallets).length === 0}
-                        />
+                        <div className="input-group">
+                          <input
+                            {...bindMessage}
+                            size={6}
+                            className="form-control"
+                            placeholder="Message"
+                            name="message"
+                            type="text"
+                            disabled={Object.keys(availableWallets).length === 0}
+                          />
+                          <div className="input-group-append">
+                            <span className="input-group-text">
+                              <small>
+                                <strong>
+                                  {message.length}/{messageLimit} Characters
+                                </strong>
+                              </small>
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div className="row no-gutters">
                       {twoFAEnabled
                         ? <>
-                          <div className="col-5 col-sm-2">2FA Code</div>
-                          <div className="col-7 col-sm-10">
-                            <input
-                              {...bindTwoFACode}
-                              size={6}
-                              placeholder="2 Factor Authentication"
-                              className="form-control autoWidth"
-                              name="twoFACode"
-                              type="number"
-                              minLength={6}
-                              maxLength={6}
-                              disabled={Object.keys(availableWallets).length === 0}
-                            />
-                          </div>
-                        </>
+                            <div className="col-5 col-sm-2">
+                              2FA Code
+                              <FormLabelDescription>2 Factor Authentication code</FormLabelDescription>
+                            </div>
+                            <div className="col-7 col-sm-10">
+                              <input
+                                {...bindTwoFACode}
+                                size={6}
+                                placeholder="2 Factor Authentication"
+                                className="form-control autoWidth"
+                                name="twoFACode"
+                                type="number"
+                                minLength={6}
+                                maxLength={6}
+                                disabled={Object.keys(availableWallets).length === 0}
+                              />
+                            </div>
+                          </>
                         : <>
-                          <div className="col-5 col-sm-2">Password</div>
-                          <div className="col-7 col-sm-10">
-                            <input
-                              {...bindPassword}
-                              size={6}
-                              className="form-control"
-                              placeholder="Password"
-                              name="password"
-                              type="password"
-                              minLength={8}
-                              disabled={Object.keys(availableWallets).length === 0}
-                            />
-                          </div>
-                        </>
+                            <div className="col-5 col-sm-2">
+                              Password
+                              <FormLabelDescription>Your password</FormLabelDescription>
+                            </div>
+                            <div className="col-7 col-sm-10">
+                              <input
+                                {...bindPassword}
+                                size={6}
+                                className="form-control"
+                                placeholder="Password"
+                                name="password"
+                                type="password"
+                                minLength={8}
+                                disabled={Object.keys(availableWallets).length === 0}
+                              />
+                            </div>
+                          </>
                       }
                     </div>
                   </div>
@@ -220,7 +250,7 @@ const Pay = props => {
 
               {amount > 0 &&
                 <div className="mg-b-10">
-                  <>Sending <strong>{amount} CCX</strong> to <strong>{ipn.name}</strong></>
+                  Sending <strong className="tx-white">{amount} CCX</strong> to <strong className="tx-white">{ipn.name}</strong>
                 </div>
               }
 
@@ -246,15 +276,15 @@ const Pay = props => {
                     sendTxResponse.status === 'error'
                       ? <div className="text-danger">{sendTxResponse.message}</div>
                       : <>
-                        TX Hash: <a
-                          href={`${appSettings.explorerURL}/index.html?hash=${sendTxResponse.message.transactionHash}#blockchain_transaction`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {sendTxResponse.message.transactionHash}
-                        </a><br />
-                        Secret Key: {sendTxResponse.message.transactionSecretKey}
-                      </>
+                          TX Hash: <a
+                            href={`${appSettings.explorerURL}/index.html?hash=${sendTxResponse.message.transactionHash}#blockchain_transaction`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {sendTxResponse.message.transactionHash}
+                          </a><br />
+                          Secret Key: {sendTxResponse.message.transactionSecretKey}
+                        </>
                   }
                 </div>
               }
