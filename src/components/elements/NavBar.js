@@ -31,29 +31,29 @@ const NavBar = () => {
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink to="/settings" className="nav-link hot_link" activeClassName="active">
-              <FontAwesomeIcon icon="cog" fixedWidth /> <span>Settings</span>
-            </NavLink>
-          </li>
-          <li className="nav-item">
             <NavLink to="/pay_settings" className="nav-link hot_link" activeClassName="active">
               <FontAwesomeIcon icon="receipt" fixedWidth /> <span>Conceal Pay</span>
             </NavLink>
           </li>
+          <li className="nav-item">
+            <NavLink to="/settings" className="nav-link hot_link" activeClassName="active">
+              <FontAwesomeIcon icon="cog" fixedWidth /> <span>Settings</span>
+            </NavLink>
+          </li>
           <li className="nav-item with-sub">
             <button className="nav-link hot_link" data-toggle="dropdown">
-              <FontAwesomeIcon icon="network-wired" fixedWidth /> <span>Ecosystem</span>
+              <FontAwesomeIcon icon="globe" fixedWidth /> <span>Links</span>
             </button>
             <div className="sub-item">
               <ul>
                 <li>
                   <a href={appSettings.homePage} className="hot_link" target="_blank" rel="noopener noreferrer">
-                    <FontAwesomeIcon icon="home" fixedWidth /> <span>Conceal Website</span>
+                    <FontAwesomeIcon icon="home" fixedWidth /> <span>Website</span>
                   </a>
                 </li>
                 <li>
                   <a href={appSettings.explorerURL} className="hot_link" target="_blank" rel="noopener noreferrer">
-                    <FontAwesomeIcon icon="link" fixedWidth /> <span>Blockchain Explorer</span>
+                    <FontAwesomeIcon icon="link" fixedWidth /> <span>Explorer</span>
                   </a>
                 </li>
                 <li>
@@ -71,18 +71,9 @@ const NavBar = () => {
                     <FontAwesomeIcon icon={['fab', 'bitcoin']} fixedWidth /> <span>CoinMarketCap</span>
                   </a>
                 </li>
-              </ul>
-            </div>
-          </li>
-          <li className="nav-item with-sub">
-            <button className="nav-link hot_link" data-toggle="dropdown">
-              <FontAwesomeIcon icon="globe" fixedWidth /> <span>Community</span>
-            </button>
-            <div className="sub-item">
-              <ul>
                 <li>
                   <a href={appSettings.discord} className="hot_link" target="_blank" rel="noopener noreferrer">
-                    <FontAwesomeIcon icon={['fab', 'discord']} fixedWidth /> <span>Discord Support</span>
+                    <FontAwesomeIcon icon={['fab', 'discord']} fixedWidth /> <span>Discord</span>
                   </a>
                 </li>
                 <li>
