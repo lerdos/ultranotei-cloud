@@ -1225,7 +1225,7 @@ hr {
 }
 
 .slim-navbar .nav-link svg {
-  fill: rgb(265, 165, 0);
+  /*fill: rgb(265, 165, 0);*/
   transition: fill 0.3s;
 }
 

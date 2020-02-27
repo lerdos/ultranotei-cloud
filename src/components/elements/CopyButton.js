@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaCheck, FaCopy } from 'react-icons/fa';
 
 
 const CopyButton = props => {
@@ -23,7 +23,7 @@ const CopyButton = props => {
           type="button"
           disabled={disabled}
         >
-          <FontAwesomeIcon icon={textCopied[id] ? 'check' : 'copy'} fixedWidth />
+          {textCopied[id] ? <FaCheck /> : <FaCopy />}
         </button>
       </CopyToClipboard>
     </OverlayTrigger>

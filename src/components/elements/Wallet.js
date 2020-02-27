@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaArrowDown, FaArrowUp, FaComments, FaKey, FaListAlt, FaTrashAlt } from 'react-icons/fa';
 
 import { AppContext } from '../ContextProvider';
 import { maskAddress } from '../../helpers/utils';
@@ -58,7 +58,7 @@ const Wallet = props => {
               onClick={() => toggleSendModal(!sendModalOpen)}
               disabled={!walletsLoaded || balanceTotal === 0 || balanceTotal === locked}
             >
-              <FontAwesomeIcon icon="arrow-up" fixedWidth />
+              <FaArrowUp />
             </button>
           </span>
         </OverlayTrigger>
@@ -69,7 +69,7 @@ const Wallet = props => {
             onClick={() => toggleReceiveModal(!receiveModalOpen)}
             disabled={!walletsLoaded}
           >
-            <FontAwesomeIcon icon="arrow-down" fixedWidth />
+            <FaArrowDown />
           </button>
         </OverlayTrigger>
 
@@ -79,7 +79,7 @@ const Wallet = props => {
             onClick={() => toggleMessagesModal(!messagesModalOpen)}
             disabled={!messagesLoaded}
           >
-            <FontAwesomeIcon icon="comments" fixedWidth />
+            <FaComments />
           </button>
         </OverlayTrigger>
 
@@ -90,7 +90,7 @@ const Wallet = props => {
               onClick={() => toggleDetailsModal(!detailsModalOpen)}
               disabled={!walletsLoaded || txs.length === 0}
             >
-              <FontAwesomeIcon icon="list-alt" fixedWidth />
+              <FaListAlt />
             </button>
           </span>
         </OverlayTrigger>
@@ -101,7 +101,7 @@ const Wallet = props => {
             onClick={() => toggleKeysModal(!keysModalOpen)}
             disabled={!walletsLoaded}
           >
-            <FontAwesomeIcon icon="key" fixedWidth />
+            <FaKey />
           </button>
         </OverlayTrigger>
 
@@ -115,7 +115,7 @@ const Wallet = props => {
               }}
               disabled={!walletsLoaded || balanceTotal !== 0}
             >
-              <FontAwesomeIcon icon="trash-alt" fixedWidth/>
+              <FaTrashAlt/>
             </button>
           </span>
         </OverlayTrigger>

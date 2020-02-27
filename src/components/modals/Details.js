@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Moment from 'react-moment';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 
 import { CCXAmount, CCXExplorerLink } from '../../helpers/utils';
 
@@ -28,8 +28,8 @@ const DetailsModal = props => {
                 <div className="media">
                   <div className="d-flex mg-r-10 wd-50">
                     {tx.type === 'received'
-                      ? <FontAwesomeIcon icon="arrow-down" className="text-success tx-icon" />
-                      : <FontAwesomeIcon icon="arrow-up" className="text-danger tx-icon" />
+                      ? <FaArrowDown className="text-success tx-icon" />
+                      : <FaArrowUp className="text-danger tx-icon" />
                     }
                   </div>
                   <div className="media-body">

@@ -1,6 +1,22 @@
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  FaAddressBook,
+  FaBitcoin,
+  FaCog,
+  FaDiscord,
+  FaGlobe,
+  FaHashtag,
+  FaHome,
+  FaIdCard,
+  FaLink,
+  FaMedium,
+  FaReceipt,
+  FaRedditAlien,
+  FaSignOutAlt,
+  FaTelegramPlane,
+  FaTwitter
+} from 'react-icons/fa';
 
 import { AppContext } from '../ContextProvider';
 
@@ -17,83 +33,83 @@ const NavBar = () => {
         <ul className="nav">
           <li className="nav-item">
             <NavLink exact to="/dashboard" className="nav-link hot_link" activeClassName="active">
-              <FontAwesomeIcon icon="home" fixedWidth /> <span>Dashboard</span>
+              <FaHome /> <span>Dashboard</span>
             </NavLink>
           </li>
           <li className="nav-item">
             <NavLink to="/address_book" className="nav-link hot_link" activeClassName="active">
-              <FontAwesomeIcon icon="address-book" fixedWidth /> <span>Address Book</span>
+              <FaAddressBook /> <span>Address Book</span>
             </NavLink>
           </li>
           <li className="nav-item">
             <NavLink to="/id" className="nav-link hot_link" activeClassName="active">
-              <FontAwesomeIcon icon="id-card" fixedWidth /> <span>Id</span>
+              <FaIdCard /> <span>Id</span>
             </NavLink>
           </li>
           <li className="nav-item">
             <NavLink to="/pay_settings" className="nav-link hot_link" activeClassName="active">
-              <FontAwesomeIcon icon="receipt" fixedWidth /> <span>Conceal Pay</span>
+              <FaReceipt /> <span>Conceal Pay</span>
             </NavLink>
           </li>
           <li className="nav-item">
             <NavLink to="/settings" className="nav-link hot_link" activeClassName="active">
-              <FontAwesomeIcon icon="cog" fixedWidth /> <span>Settings</span>
+              <FaCog /> <span>Settings</span>
             </NavLink>
           </li>
           <li className="nav-item with-sub">
             <button className="nav-link hot_link" data-toggle="dropdown">
-              <FontAwesomeIcon icon="globe" fixedWidth /> <span>Links</span>
+              <FaGlobe /> <span>Links</span>
             </button>
             <div className="sub-item">
               <ul>
                 <li>
                   <a href={appSettings.homePage} className="hot_link" target="_blank" rel="noopener noreferrer">
-                    <FontAwesomeIcon icon="home" fixedWidth /> <span>Website</span>
+                    <FaHome /> <span>Website</span>
                   </a>
                 </li>
                 <li>
                   <a href={appSettings.explorerURL} className="hot_link" target="_blank" rel="noopener noreferrer">
-                    <FontAwesomeIcon icon="link" fixedWidth /> <span>Explorer</span>
+                    <FaLink /> <span>Explorer</span>
                   </a>
                 </li>
                 <li>
                   <a href={appSettings.poolURL} className="hot_link" target="_blank" rel="noopener noreferrer">
-                    <FontAwesomeIcon icon="hashtag" fixedWidth /> <span>Mining Pool</span>
+                    <FaHashtag /> <span>Mining Pool</span>
                   </a>
                 </li>
                 <li>
                   <a href={appSettings.coinGecko} className="hot_link" target="_blank" rel="noopener noreferrer">
-                    <FontAwesomeIcon icon={['fab', 'bitcoin']} fixedWidth /> <span>CoinGecko</span>
+                    <FaBitcoin /> <span>CoinGecko</span>
                   </a>
                 </li>
                 <li>
                   <a href={appSettings.coinMarketCap} className="hot_link" target="_blank" rel="noopener noreferrer">
-                    <FontAwesomeIcon icon={['fab', 'bitcoin']} fixedWidth /> <span>CoinMarketCap</span>
+                    <FaBitcoin /> <span>CoinMarketCap</span>
                   </a>
                 </li>
                 <li>
                   <a href={appSettings.discord} className="hot_link" target="_blank" rel="noopener noreferrer">
-                    <FontAwesomeIcon icon={['fab', 'discord']} fixedWidth /> <span>Discord</span>
+                    <FaDiscord /> <span>Discord</span>
                   </a>
                 </li>
                 <li>
                   <a href={appSettings.telegram} className="hot_link" target="_blank" rel="noopener noreferrer">
-                    <FontAwesomeIcon icon={['fab', 'telegram-plane']} fixedWidth /> <span>Telegram</span>
+                    <FaTelegramPlane /> <span>Telegram</span>
                   </a>
                 </li>
                 <li>
                   <a href={appSettings.twitter} className="hot_link" target="_blank" rel="noopener noreferrer">
-                    <FontAwesomeIcon icon={['fab', 'twitter']} fixedWidth /> <span>Twitter</span>
+                    <FaTwitter /> <span>Twitter</span>
                   </a>
                 </li>
                 <li>
                   <a href={appSettings.reddit} className="hot_link" target="_blank" rel="noopener noreferrer">
-                    <FontAwesomeIcon icon={['fab', 'reddit-alien']} fixedWidth /> <span>Reddit</span>
+                    <FaRedditAlien /> <span>Reddit</span>
                   </a>
                 </li>
                 <li>
                   <a href={appSettings.medium} className="hot_link" target="_blank" rel="noopener noreferrer">
-                    <FontAwesomeIcon icon={['fab', 'medium']} fixedWidth /> <span>Medium</span>
+                    <FaMedium /> <span>Medium</span>
                   </a>
                 </li>
               </ul>
@@ -101,7 +117,7 @@ const NavBar = () => {
           </li>
           <li className="nav-item">
             <button className="nav-link hot_link" onClick={logoutUser}>
-              <FontAwesomeIcon icon="sign-out-alt" fixedWidth /> <span>Sign Out</span>
+              <FaSignOutAlt /> <span>Sign Out</span>
             </button>
           </li>
         </ul>

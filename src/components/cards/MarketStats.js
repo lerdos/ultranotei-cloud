@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
+import { FaBitcoin, FaDollarSign, FaMoneyBillAlt, FaTrophy } from 'react-icons/fa';
 
 import { AppContext } from '../ContextProvider';
 
@@ -107,7 +107,7 @@ const MarketStats = () => {
 				        <h2>$ {ccxToUSD.toLocaleString(undefined, format2Decimals)}</h2>
 			        </div>
               <div className="icon icon-info">
-                <FontAwesomeIcon icon="dollar-sign" fixedWidth />
+                <FaDollarSign />
               </div>
             </div>
           </div>
@@ -119,7 +119,7 @@ const MarketStats = () => {
                 <h2>{ccxToBTC.toLocaleString(undefined, format8Decimals)}</h2>
 			        </div>
               <div className="icon icon-info">
-                <FontAwesomeIcon icon={['fab', 'bitcoin']} fixedWidth />
+                <FaBitcoin />
               </div>
             </div>
           </div>
@@ -131,7 +131,7 @@ const MarketStats = () => {
                 <h2>$ {parseInt(marketCap).toLocaleString()}</h2>
               </div>
               <div className="icon icon-info">
-                <FontAwesomeIcon icon="trophy" fixedWidth />
+                <FaTrophy />
               </div>
             </div>
           </div>
@@ -143,7 +143,7 @@ const MarketStats = () => {
                 <h2>$ {parseInt(dailyVolume).toLocaleString()}</h2>
 			        </div>
               <div className="icon icon-info">
-                <FontAwesomeIcon icon={['far', 'money-bill-alt']} fixedWidth />
+                <FaMoneyBillAlt />
               </div>
             </div>
           </div>

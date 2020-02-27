@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome/index';
+import { FaCaretDown } from 'react-icons/fa';
 
 import { AppContext } from '../ContextProvider';
 import { maskAddress } from '../../helpers/utils';
@@ -20,7 +20,7 @@ const IdCard = props => {
         <div className="row no-gutters">
           <div className="col-5 col-sm-4">
             <Accordion.Toggle as={Button} variant="link" eventKey={`id-${address}`}>
-              <FontAwesomeIcon icon="caret-down" fixedWidth /> {name}
+              <FaCaretDown /> {name}
             </Accordion.Toggle>
           </div>
           <div className="col-7 col-sm-8 PaymentInfo">

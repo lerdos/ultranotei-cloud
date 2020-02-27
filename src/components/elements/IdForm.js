@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome/index';
 import WAValidator from 'multicoin-address-validator';
+import { FaCheck, FaExclamationTriangle, FaQuestionCircle, FaSpinner } from 'react-icons/fa';
 
 import { AppContext } from '../ContextProvider';
 import { useDebounce, useFormInput, useFormValidation } from '../../helpers/hooks';
@@ -31,7 +31,7 @@ const IdForm = () => {
         setIsTyping(false);
       });
     }
-  }, [checkId, debouncedSearchTerm, idValue]);
+  }, [debouncedSearchTerm]);
 
   const idFormValidation = (
     idAddress &&
@@ -79,7 +79,7 @@ const IdForm = () => {
                 </Tooltip>
               }
             >
-              <FontAwesomeIcon icon="question-circle" size="sm" fixedWidth className="mg-l-5" />
+              <FaQuestionCircle className="mg-l-5" />
             </OverlayTrigger>
           </div>
           <div className="col-7 col-sm-8 wallet-address">
@@ -94,14 +94,14 @@ const IdForm = () => {
               />
               <div className="input-group-append">
                 <span className="input-group-text">
-                  {isSearching && <FontAwesomeIcon icon="spinner" spin pulse />}
+                  {isSearching && <FaSpinner className="faa-spin animated" />}
                   {idValue.length > 2 && !isSearching && !isTyping && (
                       layout.idAvailable
                       ? <OverlayTrigger overlay={<Tooltip id="id-available">ID Available</Tooltip>}>
-                          <FontAwesomeIcon icon="check" className="text-success" />
+                          <FaCheck className="text-success" />
                         </OverlayTrigger>
                       : <OverlayTrigger overlay={<Tooltip id="id-not-available">ID Not Available</Tooltip>}>
-                          <FontAwesomeIcon icon="exclamation-triangle" className="text-danger" />
+                          <FaExclamationTriangle className="text-danger" />
                         </OverlayTrigger>
                   )}
                 </span>
@@ -122,7 +122,7 @@ const IdForm = () => {
                   </Tooltip>
                 }
               >
-                <FontAwesomeIcon icon="question-circle" size="sm" fixedWidth className="mg-l-5" />
+                <FaQuestionCircle className="mg-l-5" />
               </OverlayTrigger>
             </div>
           </div>
@@ -154,7 +154,7 @@ const IdForm = () => {
                   </Tooltip>
                 }
               >
-                <FontAwesomeIcon icon="question-circle" size="sm" fixedWidth className="mg-l-5" />
+                <FaQuestionCircle className="mg-l-5" />
               </OverlayTrigger>
             </div>
           </div>
@@ -179,7 +179,7 @@ const IdForm = () => {
                 </Tooltip>
               }
             >
-              <FontAwesomeIcon icon="question-circle" size="sm" fixedWidth className="mg-l-5" />
+              <FaQuestionCircle className="mg-l-5" />
             </OverlayTrigger>
           </div>
           <div className="col-7 col-sm-8 wallet-address">

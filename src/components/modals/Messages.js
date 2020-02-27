@@ -3,13 +3,13 @@ import Modal from 'react-bootstrap/Modal';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import Moment from 'react-moment';
 import WAValidator from 'multicoin-address-validator';
+import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 
 import { AppContext } from '../ContextProvider';
 import { useFormInput, useFormValidation, useTypeaheadInput } from '../../helpers/hooks';
 import { maskAddress } from '../../helpers/utils';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 
 const MessagesModal = props => {
@@ -69,8 +69,8 @@ const MessagesModal = props => {
                 <div className="media">
                   <div className="d-flex mg-r-10 wd-50">
                     {message.type === 'in'
-                      ? <FontAwesomeIcon icon="arrow-down" className="text-success tx-icon" />
-                      : <FontAwesomeIcon icon="arrow-up" className="text-danger tx-icon" />
+                      ? <FaArrowDown className="text-success tx-icon" />
+                      : <FaArrowUp className="text-danger tx-icon" />
                     }
                   </div>
                   <div className="media-body">

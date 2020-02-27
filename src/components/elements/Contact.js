@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaArrowUp, FaTrashAlt, FaUserEdit } from 'react-icons/fa';
 
 import { AppContext } from '../ContextProvider';
 import ContactModal from '../modals/Contact';
@@ -37,7 +37,7 @@ const Contact = props => {
             className="btn btn-outline-dark"
             onClick={() => toggleContactModal(!contactModalOpen)}
           >
-            <FontAwesomeIcon icon="user-edit" fixedWidth />
+            <FaUserEdit />
           </button>
         </OverlayTrigger>
 
@@ -48,7 +48,7 @@ const Contact = props => {
               onClick={() => toggleSendModal(!sendModalOpen)}
               disabled={!walletsLoaded || balanceTotal === 0 || balanceTotal === locked}
             >
-              <FontAwesomeIcon icon="arrow-up" fixedWidth />
+              <FaArrowUp />
             </button>
           </span>
         </OverlayTrigger>
@@ -64,7 +64,7 @@ const Contact = props => {
               deleteContact(contact);
             }}
           >
-            <FontAwesomeIcon icon="trash-alt" fixedWidth />
+            <FaTrashAlt />
           </button>
         </OverlayTrigger>
       </div>

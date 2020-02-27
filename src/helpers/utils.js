@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { store } from 'react-notifications-component';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 
 import { AppContext } from '../components/ContextProvider';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 
 export const maskAddress = (address, maskingChar='.', maskedChars=8, charsPre=7, charsPost=7) => {
@@ -58,7 +58,7 @@ export const CCXExplorerLink = props => {
       target="_blank"
       rel="noopener noreferrer"
     >
-      {hash} <FontAwesomeIcon icon="external-link-alt" className="tx-link-icon" />
+      {hash} <FaExternalLinkAlt className="tx-link-icon" />
     </a>
   );
 };
