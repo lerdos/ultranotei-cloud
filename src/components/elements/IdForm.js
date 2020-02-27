@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome/index';
 import WAValidator from 'multicoin-address-validator';
+import { FaCheck, FaExclamationTriangle, FaSpinner } from 'react-icons/fa';
 
 import { AppContext } from '../ContextProvider';
 import { useDebounce, useFormInput, useFormValidation } from '../../helpers/hooks';
 import WalletInput from './WalletInput';
+import FormLabelDescription from './FormLabelDescription';
 
 
 const IdForm = () => {
@@ -72,15 +73,9 @@ const IdForm = () => {
         <div className="row no-gutters">
           <div className="col-5 col-sm-4">
             Conceal ID
-            <OverlayTrigger
-              overlay={
-                <Tooltip id="conceal-id-tooltip">
-                  ID you wish to use. If you choose "myname", your Conceal ID will be "myname.conceal.id".
-                </Tooltip>
-              }
-            >
-              <FontAwesomeIcon icon="question-circle" size="sm" fixedWidth className="mg-l-5" />
-            </OverlayTrigger>
+            <FormLabelDescription>
+              ID you wish to use. If you choose "myname", your Conceal ID will be "myname.conceal.id".
+            </FormLabelDescription>
           </div>
           <div className="col-7 col-sm-8 wallet-address">
             <div className="input-group">
@@ -90,18 +85,18 @@ const IdForm = () => {
                 placeholder="Conceal ID"
                 name="id"
                 className="form-control"
-                onKeyDown={() => setIsTyping(true)}
+                onKeyDown={e => e.keyCode !== 9 && setIsTyping(true)}
               />
               <div className="input-group-append">
                 <span className="input-group-text">
-                  {isSearching && <FontAwesomeIcon icon="spinner" spin pulse />}
+                  {isSearching && <FaSpinner className="faa-spin animated" />}
                   {idValue.length > 2 && !isSearching && !isTyping && (
                       layout.idAvailable
                       ? <OverlayTrigger overlay={<Tooltip id="id-available">ID Available</Tooltip>}>
-                          <FontAwesomeIcon icon="check" className="text-success" />
+                          <FaCheck className="text-success" />
                         </OverlayTrigger>
                       : <OverlayTrigger overlay={<Tooltip id="id-not-available">ID Not Available</Tooltip>}>
-                          <FontAwesomeIcon icon="exclamation-triangle" className="text-danger" />
+                          <FaExclamationTriangle className="text-danger" />
                         </OverlayTrigger>
                   )}
                 </span>
@@ -114,16 +109,10 @@ const IdForm = () => {
           <div className="col-5 col-sm-4">
             <div>
               Payment Address
-              <OverlayTrigger
-                overlay={
-                  <Tooltip id="conceal-id-tooltip">
-                    One of your Cloud addresses with enough funds to pay the fee. By default, this address will be used
-                    to bind your ID to. If you want to bind different address, add it to "ID Address" field below.
-                  </Tooltip>
-                }
-              >
-                <FontAwesomeIcon icon="question-circle" size="sm" fixedWidth className="mg-l-5" />
-              </OverlayTrigger>
+              <FormLabelDescription>
+                One of your Cloud addresses with enough funds to pay the fee. By default, this address will be used
+                to bind your ID to. If you want to bind different address, add it to "ID Address" field below.
+              </FormLabelDescription>
             </div>
           </div>
           <div className="col-7 col-sm-8 wallet-address">
@@ -147,15 +136,9 @@ const IdForm = () => {
           <div className="col-5 col-sm-4">
             <div>
               ID Address (Optional)
-              <OverlayTrigger
-                overlay={
-                  <Tooltip id="conceal-id-tooltip">
-                    Optional address to bind ID to. If left blank, the Payment Address above will be binded to ID.
-                  </Tooltip>
-                }
-              >
-                <FontAwesomeIcon icon="question-circle" size="sm" fixedWidth className="mg-l-5" />
-              </OverlayTrigger>
+              <FormLabelDescription>
+                Optional address to bind ID to. If left blank, the Payment Address above will be binded to ID.
+              </FormLabelDescription>
             </div>
           </div>
           <div className="col-7 col-sm-8 wallet-address">
@@ -172,15 +155,9 @@ const IdForm = () => {
         <div className="row no-gutters">
           <div className="col-5 col-sm-4">
             ID Label
-            <OverlayTrigger
-              overlay={
-                <Tooltip id="conceal-id-tooltip">
-                  Label for this ID.
-                </Tooltip>
-              }
-            >
-              <FontAwesomeIcon icon="question-circle" size="sm" fixedWidth className="mg-l-5" />
-            </OverlayTrigger>
+            <FormLabelDescription>
+              Label for this ID.
+            </FormLabelDescription>
           </div>
           <div className="col-7 col-sm-8 wallet-address">
             <input

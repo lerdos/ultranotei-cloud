@@ -4,6 +4,7 @@ import WAValidator from 'multicoin-address-validator';
 
 import { AppContext } from '../ContextProvider';
 import { useFormInput, useFormValidation } from '../../helpers/hooks';
+import FormLabelDescription from '../elements/FormLabelDescription';
 
 
 const ContactModal = props => {
@@ -65,6 +66,7 @@ const ContactModal = props => {
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
                 Label
+                <FormLabelDescription>Label for this contact</FormLabelDescription>
               </div>
               <div className="col-7 col-sm-9 wallet-address">
                 <input
@@ -82,6 +84,7 @@ const ContactModal = props => {
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
                 Address
+                <FormLabelDescription>Contact's receiving address</FormLabelDescription>
               </div>
               <div className="col-7 col-sm-9 wallet-address receive-address">
                 <input
@@ -100,6 +103,7 @@ const ContactModal = props => {
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
                 Payment ID (optional)
+                <FormLabelDescription>Contact's payment ID for this address</FormLabelDescription>
               </div>
               <div className="col-7 col-sm-9 wallet-address">
                 <input

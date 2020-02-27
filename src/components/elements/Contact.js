@@ -1,19 +1,26 @@
 import React, { useContext, useState } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaArrowUp, FaTrashAlt, FaUserEdit } from 'react-icons/fa';
 
 import { AppContext } from '../ContextProvider';
 import ContactModal from '../modals/Contact';
+import SendModal from '../modals/Send';
 import CopyButton from './CopyButton';
 import { maskAddress } from '../../helpers/utils';
 
 
 const Contact = props => {
-  const { actions } = useContext(AppContext);
+  const { actions, state } = useContext(AppContext);
   const { deleteContact } = actions;
+  const { layout, wallets } = state;
   const { contact } = props;
+  const { walletsLoaded } = layout;
 
   const [contactModalOpen, toggleContactModal] = useState(false);
+  const [sendModalOpen, toggleSendModal] = useState(false);
+
+  const locked = Object.keys(wallets).reduce((acc, c) => acc + wallets[c].locked, 0);
+  const balanceTotal = Object.keys(wallets).reduce((a, c) => a + wallets[c].total, 0);
 
   return (
     <div className="list-group-item">
@@ -24,16 +31,30 @@ const Contact = props => {
       </div>
 
       <div className="btn-group" role="group">
-        <CopyButton text={contact.address} toolTipText="Copy Contact's Address" />
 
         <OverlayTrigger overlay={<Tooltip id={`${contact.address}-send`} trigger={['hover']}>Edit Contact</Tooltip>}>
           <button
             className="btn btn-outline-dark"
             onClick={() => toggleContactModal(!contactModalOpen)}
           >
-            <FontAwesomeIcon icon="user-edit" fixedWidth />
+            <FaUserEdit />
           </button>
         </OverlayTrigger>
+
+        <OverlayTrigger overlay={<Tooltip id={`${props.address}-send`}>Send CCX</Tooltip>}>
+          <span>
+            <button
+              className={`btn btn-outline-dark ${!walletsLoaded || balanceTotal === 0 || balanceTotal === locked ? 'disabled' : ''}`}
+              onClick={() => toggleSendModal(!sendModalOpen)}
+              disabled={!walletsLoaded || balanceTotal === 0 || balanceTotal === locked}
+            >
+              <FaArrowUp />
+            </button>
+          </span>
+        </OverlayTrigger>
+
+        <CopyButton text={contact.address} toolTipText="Copy Contact's Address" />
+        <CopyButton text={contact.paymentID} toolTipText="Copy Contact's Payment ID" disabled={!contact.paymentID} />
 
         <OverlayTrigger overlay={<Tooltip id={`${contact.address}-send`} trigger={['hover']}>Delete Contact</Tooltip>}>
           <button
@@ -43,7 +64,7 @@ const Contact = props => {
               deleteContact(contact);
             }}
           >
-            <FontAwesomeIcon icon="trash-alt" fixedWidth />
+            <FaTrashAlt />
           </button>
         </OverlayTrigger>
       </div>
@@ -53,6 +74,12 @@ const Contact = props => {
         show={contactModalOpen}
         toggleModal={() => toggleContactModal(!contactModalOpen)}
         contact={contact}
+      />
+
+      <SendModal
+        {...props}
+        show={sendModalOpen}
+        toggleModal={() => toggleSendModal(!sendModalOpen)}
       />
     </div>
   )

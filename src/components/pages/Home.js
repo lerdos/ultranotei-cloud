@@ -1,12 +1,22 @@
 import React, { useContext, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus,faSignInAlt, faCloudDownloadAlt, faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { useAddToHomescreenPrompt } from "../../helpers/HomeScreen";
+import {
+  FaBars,
+  FaCloudDownloadAlt,
+  FaDiscord,
+  FaFacebook,
+  FaGithub,
+  FaMedium,
+  FaSignInAlt,
+  FaTelegram,
+  FaTimes,
+  FaTwitter,
+  FaUserPlus,
+} from 'react-icons/fa';
 import AOS from 'aos';
 
 import { AppContext } from '../ContextProvider';
-import { ReactComponent as Logo } from '../../static/img/logo.svg';
+import { useAddToHomescreenPrompt } from "../../helpers/HomeScreen";
 
 import landingImg1 from '../../static/img/landing_img1.jpg';
 import landingImg2 from '../../static/img/landing_img2.jpg';
@@ -26,7 +36,7 @@ const Home = props => {
       duration: 800,
       easing: 'slide',
       once: true,
-    })
+    });
 
     const script=document.createElement('script');
     script.src='https://code.jquery.com/jquery-3.2.1.slim.min.js';
@@ -58,9 +68,9 @@ const Home = props => {
   }, []);
 
   // create a scroll element to which we scroll
-  const scrollElement = React.createRef()
+  const scrollElement = React.createRef();
 
-  const onScrollToContent = () =>
+  /*const onScrollToContent = () =>
     scrollElement.current.scrollIntoView({
       behavior: 'smooth',
       block: 'start',
@@ -72,7 +82,7 @@ const Home = props => {
     } finally {
       e && e.preventDefault()
     }
-  }
+  }*/
 
   if (redirectToReferrer && props.location.state && user.loggedIn()) {
     const { from } = props.location.state;
@@ -87,7 +97,7 @@ const Home = props => {
       <div className="site-mobile-menu">
         <div className="site-mobile-menu-header">
           <div className="site-mobile-menu-close mt-3">
-            <span className="js-menu-toggle"><FontAwesomeIcon icon={faTimes} fixedWidth /></span>
+            <span className="js-menu-toggle"><FaTimes /></span>
           </div>
         </div>
         <div className="site-mobile-menu-body" />
@@ -109,12 +119,12 @@ const Home = props => {
                 <li><a href="https://conceal.network/messaging/">MESSAGING</a></li>
                 <li><a href="https://conceal.network/mobile">MOBILE</a></li>
                 <li><a href="https://conceal.network/pay/">PAY</a></li>
-                  <li className="cta"><Link to="/login"><FontAwesomeIcon icon={faSignInAlt} fixedWidth /> SIGN IN</Link></li>
+                  <li className="cta"><Link to="/login"><FaSignInAlt /> SIGN IN</Link></li>
                 </ul>
               </nav>
             </div>
             <div className="d-inline-block d-xl-none ml-md-0 mr-auto py-3">
-            <a href="#" className="site-menu-toggle js-menu-toggle text-white"><FontAwesomeIcon icon={faBars} fixedWidth /></a>
+            <a href="#" className="site-menu-toggle js-menu-toggle text-white"><FaBars /></a>
           </div>
           </div>
         </div>
@@ -126,10 +136,10 @@ const Home = props => {
             <div className="col-md-10">
               <span className="d-block mb-3 caption" data-aos="fade-up" data-aos-delay="100">WELCOME TO CONCEAL CLOUD</span>
               <h1 className="d-block mb-4" data-aos="fade-up" data-aos-delay="200"><strong>Powerful</strong> web-based wallet &amp; dashboard</h1>
-              <Link to="/signup" className="btn-custom btnSignMain" data-aos="fade-up"><span><FontAwesomeIcon icon={faUserPlus} fixedWidth />&nbsp; SIGN UP</span></Link>
-              <Link to="/login" className="btn-custom btnSignMain" data-aos="fade-up"><span><FontAwesomeIcon icon={faSignInAlt} fixedWidth />&nbsp; SIGN IN</span></Link>
+              <Link to="/signup" className="btn-custom btnSignMain" data-aos="fade-up"><span><FaUserPlus />&nbsp; SIGN UP</span></Link>
+              <Link to="/login" className="btn-custom btnSignMain" data-aos="fade-up"><span><FaSignInAlt />&nbsp; SIGN IN</span></Link>
               {getIsVisible() && (
-                <button className="btn-custom btnSignMain btnAddToHomepage" data-aos="fade-up" onClick={() => promptToInstall()}><span><FontAwesomeIcon icon={faCloudDownloadAlt} fixedWidth />&nbsp; Install</span></button>
+                <button className="btn-custom btnSignMain btnAddToHomepage" data-aos="fade-up" onClick={() => promptToInstall()}><span><FaCloudDownloadAlt />&nbsp; Install</span></button>
               )}
             </div>
           </div>
@@ -198,7 +208,7 @@ const Home = props => {
 
           <div className="row align-items-center speaker">
             <div className="col-lg-6 mb-5 mb-lg-0 order-lg-2 imageWrapper_rounded" data-aos="fade" data-aos-delay="100">
-              <img src={landingImg4} alth="Address Book" className="img-fluid rounded" />
+              <img src={landingImg4} alt="Address Book" className="img-fluid rounded" />
             </div>
             <div className="col-lg-6 ml-auto order-lg-1">
               <div className="bio pr-lg-5">
@@ -272,12 +282,12 @@ const Home = props => {
             <div className="col-md-4">
               <h2 className="footer-heading text-uppercase mb-4">Connect with Us</h2>
               <p>
-                <a href="https://www.facebook.com/concealnetwork" className="p-2 pl-0"><FontAwesomeIcon icon={['fab', 'facebook']} fixedWidth /></a>
-                <a href="https://twitter.com/ConcealNetwork" className="p-2"><FontAwesomeIcon icon={['fab', 'twitter']} fixedWidth /></a>
-                <a href="https://medium.com/@ConcealNetwork" className="p-2"><FontAwesomeIcon icon={['fab', 'medium']} fixedWidth /></a>
-                <a href="https://github.com/ConcealNetwork" className="p-2"><FontAwesomeIcon icon={['fab', 'github']} fixedWidth /></a>
-                <a href="https://discord.conceal.network" className="p-2"><FontAwesomeIcon icon={['fab', 'discord']} fixedWidth /></a>
-                <a href="https://t.co/55klBHKGUR" className="p-2"><FontAwesomeIcon icon={['fab', 'telegram']} fixedWidth /></a>
+                <a href="https://www.facebook.com/concealnetwork" className="p-2 pl-0"><FaFacebook /></a>
+                <a href="https://twitter.com/ConcealNetwork" className="p-2"><FaTwitter /></a>
+                <a href="https://medium.com/@ConcealNetwork" className="p-2"><FaMedium /></a>
+                <a href="https://github.com/ConcealNetwork" className="p-2"><FaGithub /></a>
+                <a href="https://discord.conceal.network" className="p-2"><FaDiscord /></a>
+                <a href="https://t.co/55klBHKGUR" className="p-2"><FaTelegram /></a>
               </p>
             </div>
           </div>

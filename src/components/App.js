@@ -1,36 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fab } from '@fortawesome/free-brands-svg-icons';
-import { far } from '@fortawesome/free-regular-svg-icons';
-import {
-  faAddressBook,
-  faArrowUp,
-  faArrowDown,
-  faCaretDown,
-  faCheck,
-  faComments,
-  faCopy,
-  faCog,
-  faDollarSign,
-  faExternalLinkAlt,
-  faExclamationTriangle,
-  faGlobe,
-  faHashtag,
-  faHome,
-  faIdCard,
-  faKey,
-  faLink,
-  faListAlt,
-  faNetworkWired,
-  faReceipt,
-  faQuestionCircle,
-  faSignOutAlt,
-  faSpinner,
-  faTrashAlt,
-  faTrophy,
-  faUserEdit,
-} from '@fortawesome/free-solid-svg-icons';
+import ReactNotification from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css';
+import 'animate.css/animate.min.css';
 
 import AppContextProvider from './ContextProvider';
 import Home from './pages/Home';
@@ -51,42 +23,13 @@ import Id from './pages/Id';
 
 import '../static/css/slim.css';
 import '../static/css/slim.one.css';
+import '../static/css/font-awesome-animation.min.css';
 
-
-library.add(
-  fab,
-  far,
-  faAddressBook,
-  faArrowUp,
-  faArrowDown,
-  faCaretDown,
-  faCheck,
-  faComments,
-  faCopy,
-  faCog,
-  faDollarSign,
-  faExclamationTriangle,
-  faExternalLinkAlt,
-  faGlobe,
-  faHashtag,
-  faHome,
-  faIdCard,
-  faKey,
-  faLink,
-  faListAlt,
-  faNetworkWired,
-  faQuestionCircle,
-  faReceipt,
-  faSignOutAlt,
-  faSpinner,
-  faTrashAlt,
-  faTrophy,
-  faUserEdit,
-);
 
 const App = () => (
   <Router>
     <AppContextProvider>
+      <ReactNotification />
 
       <Route exact path="/" component={Home} />
       <Route exact path="/signup" component={SignUp} />

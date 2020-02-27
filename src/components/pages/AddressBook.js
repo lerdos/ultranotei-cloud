@@ -1,5 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Form from 'react-bootstrap/Form';
 
 import { AppContext } from '../ContextProvider';
 import ContactModal from '../modals/Contact';
@@ -9,8 +10,28 @@ import Contact from '../elements/Contact';
 const AddressBook = () => {
   const { state } = useContext(AppContext);
   const { layout, user } = state;
+  const { userLoaded } = layout;
+  const { addressBook } = user;
 
+  const [filteredAddressBook, setFilteredAddressBook] = useState(addressBook);
   const [contactModalOpen, toggleContactModal] = useState(false);
+
+  const handleChange = e => {
+    const val = e.target.value;
+    const regex = new RegExp(`.?${val}.?`, 'gi');
+    setFilteredAddressBook(
+      val !== ''
+        ? addressBook
+            .filter(contact =>
+              contact.label.match(regex) || contact.address.match(regex) || contact.paymentID.match(regex)
+            )
+        : addressBook
+    );
+  };
+
+  useEffect(() => {
+    if (userLoaded) setFilteredAddressBook(addressBook);
+  }, [addressBook, userLoaded]);
 
   return (
     <div>
@@ -28,6 +49,14 @@ const AddressBook = () => {
           <div className="section-wrapper mg-t-20">
             <div className="d-flex flex-row width-100 justify-content-between mg-b-10">
               <label className="section-title d-inline-block">Address Book</label>
+            </div>
+
+            <div className="d-flex flex-row width-100 justify-content-between mg-b-10">
+              <Form.Control
+                type="text"
+                placeholder="Search by label, address or payment ID..."
+                onKeyUp={e => handleChange(e)}
+              />
               <button
                 className="btn btn-primary btn-sm"
                 onClick={() => toggleContactModal(!contactModalOpen)}
@@ -37,13 +66,13 @@ const AddressBook = () => {
             </div>
             <div className="row">
               <div className="col-lg-12">
-                {layout.userLoaded && user.addressBook.length === 0
+                {userLoaded && addressBook.length === 0
                   ? <div>
                       You have no contacts saved in your address book.
                       Add one by clicking on the button or when you are sending funds.
                     </div>
                   : <div className="list-group list-group-user">
-                      {user.addressBook.map(contact =>
+                      {filteredAddressBook.map(contact =>
                         <Contact key={`${contact.label}-${contact.address}-${contact.paymentID}`} contact={contact} />
                       )}
                     </div>
