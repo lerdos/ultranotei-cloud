@@ -3,7 +3,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FaArrowDown, FaArrowUp, FaComments, FaKey, FaListAlt, FaTrashAlt } from 'react-icons/fa';
 
 import { AppContext } from '../ContextProvider';
-import { maskAddress } from '../../helpers/utils';
+import { FormattedAmount, maskAddress } from '../../helpers/utils';
 import SendModal from '../modals/Send';
 import ReceiveModal from '../modals/Receive';
 import MessagesModal from '../modals/Messages';
@@ -14,7 +14,7 @@ import KeysModal from '../modals/Keys';
 const Wallet = props => {
   const { actions, state } = useContext(AppContext);
   const { deleteWallet } = actions;
-  const { appSettings, layout } = state;
+  const { layout } = state;
   const { messagesLoaded, walletsLoaded } = layout;
 
   const [sendModalOpen, toggleSendModal] = useState(false);
@@ -30,25 +30,20 @@ const Wallet = props => {
   const locked = wallet.locked || 0;
   const balanceTotal = wallet.total || 0;
 
-  const formatOptions = {
-    minimumFractionDigits: appSettings.coinDecimals,
-    maximumFractionDigits: appSettings.coinDecimals,
-  };
-
   return (
     <div className="list-group-item">
       <div className="user-name-address">
         <p>{maskAddress(props.address)}</p>
         <span>
-          Balance: {balanceTotal.toLocaleString(undefined, formatOptions)} CCX&nbsp;
+          Balance: <FormattedAmount amount={balanceTotal} />&nbsp;
           {locked > 0 &&
             <span className="tx-pending d-inline-block">
-              (Locked: {locked.toLocaleString(undefined, formatOptions)})
+              (Locked: <FormattedAmount amount={locked} showCurrency={false} />)
             </span>
           }
         </span>
-        <span>Transactions in: {txIn.length}</span>
-        <span>Transactions out: {txOut.length}</span>
+        <span>Transactions in: {txIn.length.toLocaleString()}</span>
+        <span>Transactions out: {txOut.length.toLocaleString()}</span>
       </div>
       <div className="btn-group" role="group">
         <OverlayTrigger overlay={<Tooltip id={`${props.address}-send`}>Send CCX</Tooltip>}>

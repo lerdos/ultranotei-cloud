@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { CCXAmount, CCXExplorerLink, maskAddress } from '../../helpers/utils';
+import { FormattedAmount, CCXExplorerLink, maskAddress } from '../../helpers/utils';
 
 
 export const NewTxMessage = props => {
@@ -8,7 +8,7 @@ export const NewTxMessage = props => {
   return (
     <div>
       <div><small>{new Date(tx.timestamp).toLocaleString()}</small></div>
-      <div>Amount: <CCXAmount amount={tx.amount}/></div>
+      <div>Amount: <FormattedAmount amount={tx.amount}/></div>
       <div>Wallet: {maskAddress(tx.address)}</div>
       <div>Hash: <CCXExplorerLink hash={maskAddress(tx.hash)}/></div>
       <div>Status: <strong>{tx.status.toUpperCase()}</strong></div>

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Moment from 'react-moment';
@@ -16,7 +16,7 @@ const MessagesModal = props => {
   const [filteredMessages, setFilteredMessages] = useState(messages);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const handleChange = e => setSearchTerm(e.target.value);;
+  const handleChange = e => setSearchTerm(e.target.value);
 
   useEffect(() => {
     const regex = new RegExp(`.?${searchTerm}.?`, 'gi');

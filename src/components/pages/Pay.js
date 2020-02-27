@@ -1,16 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
 
 import { AppContext } from '../ContextProvider';
-import { useFormInput, useFormValidation } from '../../helpers/hooks';
 import FormLabelDescription from '../elements/FormLabelDescription';
 import WalletDropdown from '../elements/WalletDropdown';
+import { useCalculatedValues, useFormInput, useSendFormValidation } from '../../helpers/hooks';
+import { FormattedAmount } from '../../helpers/utils';
 
 
 const Pay = props => {
   const { actions, state } = useContext(AppContext);
   const { sendTx } = actions;
   const { appSettings, layout, marketData, userSettings, wallets } = state;
-  const { coinDecimals, defaultFee, messageFee, messageLimit, feePerChar } = appSettings;
+  const { messageLimit } = appSettings;
   const { ipn, twoFAEnabled } = userSettings;
   const { formSubmitted, sendTxResponse, walletsLoaded } = layout;
 
@@ -25,66 +26,20 @@ const Pay = props => {
   const ref = params.get('ref');
   const amountPredefined = params.get('amount');
 
-  const { value: amount, reset: resetAmount, setValue: setAmountValue } = useFormInput('');
+  const { value: amount, reset: resetAmount, setValue: setAmountValue } = useFormInput(0);
   const { value: message, bind: bindMessage, reset: resetMessage } = useFormInput('');
   const { value: twoFACode, bind: bindTwoFACode, reset: resetTwoFACode } = useFormInput('');
   const { value: password, bind: bindPassword, reset: resetPassword } = useFormInput('');
+  const { btcValue, usdValue } = useCalculatedValues(amount, marketData);
   const [availableWallets, setAvailableWallets] = useState({});
   const [wallet, setWallet] = useState(null);
   const [walletAddress, setWalletAddress] = useState('');
-  const [btcValue, setBtcValue] = useState(0);
-  const [usdValue, setUsdValue] = useState(0);
 
   useEffect(() => {
     if (amountPredefined) setAmountValue(amountPredefined);
   }, [amountPredefined, setAmountValue]);
 
-  let formValidation = false;
-
-  if (wallet) {
-    const parsedAmount = !Number.isNaN(parseFloat(amount)) ? parseFloat(amount) : 0;
-    const totalMessageFee = message.length > 0 ? messageFee + message.length * feePerChar : 0;
-    const txFee = parsedAmount > 0 || amount !== '' ? defaultFee : 0;
-    const totalTxFee = txFee + totalMessageFee;
-    const totalAmount = parsedAmount > 0 ? (parsedAmount + totalTxFee).toFixed(coinDecimals) : totalTxFee;
-
-    const walletBalanceValid = totalAmount <= wallet.balance;
-    const messageAmountValid = totalMessageFee > 0 && totalTxFee <= wallet.balance;
-    const totalAmountValid = (parsedAmount >= defaultFee && totalAmount > 0) || messageAmountValid;
-
-    formValidation = (
-      walletBalanceValid &&
-      totalAmountValid &&
-      (twoFAEnabled
-        ? (parseInt(twoFACode) && twoFACode.toString().length === 6)
-        : (password !== '' && password.length >= 8)
-      )
-    );
-  }
-  const formValid = useFormValidation(formValidation);
-
-  const ccxToUSD =  marketData ? marketData.market_data.current_price.usd : 0;
-  const ccxToBTC =  marketData ? marketData.market_data.current_price.btc : 0;
-
-  useEffect(() => {
-    if (amount && parseFloat(amount) > 0) {
-      setBtcValue(parseFloat(amount) * ccxToBTC);
-      setUsdValue(parseFloat(amount) * ccxToUSD);
-    } else {
-      setBtcValue(0);
-      setUsdValue(0);
-    }
-  }, [amount, ccxToBTC, ccxToUSD]);
-
-  const btcFormatOptions = {
-    minimumFractionDigits: 8,
-    maximumFractionDigits: 8,
-  };
-
-  const usdFormatOptions = {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  };
+  const formValid = useSendFormValidation({ amount, appSettings, password, twoFACode, userSettings, wallet });
 
   return (
     <div className="donatePage">
@@ -170,8 +125,8 @@ const Pay = props => {
                           type="number"
                         />
                         <div className="float-left mg-l-10">
-                          BTC: {btcValue.toLocaleString(undefined, btcFormatOptions)}<br />
-						              USD: {usdValue.toLocaleString(undefined, usdFormatOptions)}
+                          <FormattedAmount amount={btcValue} currency="BTC" /><br />
+                          <FormattedAmount amount={usdValue} currency="USD" />
                         </div>
                       </div>
                     </div>
@@ -250,7 +205,7 @@ const Pay = props => {
 
               {amount > 0 &&
                 <div className="mg-b-10">
-                  Sending <strong className="tx-white">{amount} CCX</strong> to <strong className="tx-white">{ipn.name}</strong>
+                  Sending <strong className="tx-white"><FormattedAmount amount={amount}/></strong> to <strong className="tx-white">{ipn.name}</strong>
                 </div>
               }
 

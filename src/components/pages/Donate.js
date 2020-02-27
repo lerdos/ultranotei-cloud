@@ -1,18 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import React, { useContext, useState } from 'react';
 import WAValidator from 'multicoin-address-validator';
 
 import { AppContext } from '../ContextProvider';
-import { maskAddress } from '../../helpers/utils';
-import { useFormInput, useFormValidation } from '../../helpers/hooks';
 import FormLabelDescription from '../elements/FormLabelDescription';
+import WalletDropdown from '../elements/WalletDropdown';
+import { useCalculatedValues, useFormInput, useSendFormValidation } from '../../helpers/hooks';
+import { FormattedAmount } from '../../helpers/utils';
 
 
 const Donate = props => {
   const { actions, state } = useContext(AppContext);
-  const { createWallet, sendTx } = actions;
+  const { sendTx } = actions;
   const { appSettings, layout, marketData, userSettings, wallets } = state;
-  const { coinDecimals, defaultFee, messageFee, messageLimit, feePerChar } = appSettings;
+  const { coinDecimals, defaultFee, messageLimit } = appSettings;
   const { formSubmitted, sendTxResponse, walletsLoaded } = layout;
 
   const params = new URLSearchParams(props.location.search);
@@ -24,77 +24,23 @@ const Donate = props => {
   const { value: message, bind: bindMessage, reset: resetMessage } = useFormInput(params.get('message') || '');
   const { value: twoFACode, bind: bindTwoFACode, reset: resetTwoFACode } = useFormInput('');
   const { value: password, bind: bindPassword, reset: resetPassword } = useFormInput('');
+  const { btcValue, usdValue } = useCalculatedValues(amount, marketData);
   const [availableWallets, setAvailableWallets] = useState({});
   const [wallet, setWallet] = useState(null);
   const [walletAddress, setWalletAddress] = useState('');
-  const [btcValue, setBtcValue] = useState(0);
-  const [usdValue, setUsdValue] = useState(0);
 
-  useEffect(() => {
-    const availableWallets = Object.keys(wallets)
-      .reduce((acc, curr) => {
-        if (wallets[curr].balance > 0 && curr !== address) acc[curr] = wallets[curr];
-        return acc;
-      }, {});
-    const selectedAddress = Object.keys(availableWallets)[0];
-    const selectedWallet = wallets[selectedAddress];
-    if (selectedAddress && selectedWallet) {
-      setWalletAddress(selectedAddress);
-      setWallet(selectedWallet);
-    }
-    setAvailableWallets(availableWallets);
-  }, [address, wallets]);
+  const maxValue = wallet ? (wallet.balance - defaultFee).toFixed(coinDecimals) : 0;
 
-  let formValidation = false;
-  let maxValue = 0;
-
-  if (wallet) {
-    const parsedAmount = !Number.isNaN(parseFloat(amount)) ? parseFloat(amount) : 0;
-    const totalMessageFee = message.length > 0 ? messageFee + message.length * feePerChar : 0;
-    const txFee = parsedAmount > 0 || amount !== '' ? defaultFee : 0;
-    const totalTxFee = txFee + totalMessageFee;
-    const totalAmount = parsedAmount > 0 ? (parsedAmount + totalTxFee).toFixed(coinDecimals) : totalTxFee;
-    maxValue = totalTxFee > 0
-      ? (wallet.balance - totalTxFee).toFixed(coinDecimals)
-      : (wallet.balance - defaultFee).toFixed(coinDecimals);
-
-    const walletBalanceValid = totalAmount <= wallet.balance;
-    const messageAmountValid = totalMessageFee > 0 && totalTxFee <= wallet.balance;
-    const totalAmountValid = (parsedAmount >= defaultFee && totalAmount > 0) || messageAmountValid;
-
-    formValidation = (
-      walletBalanceValid &&
-      totalAmountValid &&
-      (userSettings.twoFAEnabled
-        ? (parseInt(twoFACode) && twoFACode.toString().length === 6)
-        : (password !== '' && password.length >= 8)
-      )
-    );
-  }
-  const formValid = useFormValidation(formValidation);
-
-  const ccxToUSD =  marketData ? marketData.market_data.current_price.usd : 0;
-  const ccxToBTC =  marketData ? marketData.market_data.current_price.btc : 0;
-
-  useEffect(() => {
-    if (amount && parseFloat(amount) > 0) {
-      setBtcValue(parseFloat(amount) * ccxToBTC);
-      setUsdValue(parseFloat(amount) * ccxToUSD);
-    } else {
-      setBtcValue(0);
-      setUsdValue(0);
-    }
-  }, [amount, ccxToBTC, ccxToUSD]);
-
-  const btcFormatOptions = {
-    minimumFractionDigits: 8,
-    maximumFractionDigits: 8,
-  };
-
-  const usdFormatOptions = {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  };
+  const formValid = useSendFormValidation({
+    amount,
+    appSettings,
+    fromAddress: walletAddress,
+    password,
+    toAddress: address,
+    twoFACode,
+    userSettings,
+    wallet,
+  });
 
   return (
     <div className="donatePage">
@@ -149,35 +95,16 @@ const Donate = props => {
                         <FormLabelDescription>Your wallet from which funds will be sent</FormLabelDescription>
                       </div>
                       <div className="col-7 col-sm-10">
-                        {walletsLoaded && Object.keys(availableWallets).length > 0 &&
-                        <select
-                          className="form-control autoWidth"
-                          onChange={e => {
-                            setWallet(wallets[e.target.value]);
-                            setWalletAddress(e.target.value);
-                          }}
-                          value={walletAddress}
-                        >
-                          {Object.keys(availableWallets).map(address =>
-                            <option value={address} key={address} disabled={wallets[address].balance <= 0}>
-                              {maskAddress(address)} ({wallets[address].balance} CCX)
-                            </option>
-                          )}
-                        </select>
-                        }
-                        {walletsLoaded && Object.keys(wallets).length > 0 && Object.keys(availableWallets).length === 0 &&
-                        <div>
-                          Balance too low. Send some funds to your wallet to process this payment.
-                        </div>
-                        }
-                        {walletsLoaded && Object.keys(wallets).length === 0 &&
-                        <div>
-                          You have no wallets yet. Create one
-                          <Button className="btn-uppercase-sm btn-create-wallet" onClick={() => createWallet()}>
-                            here
-                          </Button>
-                        </div>
-                        }
+                        <WalletDropdown
+                          availableWallets={availableWallets}
+                          setWallet={setWallet}
+                          setWalletAddress={setWalletAddress}
+                          setAvailableWallets={setAvailableWallets}
+                          walletAddress={walletAddress}
+                          wallets={wallets}
+                          walletsLoaded={walletsLoaded}
+                          currentAddress={address}
+                        />
                       </div>
                     </div>
                     <div className="row no-gutters">
@@ -199,8 +126,8 @@ const Donate = props => {
                           disabled={Object.keys(availableWallets).length === 0}
                         />
                         <div className="float-left mg-l-10">
-                          BTC: {btcValue.toLocaleString(undefined, btcFormatOptions)}<br />
-						              USD: {usdValue.toLocaleString(undefined, usdFormatOptions)}
+                          <FormattedAmount amount={btcValue} currency="BTC" /><br />
+                          <FormattedAmount amount={usdValue} currency="USD" />
                         </div>
                       </div>
                     </div>
@@ -289,22 +216,22 @@ const Donate = props => {
               </div>
 
               {sendTxResponse &&
-              <div className={`${sendTxResponse.status}-message`}>
-                {
-                  sendTxResponse.status === 'error'
-                    ? <div className="text-danger">{sendTxResponse.message}</div>
-                    : <>
-                        TX Hash: <a
-                        href={`${appSettings.explorerURL}/index.html?hash=${sendTxResponse.message.transactionHash}#blockchain_transaction`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {sendTxResponse.message.transactionHash}
-                      </a><br/>
-                        Secret Key: {sendTxResponse.message.transactionSecretKey}
-                      </>
-                }
-              </div>
+                <div className={`${sendTxResponse.status}-message`}>
+                  {
+                    sendTxResponse.status === 'error'
+                      ? <div className="text-danger">{sendTxResponse.message}</div>
+                      : <>
+                          TX Hash: <a
+                          href={`${appSettings.explorerURL}/index.html?hash=${sendTxResponse.message.transactionHash}#blockchain_transaction`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {sendTxResponse.message.transactionHash}
+                        </a><br/>
+                          Secret Key: {sendTxResponse.message.transactionSecretKey}
+                        </>
+                  }
+                </div>
               }
             </form>
           </>

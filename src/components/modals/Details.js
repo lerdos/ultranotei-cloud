@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Moment from 'react-moment';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 
-import { CCXAmount, CCXExplorerLink } from '../../helpers/utils';
+import { FormattedAmount, CCXExplorerLink } from '../../helpers/utils';
 
 
 const DetailsModal = props => {
@@ -35,8 +35,8 @@ const DetailsModal = props => {
                   <div className="media-body">
                     <small className="mg-b-10 tx-timestamp"><Moment>{tx.timestamp}</Moment></small>
                     <p className="mg-b-5">
-                      <span className="tx-amount"><CCXAmount amount={tx.amount} /></span>&nbsp;
-                      <small className="tx-fee">FEE: <CCXAmount amount={tx.fee} /></small>
+                      <span className="tx-amount"><FormattedAmount amount={tx.amount} /></span>&nbsp;
+                      <small className="tx-fee">FEE: <FormattedAmount amount={tx.fee} /></small>
                     </p>
                     <p className="mg-b-5">
                       <CCXExplorerLink hash={tx.hash} />

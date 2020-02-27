@@ -2,13 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import QrReader from 'react-qr-reader';
-import WAValidator from 'multicoin-address-validator';
 
 import { AppContext } from '../ContextProvider';
 import FormLabelDescription from '../elements/FormLabelDescription';
 import WalletDropdown from '../elements/WalletDropdown';
-import { useFormInput, useFormValidation, useTypeaheadInput } from '../../helpers/hooks';
-import { maskAddress } from '../../helpers/utils';
+import { useFormInput, useSendFormValidation, useTypeaheadInput } from '../../helpers/hooks';
+import { FormattedAmount, maskAddress } from '../../helpers/utils';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 
@@ -17,12 +16,12 @@ const SendModal = props => {
   const { actions, state } = useContext(AppContext);
   const { sendTx } = actions;
   const { appSettings, layout, user, userSettings, wallets } = state;
-  const { coinDecimals, defaultFee, messageFee, messageLimit } = appSettings;
-  const { formSubmitted, sendTxResponse, walletsLoaded } = layout;
+  const { coinDecimals, defaultFee, messageLimit } = appSettings;
+  const { formSubmitted, walletsLoaded } = layout;
   const { toggleModal, wallet, ...rest } = props;
 
   const [availableWallets, setAvailableWallets] = useState({});
-  const [selectedWallet, setSelectedWallet] = useState(wallet || {});
+  const [selectedWallet, setSelectedWallet] = useState(wallet || { balance: 0 });
   const [walletAddress, setWalletAddress] = useState('');
   const [qrReaderOpened, setQrReaderOpened] = useState(false);
 
@@ -35,37 +34,26 @@ const SendModal = props => {
   const { value: label, bind: bindLabel, setValue: setLabelValue, reset: resetLabel } = useFormInput('');
 
   const parsedAmount = !Number.isNaN(parseFloat(amount)) ? parseFloat(amount) : 0;
-  const totalMessageFee = message.length > 0 ? messageFee : 0;
-  const txFee = parsedAmount > 0 || amount !== '' ? defaultFee : 0;
-  const totalTxFee = txFee + totalMessageFee;
-  const totalAmount = parsedAmount > 0 ? (parsedAmount + totalTxFee).toFixed(coinDecimals) : totalTxFee;
-  const maxValue = totalTxFee > 0
-    ? (selectedWallet.balance - totalTxFee).toFixed(coinDecimals)
-    : (selectedWallet.balance - defaultFee).toFixed(coinDecimals);
-
-  const walletBalanceValid = totalAmount <= selectedWallet.balance;
-  const messageAmountValid = totalMessageFee > 0 && totalTxFee <= selectedWallet.balance;
-  const totalAmountValid = (parsedAmount >= defaultFee && totalAmount > 0) || messageAmountValid;
+  const totalAmount = parsedAmount > 0 ? parsedAmount + defaultFee : 0;
+  const maxValue = (selectedWallet.balance - defaultFee).toFixed(coinDecimals);
+  const calculateMax = () => setAmountValue(maxValue);
 
   useEffect(() => {
     if (paymentIDValue) setPaymentIDValue(paymentIDValue);
   }, [paymentIDValue, setPaymentIDValue]);
 
-  const formValidation = (
-    address !== props.address &&
-    (WAValidator.validate(address, 'CCX') || new RegExp(/^[a-z0-9]*\.conceal\.id/).test(address)) &&
-    walletBalanceValid &&
-    totalAmountValid &&
-    (message && message.length > 0 && message.length <= messageLimit) &&
-    (paymentID === '' || paymentID.length === 64) &&
-    (userSettings.twoFAEnabled
-      ? (parseInt(twoFACode) && twoFACode.toString().length === 6)
-      : (password !== '' && password.length >= 8)
-    )
-  );
-  const formValid = useFormValidation(formValidation);
-
-  const calculateMax = () => setAmountValue(maxValue > 0 ? maxValue : 0);
+  const formValid = useSendFormValidation({
+    amount,
+    appSettings,
+    fromAddress: props.address,
+    message,
+    password,
+    paymentID,
+    toAddress: address,
+    twoFACode,
+    userSettings,
+    wallet,
+  });
 
   let addressInput = null;
   const handleScan = data => {
@@ -93,11 +81,6 @@ const SendModal = props => {
 
   const handleError = err => {
     console.error(err)
-  };
-
-  const formatOptions = {
-    minimumFractionDigits: coinDecimals,
-    maximumFractionDigits: coinDecimals,
   };
 
   return (
@@ -368,41 +351,18 @@ const SendModal = props => {
                 <h2>
                   <span className="tx-total-text">TOTAL</span>&nbsp;
                   <span className={`${totalAmount > selectedWallet.balance ? 'text-danger' : ''}`}>
-                    {totalAmount.toLocaleString(undefined, formatOptions)} CCX
+                    <FormattedAmount amount={totalAmount} />
                   </span>
                 </h2>
+                <div className="tx-default-fee-text">
+                  FEE: <span className="tx-white"><FormattedAmount amount={defaultFee} /></span>
+                </div>
                 <div>
-                  <span className="tx-available-text">AVAILABLE</span>&nbsp;
-                  <strong>
-                    {selectedWallet.balance && selectedWallet.balance.toLocaleString(undefined, formatOptions)}
-                  </strong> CCX
-                </div>
-                <div className="tx-default-fee-text">
-                    MESSAGE FEE: {totalMessageFee.toLocaleString(undefined, formatOptions)} CCX
-                </div>
-                <div className="tx-default-fee-text">
-                    TRANSACTION FEE: {defaultFee.toLocaleString(undefined, formatOptions)} CCX
+                  <span className="tx-available-text">AVAILABLE:</span>&nbsp;
+                  <span className="tx-white"><FormattedAmount amount={selectedWallet.balance} /></span>
                 </div>
               </span>
           </div>
-          {sendTxResponse &&
-            <div className={`${sendTxResponse.status}-message`}>
-              {
-                sendTxResponse.status === 'error'
-                  ? <div className="text-danger">{sendTxResponse.message}</div>
-                  : <>
-                      TX Hash: <a
-                        href={`${appSettings.explorerURL}/index.html?hash=${sendTxResponse.message.transactionHash}#blockchain_transaction`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {sendTxResponse.message.transactionHash}
-                      </a><br />
-                      Secret Key: {sendTxResponse.message.transactionSecretKey}
-                    </>
-              }
-            </div>
-          }
         </form>
       </Modal.Body>
       <Modal.Footer>

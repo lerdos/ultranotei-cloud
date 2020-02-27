@@ -5,14 +5,14 @@ import WAValidator from 'multicoin-address-validator';
 import { AppContext } from '../ContextProvider';
 import FormLabelDescription from './FormLabelDescription';
 import { useFormInput, useFormValidation, useTypeaheadInput } from '../../helpers/hooks';
-import { maskAddress } from '../../helpers/utils';
+import { FormattedAmount, maskAddress } from '../../helpers/utils';
 
 
 const MessageForm = props => {
   const { actions, state } = useContext(AppContext);
   const { sendMessage } = actions;
   const { appSettings, layout, user, userSettings } = state;
-  const { coinDecimals, messageFee, messageLimit } = appSettings;
+  const { messageFee, messageLimit } = appSettings;
   const { formSubmitted, sendMessageResponse } = layout;
   const { wallet } = props;
 
@@ -39,11 +39,6 @@ const MessageForm = props => {
     )
   );
   const formValid = useFormValidation(formValidation);
-
-  const formatOptions = {
-    minimumFractionDigits: coinDecimals,
-    maximumFractionDigits: coinDecimals,
-  };
 
   return (
     <div className="form-layout form-layout-7">
@@ -185,9 +180,7 @@ const MessageForm = props => {
                 </div>
               </div>
           }
-
         </div>
-
 
         <hr />
 
@@ -205,14 +198,14 @@ const MessageForm = props => {
             <h2>
               <span className="tx-total-text">TOTAL</span>&nbsp;
               <span className={`${totalMessageFee > wallet.balance ? 'text-danger' : ''}`}>
-                {totalMessageFee.toLocaleString(undefined, formatOptions)} CCX
+                <FormattedAmount amount={totalMessageFee} />
               </span>
             </h2>
             <div>
               <span className="tx-available-text">AVAILABLE: </span>
               <strong>
-                {wallet.balance && wallet.balance.toLocaleString(undefined, formatOptions)}
-              </strong> CCX
+                <FormattedAmount amount={wallet.balance} />
+              </strong>
             </div>
           </span>
         </div>
@@ -235,6 +228,7 @@ const MessageForm = props => {
         </div>
         }
       </form>
+      <hr />
     </div>
   );
 };

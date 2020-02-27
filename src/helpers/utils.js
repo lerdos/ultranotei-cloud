@@ -31,17 +31,53 @@ export const showNotification = options => {
   });
 };
 
-export const CCXAmount = props => {
+export const formattedStringAmount = ({
+  amount,
+  currency = 'CCX',
+  formatOptions = { minimumFractionDigits: 5, maximumFractionDigits: 5 },
+  showCurrency,
+  useSymbol,
+}) => {
+  let c = '';
+  const symbols = { USD: '$', BTC: 'B' };
+  if (showCurrency || useSymbol) {
+    c = useSymbol
+      ? symbols[currency]
+      : currency;
+  }
+  return `${useSymbol ? c : ''} ${parseFloat(amount).toLocaleString(undefined, formatOptions)} ${!useSymbol ? c : ''}`;
+};
+
+export const FormattedAmount = props => {
   const { state } = useContext(AppContext);
   const { appSettings } = state;
-  const { amount } = props;
+  const { amount, currency = 'CCX', showCurrency = true, useSymbol = false } = props;
 
-  const formatOptions = {
-    minimumFractionDigits: appSettings.coinDecimals,
-    maximumFractionDigits: appSettings.coinDecimals,
-  };
+  let minimumFractionDigits;
+  let maximumFractionDigits;
 
-  return (<>{amount.toLocaleString(undefined, formatOptions)} CCX</>);
+  switch (currency) {
+    case 'BTC':
+      minimumFractionDigits = 8;
+      maximumFractionDigits = 8;
+      break;
+    case 'USD':
+      minimumFractionDigits = 2;
+      maximumFractionDigits = 2;
+      break;
+    default:
+      minimumFractionDigits = appSettings.coinDecimals;
+      maximumFractionDigits = appSettings.coinDecimals;
+      break;
+  }
+
+  const formatOptions = { minimumFractionDigits, maximumFractionDigits };
+
+  return (
+    <>
+      {formattedStringAmount({ amount, currency, formatOptions, showCurrency, useSymbol })}
+    </>
+  );
 };
 
 export const CCXExplorerLink = props => {
