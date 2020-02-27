@@ -1090,7 +1090,8 @@ hr {
   color: rgb(255, 255, 255);
 }
 
-.modal-content form {
+.modal-content form,
+.modal-content .form-layout {
   color: rgb(134, 139, 161);
 }
 
@@ -1229,13 +1230,16 @@ hr {
 }
 
 .slim-navbar .nav-link svg {
-  /*fill: rgb(265, 165, 0);*/
   transition: fill 0.3s;
 }
 
-.slim-navbar .nav-item:hover svg,
-.slim-navbar .nav-link.active:hover svg {
+.slim-navbar .nav-item:hover svg {
   fill: rgb(255, 255, 255);
+  transition: fill 0.3s;
+}
+
+.slim-navbar .nav-link.active:hover svg {
+  fill: rgb(265, 165, 0);
   transition: fill 0.3s;
 }
 
