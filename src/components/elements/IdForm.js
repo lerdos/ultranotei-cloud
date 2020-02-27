@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import WAValidator from 'multicoin-address-validator';
-import { FaCheck, FaExclamationTriangle, FaQuestionCircle, FaSpinner } from 'react-icons/fa';
+import { FaCheck, FaExclamationTriangle, FaSpinner } from 'react-icons/fa';
 
 import { AppContext } from '../ContextProvider';
 import { useDebounce, useFormInput, useFormValidation } from '../../helpers/hooks';
 import WalletInput from './WalletInput';
+import FormLabelDescription from './FormLabelDescription';
 
 
 const IdForm = () => {
@@ -72,15 +73,9 @@ const IdForm = () => {
         <div className="row no-gutters">
           <div className="col-5 col-sm-4">
             Conceal ID
-            <OverlayTrigger
-              overlay={
-                <Tooltip id="conceal-id-tooltip">
-                  ID you wish to use. If you choose "myname", your Conceal ID will be "myname.conceal.id".
-                </Tooltip>
-              }
-            >
-              <FaQuestionCircle className="mg-l-5" />
-            </OverlayTrigger>
+            <FormLabelDescription>
+              ID you wish to use. If you choose "myname", your Conceal ID will be "myname.conceal.id".
+            </FormLabelDescription>
           </div>
           <div className="col-7 col-sm-8 wallet-address">
             <div className="input-group">
@@ -114,16 +109,10 @@ const IdForm = () => {
           <div className="col-5 col-sm-4">
             <div>
               Payment Address
-              <OverlayTrigger
-                overlay={
-                  <Tooltip id="conceal-id-tooltip">
-                    One of your Cloud addresses with enough funds to pay the fee. By default, this address will be used
-                    to bind your ID to. If you want to bind different address, add it to "ID Address" field below.
-                  </Tooltip>
-                }
-              >
-                <FaQuestionCircle className="mg-l-5" />
-              </OverlayTrigger>
+              <FormLabelDescription>
+                One of your Cloud addresses with enough funds to pay the fee. By default, this address will be used
+                to bind your ID to. If you want to bind different address, add it to "ID Address" field below.
+              </FormLabelDescription>
             </div>
           </div>
           <div className="col-7 col-sm-8 wallet-address">
@@ -147,15 +136,9 @@ const IdForm = () => {
           <div className="col-5 col-sm-4">
             <div>
               ID Address (Optional)
-              <OverlayTrigger
-                overlay={
-                  <Tooltip id="conceal-id-tooltip">
-                    Optional address to bind ID to. If left blank, the Payment Address above will be binded to ID.
-                  </Tooltip>
-                }
-              >
-                <FaQuestionCircle className="mg-l-5" />
-              </OverlayTrigger>
+              <FormLabelDescription>
+                Optional address to bind ID to. If left blank, the Payment Address above will be binded to ID.
+              </FormLabelDescription>
             </div>
           </div>
           <div className="col-7 col-sm-8 wallet-address">
@@ -172,15 +155,9 @@ const IdForm = () => {
         <div className="row no-gutters">
           <div className="col-5 col-sm-4">
             ID Label
-            <OverlayTrigger
-              overlay={
-                <Tooltip id="conceal-id-tooltip">
-                  Label for this ID.
-                </Tooltip>
-              }
-            >
-              <FaQuestionCircle className="mg-l-5" />
-            </OverlayTrigger>
+            <FormLabelDescription>
+              Label for this ID.
+            </FormLabelDescription>
           </div>
           <div className="col-7 col-sm-8 wallet-address">
             <input

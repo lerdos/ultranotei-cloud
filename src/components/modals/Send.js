@@ -5,6 +5,7 @@ import QrReader from 'react-qr-reader';
 import WAValidator from 'multicoin-address-validator';
 
 import { AppContext } from '../ContextProvider';
+import FormLabelDescription from '../elements/FormLabelDescription';
 import WalletDropdown from '../elements/WalletDropdown';
 import { useFormInput, useFormValidation, useTypeaheadInput } from '../../helpers/hooks';
 import { maskAddress } from '../../helpers/utils';
@@ -154,6 +155,7 @@ const SendModal = props => {
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
                 From
+                <FormLabelDescription>Address from which funds will be sent from</FormLabelDescription>
               </div>
               <div className="col-7 col-sm-9 wallet-address">
                 {props.address ||
@@ -173,6 +175,7 @@ const SendModal = props => {
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
                 To
+                <FormLabelDescription>Address to send funds to</FormLabelDescription>
               </div>
               <div className="col-7 col-sm-9">
                 <Typeahead
@@ -209,6 +212,7 @@ const SendModal = props => {
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
                 Amount
+                <FormLabelDescription>Amount to send</FormLabelDescription>
               </div>
               <div className="col-7 col-sm-9">
                 <div className="input-group">
@@ -235,6 +239,7 @@ const SendModal = props => {
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
                 Payment ID (optional)
+                <FormLabelDescription>Optional Payment ID for receiving address</FormLabelDescription>
               </div>
               <div className="col-7 col-sm-9">
                 <input
@@ -253,6 +258,7 @@ const SendModal = props => {
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
                 Message (optional)
+                <FormLabelDescription>Optional message to include in this transaction</FormLabelDescription>
               </div>
               <div className="col-7 col-sm-9">
                 <div className="input-group">
@@ -280,6 +286,9 @@ const SendModal = props => {
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
                 Label (optional)
+                <FormLabelDescription>
+                  Add label to automatically add receiving address to Address Book
+                </FormLabelDescription>
               </div>
               <div className="col-7 col-sm-9">
                 <input
@@ -298,6 +307,7 @@ const SendModal = props => {
               ? <div className="row no-gutters">
                   <div className="col-5 col-sm-3">
                     2 Factor Authentication
+                    <FormLabelDescription>2 Factor Authentication code</FormLabelDescription>
                   </div>
                   <div className="col-7 col-sm-9">
                     <input
@@ -315,6 +325,7 @@ const SendModal = props => {
               : <div className="row no-gutters">
                   <div className="col-5 col-sm-3">
                     Password
+                    <FormLabelDescription>Your password</FormLabelDescription>
                   </div>
                   <div className="col-7 col-sm-9">
                     <input

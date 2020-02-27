@@ -58,7 +58,7 @@ const DonationForm = () => {
           <input
             {...bindRecipientName}
             type="text"
-            placeholder="Recipient Name"
+            placeholder="Recipient Name (optional)"
             name="recipientName"
             className="form-control rbt-input-main"
             maxLength={64}
@@ -68,7 +68,7 @@ const DonationForm = () => {
           <input
             {...bindAmount}
             type="number"
-            placeholder="Amount"
+            placeholder="Amount (optional)"
             name="amount"
             className="form-control rbt-input-main"
             step={Math.pow(10, -coinDecimals).toFixed(coinDecimals)}
@@ -76,7 +76,7 @@ const DonationForm = () => {
           <input
             {...bindMessage}
             type="text"
-            placeholder="Message"
+            placeholder="Message (optional)"
             name="message"
             className="form-control rbt-input-main"
           />

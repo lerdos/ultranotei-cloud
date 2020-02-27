@@ -7,6 +7,7 @@ import { FaCaretDown } from 'react-icons/fa';
 import { AppContext } from '../../ContextProvider';
 import { useFormInput, useFormValidation } from '../../../helpers/hooks';
 import CopyButton from '../CopyButton';
+import FormLabelDescription from '../FormLabelDescription';
 import { maskAddress } from '../../../helpers/utils';
 
 
@@ -90,6 +91,9 @@ const IPNForm = props => {
               <div className="row no-gutters">
                 <div className="col-5 col-sm-4">
                   Name of the business
+                  <FormLabelDescription>
+                    Name of the business which is used for this IPN configuration
+                  </FormLabelDescription>
                 </div>
                 <div className="col-7 col-sm-8 wallet-address">
                   <input
@@ -105,6 +109,9 @@ const IPNForm = props => {
               <div className="row no-gutters">
                 <div className="col-5 col-sm-4">
                   Callback URL
+                  <FormLabelDescription>
+                    URL which will be called after transaction is received
+                  </FormLabelDescription>
                   <label className="codeExample">
                     e.g. <code>https://example.com/ccx_transaction_received?tx=TX_HASH&ref=ORDER_ID</code>
                   </label>
@@ -123,6 +130,9 @@ const IPNForm = props => {
               <div className="row no-gutters">
                 <div className="col-5 col-sm-4">
                   URL to redirect on successful payment
+                  <FormLabelDescription>
+                    URL used on client side to redirect after successful payment
+                  </FormLabelDescription>
                 </div>
                 <div className="col-7 col-sm-8 wallet-address">
                   <input
@@ -138,6 +148,9 @@ const IPNForm = props => {
               <div className="row no-gutters">
                 <div className="col-5 col-sm-4">
                   URL to redirect on failed payment
+                  <FormLabelDescription>
+                    URL used on client side to redirect after failed payment
+                  </FormLabelDescription>
                 </div>
                 <div className="col-7 col-sm-8 wallet-address">
                   <input
@@ -153,6 +166,9 @@ const IPNForm = props => {
               <div className="row no-gutters">
                 <div className="col-5 col-sm-4">
                   Number of retries to call callback URL (max. 10 times)
+                  <FormLabelDescription>
+                    Maximum number of attempts to call the callback URL after transaction is received
+                  </FormLabelDescription>
                 </div>
                 <div className="col-7 col-sm-8 wallet-address">
                   <input
@@ -169,6 +185,9 @@ const IPNForm = props => {
               <div className="row no-gutters">
                 <div className="col-5 col-sm-4">
                   Number of confirmations before calling callback URL
+                  <FormLabelDescription>
+                    Number of blocks to wait for confirmation before calling the callback URL
+                  </FormLabelDescription>
                 </div>
                 <div className="col-7 col-sm-8 wallet-address">
                   <input

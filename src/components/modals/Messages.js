@@ -8,6 +8,7 @@ import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import { AppContext } from '../ContextProvider';
 import { useFormInput, useFormValidation, useTypeaheadInput } from '../../helpers/hooks';
 import { maskAddress } from '../../helpers/utils';
+import FormLabelDescription from '../elements/FormLabelDescription';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 
@@ -115,6 +116,7 @@ const MessagesModal = props => {
               <div className="row no-gutters">
                 <div className="col-5 col-sm-3">
                   From
+                  <FormLabelDescription>From address</FormLabelDescription>
                 </div>
                 <div className="col-7 col-sm-9 wallet-address">
                   {props.address}
@@ -124,6 +126,7 @@ const MessagesModal = props => {
               <div className="row no-gutters">
                 <div className="col-5 col-sm-3">
                   To
+                  <FormLabelDescription>To address</FormLabelDescription>
                 </div>
                 <div className="col-7 col-sm-9">
                   <Typeahead
@@ -160,6 +163,7 @@ const MessagesModal = props => {
               <div className="row no-gutters">
                 <div className="col-5 col-sm-3">
                   Message
+                  <FormLabelDescription>Message body</FormLabelDescription>
                 </div>
                 <div className="col-7 col-sm-9">
                   <div className="input-group">
@@ -189,6 +193,7 @@ const MessagesModal = props => {
               ? <div className="row no-gutters">
                 <div className="col-5 col-sm-3">
                   2 Factor Authentication
+                  <FormLabelDescription>2 Factor Authentication code</FormLabelDescription>
                 </div>
                 <div className="col-7 col-sm-9">
                   <input
@@ -206,6 +211,7 @@ const MessagesModal = props => {
               : <div className="row no-gutters">
                 <div className="col-5 col-sm-3">
                   Password
+                  <FormLabelDescription>Your password</FormLabelDescription>
                 </div>
                 <div className="col-7 col-sm-9">
                   <input

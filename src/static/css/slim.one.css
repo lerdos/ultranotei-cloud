@@ -1090,6 +1090,10 @@ hr {
   color: rgb(255, 255, 255);
 }
 
+.modal-content form {
+  color: rgb(134, 139, 161);
+}
+
 .modal .modal-header,
 .modal .modal-footer {
   background-color: rgb(22, 25, 28);
@@ -1648,4 +1652,11 @@ label.codeExample {
   padding: 10px;
   background-color: rgb(265, 165, 0);
   color: rgb(0, 0, 0);
+}
+
+
+/******************** Form Label Description *********************/
+
+.form-label-description {
+
 }

@@ -5,6 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 import { AppContext } from '../ContextProvider';
 import { useFormInput, useFormValidation } from '../../helpers/hooks';
 import CopyButton from '../elements/CopyButton';
+import FormLabelDescription from '../elements/FormLabelDescription';
 
 
 const KeysModal = props => {
@@ -43,6 +44,7 @@ const KeysModal = props => {
                   <div className="row no-gutters">
                     <div className="col-5 col-sm-3">
                       Public Key
+                      <FormLabelDescription>Public Key</FormLabelDescription>
                     </div>
                     <div className="col-7 col-sm-9 wallet-address">
                       <div className="input-group">
@@ -61,6 +63,7 @@ const KeysModal = props => {
                   <div className="row no-gutters">
                     <div className="col-5 col-sm-3">
                       Private Spend Key
+                      <FormLabelDescription>Private spend key</FormLabelDescription>
                     </div>
                     <div className="col-7 col-sm-9 wallet-address">
                       <div className="input-group">
@@ -79,6 +82,7 @@ const KeysModal = props => {
                   <div className="row no-gutters">
                     <div className="col-5 col-sm-3">
                       Private View Key
+                      <FormLabelDescription>Private view key</FormLabelDescription>
                     </div>
                     <div className="col-7 col-sm-9 wallet-address">
                       <div className="input-group">
@@ -119,12 +123,13 @@ const KeysModal = props => {
                     <div className="form-layout form-layout-7">
                       <div className="row no-gutters">
                         <div className="col-5 col-sm-4">
-                          2FA Key
+                          2FA Code
+                          <FormLabelDescription>2 Factor Authentication code</FormLabelDescription>
                         </div>
                         <div className="col-7 col-sm-8">
                           <input
                             {...bindTwoFACode}
-                            placeholder="2 Factor Authentication Key"
+                            placeholder="2 Factor Authentication Code"
                             type="number"
                             name="twoFACode"
                             className="form-control"

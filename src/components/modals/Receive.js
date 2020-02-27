@@ -5,6 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 import { AppContext } from '../ContextProvider';
 import { useFormInput } from '../../helpers/hooks';
 import CopyButton from '../elements/CopyButton';
+import FormLabelDescription from '../elements/FormLabelDescription';
 
 
 const ReceiveModal = props => {
@@ -47,6 +48,7 @@ const ReceiveModal = props => {
           <div className="row no-gutters">
             <div className="col-5 col-sm-3">
               Address
+              <FormLabelDescription>Current address</FormLabelDescription>
             </div>
             <div className="col-7 col-sm-9 wallet-address receive-address">
               <div className="input-group">
@@ -65,6 +67,7 @@ const ReceiveModal = props => {
           <div className="row no-gutters">
             <div className="col-5 col-sm-3">
               Amount (optional)
+              <FormLabelDescription>Desired amount to receive</FormLabelDescription>
             </div>
             <div className="col-7 col-sm-9 wallet-address">
               <input
@@ -83,6 +86,7 @@ const ReceiveModal = props => {
           <div className="row no-gutters">
             <div className="col-5 col-sm-3">
               Payment ID (optional)
+              <FormLabelDescription>Optional Payment ID for this address</FormLabelDescription>
             </div>
             <div className="col-7 col-sm-9 wallet-address">
               <input
@@ -101,6 +105,7 @@ const ReceiveModal = props => {
           <div className="row no-gutters">
             <div className="col-5 col-sm-3">
               Message (optional)
+              <FormLabelDescription>Desired message to receive with this transaction</FormLabelDescription>
             </div>
             <div className="col-7 col-sm-9 wallet-address">
               <input
@@ -117,6 +122,7 @@ const ReceiveModal = props => {
           <div className="row no-gutters">
             <div className="col-5 col-sm-3">
               Label (optional)
+              <FormLabelDescription>Label to use in this transaction</FormLabelDescription>
             </div>
             <div className="col-7 col-sm-9 wallet-address">
               <input
