@@ -496,6 +496,7 @@ const AppContextProvider = props => {
         };
         dispatch({ type: 'SEND_MESSAGE', sendMessageResponse });
         extras.forEach(fn => fn());
+        getMessages();
       })
       .catch(err => console.error(err))
       .finally(() => dispatch({ type: 'FORM_SUBMITTED', value: false }));

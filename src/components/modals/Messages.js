@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Moment from 'react-moment';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 
+import MessageForm from '../elements/MessageForm';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
-import MessageForm from '../elements/MessageForm';
 
 
 const MessagesModal = props => {
@@ -14,12 +14,14 @@ const MessagesModal = props => {
 
   const [showForm, setShowForm] = useState(false);
   const [filteredMessages, setFilteredMessages] = useState(messages);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const handleChange = e => {
-    const val = e.target.value;
-    const regex = new RegExp(`.?${val}.?`, 'gi');
-    setFilteredMessages(val !== '' ? messages.filter(message => message.message.match(regex)) : messages);
-  };
+  const handleChange = e => setSearchTerm(e.target.value);;
+
+  useEffect(() => {
+    const regex = new RegExp(`.?${searchTerm}.?`, 'gi');
+    setFilteredMessages(searchTerm !== '' ? messages.filter(message => message.message.match(regex)) : messages);
+  }, [messages, searchTerm]);
 
   return (
     <Modal
