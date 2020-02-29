@@ -225,24 +225,6 @@ const Pay = props => {
                   SEND
                 </button>
               </div>
-              {sendTxResponse && sendTxResponse.message && sendTxResponse.message.transactionHash &&
-                <div className={`${sendTxResponse.status}-message`}>
-                  {
-                    sendTxResponse.status === 'error'
-                      ? <div className="text-danger">{sendTxResponse.message}</div>
-                      : <>
-                          TX Hash: <a
-                            href={`${appSettings.explorerURL}/index.html?hash=${sendTxResponse.message.transactionHash}#blockchain_transaction`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {sendTxResponse.message.transactionHash}
-                          </a><br />
-                          Secret Key: {sendTxResponse.message.transactionSecretKey}
-                        </>
-                  }
-                </div>
-              }
               {sendTxResponse && sendTxResponse.redirect &&
                 <div>
                   <strong>Payment Successful!</strong> You will be redirected in 10 seconds...

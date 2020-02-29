@@ -13,7 +13,7 @@ const Donate = props => {
   const { sendTx } = actions;
   const { appSettings, layout, marketData, userSettings, wallets } = state;
   const { coinDecimals, defaultFee, messageLimit } = appSettings;
-  const { formSubmitted, sendTxResponse, walletsLoaded } = layout;
+  const { formSubmitted, walletsLoaded } = layout;
 
   const params = new URLSearchParams(props.location.search);
   const address = params.get('address') || props.match.params.address;
@@ -214,25 +214,6 @@ const Donate = props => {
                   SEND
                 </button>
               </div>
-
-              {sendTxResponse &&
-                <div className={`${sendTxResponse.status}-message`}>
-                  {
-                    sendTxResponse.status === 'error'
-                      ? <div className="text-danger">{sendTxResponse.message}</div>
-                      : <>
-                          TX Hash: <a
-                          href={`${appSettings.explorerURL}/index.html?hash=${sendTxResponse.message.transactionHash}#blockchain_transaction`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {sendTxResponse.message.transactionHash}
-                        </a><br/>
-                          Secret Key: {sendTxResponse.message.transactionSecretKey}
-                        </>
-                  }
-                </div>
-              }
             </form>
           </>
         }

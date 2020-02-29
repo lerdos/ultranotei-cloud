@@ -13,7 +13,7 @@ export const maskAddress = (address, maskingChar='.', maskedChars=8, charsPre=7,
 
 export const showNotification = options => {
   const {
-    duration = 600 * 1000, // Dismiss after 10 minutes
+    dismiss = { duration: 60 * 1000 }, // Dismiss after 10 minutes
     message,
     title = 'ERROR',
     type = 'danger',
@@ -27,7 +27,7 @@ export const showNotification = options => {
     container: 'top-right',
     animationIn: ['animated', 'fadeIn'],
     animationOut: ['animated', 'fadeOut'],
-    dismiss: { duration },
+    dismiss,
   });
 };
 

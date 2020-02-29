@@ -6,7 +6,7 @@ import { FaCheck, FaCopy } from 'react-icons/fa';
 
 
 const CopyButton = props => {
-  const { disabled, text, toolTipText } = props;
+  const { classNames, disabled, text, toolTipText } = props;
   const id = props.id || text;
   const [textCopied, setTextCopied] = useState({});
 
@@ -19,7 +19,7 @@ const CopyButton = props => {
     <OverlayTrigger overlay={<Tooltip id={`${id}-copy`}>{toolTipText}</Tooltip>}>
       <CopyToClipboard text={text} onCopy={() => copyClipboard(text)} >
         <button
-          className={`btn btn-no-focus ${textCopied[id] ? 'btn-outline-success' : 'btn-outline-dark'}`}
+          className={`btn btn-no-focus ${textCopied[id] ? 'btn-outline-success' : 'btn-outline-dark'} ${classNames ? classNames.join(' ') : ''}`}
           type="button"
           disabled={disabled}
         >
