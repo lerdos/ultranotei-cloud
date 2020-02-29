@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
+import { FaBitcoin, FaDollarSign, FaMoneyBillAlt, FaTrophy } from 'react-icons/fa';
 
 import { AppContext } from '../ContextProvider';
+import {FormattedAmount, formattedStringAmount} from '../../helpers/utils';
 
 
 const MarketStats = () => {
@@ -16,9 +17,6 @@ const MarketStats = () => {
   const marketCap =  marketData ? marketData.market_data.market_cap.usd : 0;
   const marketCapRank =  marketData ? marketData.market_cap_rank : 0;
   const dailyVolume = marketData ? marketData.market_data.total_volume.usd : 0;
-
-  const format2Decimals = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
-  const format8Decimals = { minimumFractionDigits: 8, maximumFractionDigits: 8 };
 
   const data = {
     labels: xLabels,
@@ -46,7 +44,7 @@ const MarketStats = () => {
         ticks: {
           maxTicksLimit: 5,
           fontSize: 10,
-          callback: value => `$ ${value.toLocaleString(undefined, format2Decimals)}`
+          callback: amount => `$ ${formattedStringAmount({ amount, currency: 'USD', useSymbol: true })}`
         },
         gridLines: {
           color: 'rgba(255, 255, 255, .08)'
@@ -72,7 +70,7 @@ const MarketStats = () => {
       mode: 'index',
       intersect: false,
       callbacks: {
-        label: item => `$ ${parseFloat(item.value).toLocaleString(undefined, format2Decimals)}`,
+        label: item => `$ ${formattedStringAmount({ amount: item.value, currency: 'USD', useSymbol: true })}`
       }
     },
   };
@@ -88,7 +86,7 @@ const MarketStats = () => {
           .reverse()
       );
     }
-  }, [marketData]);
+  }, [data.labels.length, marketData]);
 
   return (
     <div>
@@ -104,10 +102,10 @@ const MarketStats = () => {
             <div className="dash-content dash-small-info dash-flex">
    			      <div className="info-text">
 				        <label>CCX to USD</label>
-				        <h2>$ {ccxToUSD.toLocaleString(undefined, format2Decimals)}</h2>
+				        <h2><FormattedAmount amount={ccxToUSD} currency="USD" useSymbol /></h2>
 			        </div>
               <div className="icon icon-info">
-                <FontAwesomeIcon icon="dollar-sign" fixedWidth />
+                <FaDollarSign />
               </div>
             </div>
           </div>
@@ -116,10 +114,10 @@ const MarketStats = () => {
             <div className="dash-content dash-small-info dash-flex">
    			      <div className="info-text">
                 <label>CCX to BTC</label>
-                <h2>{ccxToBTC.toLocaleString(undefined, format8Decimals)}</h2>
+                <h2><FormattedAmount amount={ccxToBTC} currency="BTC" showCurrency={false} /></h2>
 			        </div>
               <div className="icon icon-info">
-                <FontAwesomeIcon icon={['fab', 'bitcoin']} fixedWidth />
+                <FaBitcoin />
               </div>
             </div>
           </div>
@@ -131,7 +129,7 @@ const MarketStats = () => {
                 <h2>$ {parseInt(marketCap).toLocaleString()}</h2>
               </div>
               <div className="icon icon-info">
-                <FontAwesomeIcon icon="trophy" fixedWidth />
+                <FaTrophy />
               </div>
             </div>
           </div>
@@ -143,7 +141,7 @@ const MarketStats = () => {
                 <h2>$ {parseInt(dailyVolume).toLocaleString()}</h2>
 			        </div>
               <div className="icon icon-info">
-                <FontAwesomeIcon icon={['far', 'money-bill-alt']} fixedWidth />
+                <FaMoneyBillAlt />
               </div>
             </div>
           </div>

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Accordion from 'react-bootstrap/Accordion';
 
 import { AppContext } from '../ContextProvider';
+import FormLabelDescription from '../elements/FormLabelDescription';
 import DonationForm from '../elements/Settings/DonationForm';
 import IPNForm from '../elements/Settings/IPNForm';
 
@@ -34,7 +35,13 @@ const PaySettings = () => {
                 <div className="form-layout form-layout-7">
 
                   <div className="row no-gutters">
-                    <div className="col-5 col-sm-4 align-items-start pd-t-25-force">Receiving Wallet Address</div>
+                    <div className="col-5 col-sm-4 align-items-baseline">
+                      Receiving Wallet Address
+                      <FormLabelDescription>
+                        Enter wallet address (along with other optional parameters) to generate URL which can be used to
+                        receive CCX
+                      </FormLabelDescription>
+                    </div>
                     <div className="col-7 col-sm-8"><DonationForm /></div>
                   </div>
 

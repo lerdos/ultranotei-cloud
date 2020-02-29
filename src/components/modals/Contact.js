@@ -4,6 +4,7 @@ import WAValidator from 'multicoin-address-validator';
 
 import { AppContext } from '../ContextProvider';
 import { useFormInput, useFormValidation } from '../../helpers/hooks';
+import FormLabelDescription from '../elements/FormLabelDescription';
 
 
 const ContactModal = props => {
@@ -18,13 +19,13 @@ const ContactModal = props => {
   const formValidation = contact
     ? (
         label.length > 0 &&
-        WAValidator.validate(address, 'CCX') &&
+        (WAValidator.validate(address, 'CCX') || new RegExp(/^[a-z0-9]*\.conceal\.id/).test(address)) &&
         (paymentID === '' || paymentID.length === 64) &&
         !(label === contact.label && address === contact.address && paymentID === contact.paymentID)
       )
     : (
         label.length > 0 &&
-        WAValidator.validate(address, 'CCX') &&
+        (WAValidator.validate(address, 'CCX') || new RegExp(/^[a-z0-9]*\.conceal\.id/).test(address)) &&
         (paymentID === '' || paymentID.length === 64)
       );
   const formValid = useFormValidation(formValidation);
@@ -65,6 +66,7 @@ const ContactModal = props => {
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
                 Label
+                <FormLabelDescription>Label for this contact</FormLabelDescription>
               </div>
               <div className="col-7 col-sm-9 wallet-address">
                 <input
@@ -82,6 +84,7 @@ const ContactModal = props => {
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
                 Address
+                <FormLabelDescription>Contact's receiving address</FormLabelDescription>
               </div>
               <div className="col-7 col-sm-9 wallet-address receive-address">
                 <input
@@ -91,7 +94,7 @@ const ContactModal = props => {
                   className="form-control"
                   name="address"
                   type="text"
-                  minLength={98}
+                  minLength={12}
                   maxLength={98}
                 />
               </div>
@@ -100,6 +103,7 @@ const ContactModal = props => {
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
                 Payment ID (optional)
+                <FormLabelDescription>Contact's payment ID for this address</FormLabelDescription>
               </div>
               <div className="col-7 col-sm-9 wallet-address">
                 <input

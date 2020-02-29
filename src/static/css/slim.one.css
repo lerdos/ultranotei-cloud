@@ -1090,6 +1090,11 @@ hr {
   color: rgb(255, 255, 255);
 }
 
+.modal-content form,
+.modal-content .form-layout {
+  color: rgb(134, 139, 161);
+}
+
 .modal .modal-header,
 .modal .modal-footer {
   background-color: rgb(22, 25, 28);
@@ -1128,6 +1133,7 @@ hr {
   transition: background-color .3s, box-shadow .3s, color .3s;
 }
 
+.donatePage .input-group-append .input-group-text,
 .send-form .input-group-append .input-group-text {
   border: none;
   background-color: rgb(33, 37, 41);
@@ -1155,7 +1161,7 @@ hr {
 
 .send-form .tx-default-fee-text {
   color: rgb(111, 111, 111);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
 }
 
 .tx-details,
@@ -1225,13 +1231,16 @@ hr {
 }
 
 .slim-navbar .nav-link svg {
-  fill: rgb(265, 165, 0);
   transition: fill 0.3s;
 }
 
-.slim-navbar .nav-item:hover svg,
-.slim-navbar .nav-link.active:hover svg {
+.slim-navbar .nav-item:hover svg {
   fill: rgb(255, 255, 255);
+  transition: fill 0.3s;
+}
+
+.slim-navbar .nav-link.active:hover svg {
+  fill: rgb(265, 165, 0);
   transition: fill 0.3s;
 }
 
@@ -1648,4 +1657,11 @@ label.codeExample {
   padding: 10px;
   background-color: rgb(265, 165, 0);
   color: rgb(0, 0, 0);
+}
+
+
+/******************** Form Label Description *********************/
+
+.form-label-description {
+
 }

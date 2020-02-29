@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome/index';
 import WAValidator from 'multicoin-address-validator';
+import { FaCheck, FaExclamationTriangle, FaSpinner } from 'react-icons/fa';
 
 import { AppContext } from '../ContextProvider';
 import { useDebounce, useFormInput, useFormValidation } from '../../helpers/hooks';
 import WalletInput from './WalletInput';
+import FormLabelDescription from './FormLabelDescription';
 
 
 const IdForm = () => {
@@ -17,7 +18,7 @@ const IdForm = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [idAddress, setIdAddress] = useState(false);
-  const { value: idValue, bind: bindIdValue, setValue: setIdValue, reset: resetId } = useFormInput('');
+  const { value: idValue, bind: bindIdValue, reset: resetId } = useFormInput('');
   const { value: idName, bind: bindIdName, reset: resetName } = useFormInput('');
   const { value: idAddressToCreate, bind: bindIdAddressToCreate, reset: resetIdAddressToCreate } = useFormInput('');
 
@@ -70,38 +71,48 @@ const IdForm = () => {
     >
       <div className="form-layout form-layout-7">
         <div className="row no-gutters">
-          <div className="col-5 col-sm-4">Conceal ID</div>
-          <div className="col-7 col-sm-8 input-group wallet-address">
+          <div className="col-5 col-sm-4">
+            Conceal ID
+            <FormLabelDescription>
+              ID you wish to use. If you choose "myname", your Conceal ID will be "myname.conceal.id".
+            </FormLabelDescription>
+          </div>
+          <div className="col-7 col-sm-8 wallet-address">
+            <div className="input-group">
               <input
                 {...bindIdValue}
                 type="text"
                 placeholder="Conceal ID"
                 name="id"
-                className="form-control rbt-input-main"
-                onKeyDown={() => setIsTyping(true)}
+                className="form-control"
+                onKeyDown={e => e.keyCode !== 9 && setIsTyping(true)}
               />
               <div className="input-group-append">
                 <span className="input-group-text">
-                  {isSearching && <FontAwesomeIcon icon="spinner" spin pulse />}
+                  {isSearching && <FaSpinner className="faa-spin animated" />}
                   {idValue.length > 2 && !isSearching && !isTyping && (
                       layout.idAvailable
                       ? <OverlayTrigger overlay={<Tooltip id="id-available">ID Available</Tooltip>}>
-                          <FontAwesomeIcon icon="check" className="text-success" />
+                          <FaCheck className="text-success" />
                         </OverlayTrigger>
                       : <OverlayTrigger overlay={<Tooltip id="id-not-available">ID Not Available</Tooltip>}>
-                          <FontAwesomeIcon icon="exclamation-triangle" className="text-danger" />
+                          <FaExclamationTriangle className="text-danger" />
                         </OverlayTrigger>
                   )}
                 </span>
               </div>
+            </div>
           </div>
         </div>
 
         <div className="row no-gutters">
           <div className="col-5 col-sm-4">
             <div>
-              Payment Address<br />
-              <small>Cloud address to pay ID fee</small>
+              Payment Address
+              <FormLabelDescription>
+                One of your Cloud addresses with enough funds to pay the fee. By default, this address will be used
+                to bind your ID to. If you want to bind different address, add it to "ID Address" field below.
+              </FormLabelDescription>
             </div>
           </div>
           <div className="col-7 col-sm-8 wallet-address">
@@ -124,8 +135,10 @@ const IdForm = () => {
         <div className="row no-gutters">
           <div className="col-5 col-sm-4">
             <div>
-              ID Address (Optional)<br />
-              <small>If left blank, Payment Address will be used</small>
+              ID Address (Optional)
+              <FormLabelDescription>
+                Optional address to bind ID to. If left blank, the Payment Address above will be binded to ID.
+              </FormLabelDescription>
             </div>
           </div>
           <div className="col-7 col-sm-8 wallet-address">
@@ -140,12 +153,17 @@ const IdForm = () => {
         </div>
 
         <div className="row no-gutters">
-          <div className="col-5 col-sm-4">ID Name</div>
+          <div className="col-5 col-sm-4">
+            ID Label
+            <FormLabelDescription>
+              Label for this ID.
+            </FormLabelDescription>
+          </div>
           <div className="col-7 col-sm-8 wallet-address">
             <input
               {...bindIdName}
               type="text"
-              placeholder="ID Name"
+              placeholder="ID Label"
               name="idName"
               className="form-control rbt-input-main"
             />

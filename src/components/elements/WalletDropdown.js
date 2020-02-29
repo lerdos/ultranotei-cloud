@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react';
+import Button from 'react-bootstrap/Button';
 
 import { AppContext } from '../ContextProvider';
-import { maskAddress } from '../../helpers/utils';
-import Button from 'react-bootstrap/Button';
+import { formattedStringAmount, maskAddress } from '../../helpers/utils';
 
 
 const WalletDropdown = props => {
@@ -17,13 +17,13 @@ const WalletDropdown = props => {
     walletAddress,
     setWalletAddress,
     walletsLoaded,
+    currentAddress = '',
   } = props;
-
 
   useEffect(() => {
     const availableWallets = Object.keys(wallets)
       .reduce((acc, curr) => {
-        if (wallets[curr].balance > 0) acc[curr] = wallets[curr];
+        if (wallets[curr].balance > 0 && curr !== currentAddress) acc[curr] = wallets[curr];
         return acc;
       }, {});
     const selectedAddress = Object.keys(availableWallets)[0];
@@ -34,7 +34,7 @@ const WalletDropdown = props => {
       setWallet(selectedWallet);
     }
     setAvailableWallets(availableWallets);
-  }, [wallets]);
+  }, [setAvailableWallets, setWallet, setWalletAddress, wallets]);
 
   return (
     <>
@@ -49,7 +49,7 @@ const WalletDropdown = props => {
         >
           {Object.keys(availableWallets).map(address =>
             <option value={address} key={address}>
-              {maskAddress(address)} ({wallets[address].balance} CCX)
+              {maskAddress(address)} ({formattedStringAmount({ amount: wallets[address].balance })})
             </option>
           )}
         </select>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import WAValidator from 'multicoin-address-validator';
 
 
 export const useFormInput = (init) => {
@@ -10,7 +11,7 @@ export const useFormInput = (init) => {
 
 export const useFormValidation = (init) => {
   const [formValid, setFormValid] = useState(false);
-  useEffect(() => { setFormValid(init) });
+  useEffect(() => { setFormValid(init) }, [init]);
   return formValid;
 };
 
@@ -39,7 +40,62 @@ export const useDebounce = (value, delay) => {
   useEffect(() => {
     const handler = setTimeout(() => { setDebouncedValue(value) }, delay);
     return () => { clearTimeout(handler) };
-  }, [value],
+  }, [delay, value],
   );
   return debouncedValue;
+};
+
+export const useCalculatedValues = (amount, marketData) => {
+  const [btcValue, setBtcValue] = useState(amount);
+  const [usdValue, setUsdValue] = useState(amount);
+
+  const ccxToUSD =  marketData ? marketData.market_data.current_price.usd : 0;
+  const ccxToBTC =  marketData ? marketData.market_data.current_price.btc : 0;
+
+  useEffect(() => {
+    setBtcValue(parseFloat(amount) > 0 ? amount * ccxToBTC : 0);
+    setUsdValue(parseFloat(amount) > 0 ? amount * ccxToUSD : 0);
+  }, [amount, ccxToBTC, ccxToUSD]);
+
+  return { btcValue, usdValue };
+};
+
+export const useSendFormValidation = ({
+  amount,
+  appSettings,
+  fromAddress,
+  message = '',
+  password = '',
+  paymentID = '',
+  toAddress,
+  twoFACode,
+  userSettings,
+  wallet,
+}) => {
+  const { coinDecimals, defaultFee, messageLimit } = appSettings;
+  const { twoFAEnabled } = userSettings;
+  let isValid = false;
+  const [formValid, setFormValid] = useState(isValid);
+
+  if (wallet) {
+    const parsedAmount = !Number.isNaN(parseFloat(amount)) ? parseFloat(amount) : 0;
+    const totalAmount = parsedAmount > 0 ? parsedAmount + defaultFee : 0;
+    const walletBalanceValid = totalAmount <= parseFloat(wallet.balance.toFixed(coinDecimals));
+
+    isValid = (
+      (fromAddress && toAddress !== fromAddress) &&
+      (WAValidator.validate(toAddress, 'CCX') || new RegExp(/^[a-z0-9]*\.conceal\.id/).test(toAddress)) &&
+      totalAmount > 0 &&
+      walletBalanceValid &&
+      (message !== '' || message.length <= messageLimit) &&
+      (paymentID === '' || paymentID.length === 64) &&
+      (twoFAEnabled
+          ? (parseInt(twoFACode) && twoFACode.toString().length === 6)
+          : (password !== '' && password.length >= 8)
+      )
+    );
+  }
+
+  useEffect(() => setFormValid(isValid), [isValid]);
+  return formValid;
 };

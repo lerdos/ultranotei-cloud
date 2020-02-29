@@ -2,11 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import QrReader from 'react-qr-reader';
-import WAValidator from 'multicoin-address-validator';
 
 import { AppContext } from '../ContextProvider';
-import { useFormInput, useFormValidation, useTypeaheadInput } from '../../helpers/hooks';
-import { maskAddress } from '../../helpers/utils';
+import FormLabelDescription from '../elements/FormLabelDescription';
+import WalletDropdown from '../elements/WalletDropdown';
+import { useFormInput, useSendFormValidation, useTypeaheadInput } from '../../helpers/hooks';
+import { FormattedAmount, maskAddress } from '../../helpers/utils';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 
@@ -14,11 +15,14 @@ import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 const SendModal = props => {
   const { actions, state } = useContext(AppContext);
   const { sendTx } = actions;
-  const { appSettings, layout, user, userSettings } = state;
-  const { coinDecimals, defaultFee, messageFee } = appSettings;
-  const { formSubmitted, sendTxResponse } = layout;
+  const { appSettings, layout, user, userSettings, wallets } = state;
+  const { coinDecimals, defaultFee, messageLimit } = appSettings;
+  const { formSubmitted, walletsLoaded } = layout;
   const { toggleModal, wallet, ...rest } = props;
 
+  const [availableWallets, setAvailableWallets] = useState({});
+  const [selectedWallet, setSelectedWallet] = useState(wallet || { balance: 0 });
+  const [walletAddress, setWalletAddress] = useState('');
   const [qrReaderOpened, setQrReaderOpened] = useState(false);
 
   const { value: address, bind: bindAddress, reset: resetAddress, paymentIDValue } = useTypeaheadInput('');
@@ -30,36 +34,26 @@ const SendModal = props => {
   const { value: label, bind: bindLabel, setValue: setLabelValue, reset: resetLabel } = useFormInput('');
 
   const parsedAmount = !Number.isNaN(parseFloat(amount)) ? parseFloat(amount) : 0;
-  const totalMessageFee = message.length > 0 ? messageFee : 0;
-  const txFee = parsedAmount > 0 || amount !== '' ? defaultFee : 0;
-  const totalTxFee = txFee + totalMessageFee;
-  const totalAmount = parsedAmount > 0 ? (parsedAmount + totalTxFee).toFixed(coinDecimals) : totalTxFee;
-  const maxValue = totalTxFee > 0
-    ? (wallet.balance - totalTxFee).toFixed(coinDecimals)
-    : (wallet.balance - defaultFee).toFixed(coinDecimals);
-
-  const walletBalanceValid = totalAmount <= wallet.balance;
-  const messageAmountValid = totalMessageFee > 0 && totalTxFee <= wallet.balance;
-  const totalAmountValid = (parsedAmount >= defaultFee && totalAmount > 0) || messageAmountValid;
+  const totalAmount = parsedAmount > 0 ? parsedAmount + defaultFee : 0;
+  const maxValue = (selectedWallet.balance - defaultFee).toFixed(coinDecimals);
+  const calculateMax = () => setAmountValue(maxValue);
 
   useEffect(() => {
     if (paymentIDValue) setPaymentIDValue(paymentIDValue);
-  }, [paymentIDValue]);
+  }, [paymentIDValue, setPaymentIDValue]);
 
-  const formValidation = (
-    address !== props.address &&
-    WAValidator.validate(address, 'CCX') &&
-    walletBalanceValid &&
-    totalAmountValid &&
-    (paymentID === '' || paymentID.length === 64) &&
-    (userSettings.twoFAEnabled
-      ? (parseInt(twoFACode) && twoFACode.toString().length === 6)
-      : (password !== '' && password.length >= 8)
-    )
-  );
-  const formValid = useFormValidation(formValidation);
-
-  const calculateMax = () => setAmountValue(maxValue > 0 ? maxValue : 0);
+  const formValid = useSendFormValidation({
+    amount,
+    appSettings,
+    fromAddress: props.address,
+    message,
+    password,
+    paymentID,
+    toAddress: address,
+    twoFACode,
+    userSettings,
+    wallet,
+  });
 
   let addressInput = null;
   const handleScan = data => {
@@ -87,11 +81,6 @@ const SendModal = props => {
 
   const handleError = err => {
     console.error(err)
-  };
-
-  const formatOptions = {
-    minimumFractionDigits: coinDecimals,
-    maximumFractionDigits: coinDecimals,
   };
 
   return (
@@ -123,7 +112,7 @@ const SendModal = props => {
             sendTx(
               {
                 e,
-                wallet: props.address,
+                wallet: selectedWallet,
                 address,
                 paymentID,
                 amount,
@@ -150,15 +139,27 @@ const SendModal = props => {
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
                 From
+                <FormLabelDescription>Address from which funds will be sent from</FormLabelDescription>
               </div>
               <div className="col-7 col-sm-9 wallet-address">
-                {props.address}
+                {props.address ||
+                  <WalletDropdown
+                    availableWallets={availableWallets}
+                    setWallet={setSelectedWallet}
+                    setWalletAddress={setWalletAddress}
+                    setAvailableWallets={setAvailableWallets}
+                    walletAddress={walletAddress}
+                    wallets={wallets}
+                    walletsLoaded={walletsLoaded}
+                  />
+                }
               </div>
             </div>
 
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
                 To
+                <FormLabelDescription>Address to send funds to</FormLabelDescription>
               </div>
               <div className="col-7 col-sm-9">
                 <Typeahead
@@ -195,6 +196,7 @@ const SendModal = props => {
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
                 Amount
+                <FormLabelDescription>Amount to send</FormLabelDescription>
               </div>
               <div className="col-7 col-sm-9">
                 <div className="input-group">
@@ -221,6 +223,7 @@ const SendModal = props => {
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
                 Payment ID (optional)
+                <FormLabelDescription>Optional Payment ID for receiving address</FormLabelDescription>
               </div>
               <div className="col-7 col-sm-9">
                 <input
@@ -239,6 +242,7 @@ const SendModal = props => {
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
                 Message (optional)
+                <FormLabelDescription>Optional message to include in this transaction</FormLabelDescription>
               </div>
               <div className="col-7 col-sm-9">
                 <div className="input-group">
@@ -249,15 +253,16 @@ const SendModal = props => {
                     className="form-control"
                     name="message"
                     type="text"
+                    maxLength={messageLimit}
                   />
                   <div className="input-group-append">
-                      <span className="input-group-text">
-                        <small>
-                          <strong>
-                            MESSAGE FEE: {(totalMessageFee).toLocaleString(undefined, formatOptions)} CCX
-                          </strong>
-                        </small>
-                      </span>
+                    <span className="input-group-text">
+                      <small>
+                        <strong>
+                          {message.length}/{messageLimit} Characters
+                        </strong>
+                      </small>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -266,6 +271,9 @@ const SendModal = props => {
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
                 Label (optional)
+                <FormLabelDescription>
+                  Add label to automatically add receiving address to Address Book
+                </FormLabelDescription>
               </div>
               <div className="col-7 col-sm-9">
                 <input
@@ -284,6 +292,7 @@ const SendModal = props => {
               ? <div className="row no-gutters">
                   <div className="col-5 col-sm-3">
                     2 Factor Authentication
+                    <FormLabelDescription>2 Factor Authentication code</FormLabelDescription>
                   </div>
                   <div className="col-7 col-sm-9">
                     <input
@@ -301,6 +310,7 @@ const SendModal = props => {
               : <div className="row no-gutters">
                   <div className="col-5 col-sm-3">
                     Password
+                    <FormLabelDescription>Your password</FormLabelDescription>
                   </div>
                   <div className="col-7 col-sm-9">
                     <input
@@ -340,42 +350,19 @@ const SendModal = props => {
             <span className="tx-right sendSummary">
                 <h2>
                   <span className="tx-total-text">TOTAL</span>&nbsp;
-                  <span className={`${totalAmount > wallet.balance ? 'text-danger' : ''}`}>
-                    {totalAmount.toLocaleString(undefined, formatOptions)} CCX
+                  <span className={`${totalAmount > selectedWallet.balance ? 'text-danger' : ''}`}>
+                    <FormattedAmount amount={totalAmount} />
                   </span>
                 </h2>
+                <div className="tx-default-fee-text">
+                  FEE: <span className="tx-white"><FormattedAmount amount={defaultFee} /></span>
+                </div>
                 <div>
-                  <span className="tx-available-text">AVAILABLE</span>&nbsp;
-                  <strong>
-                    {wallet.balance && wallet.balance.toLocaleString(undefined, formatOptions)}
-                  </strong> CCX
-                </div>
-                <div className="tx-default-fee-text">
-                    MESSAGE FEE: {totalMessageFee.toLocaleString(undefined, formatOptions)} CCX
-                </div>
-                <div className="tx-default-fee-text">
-                    TRANSACTION FEE: {defaultFee.toLocaleString(undefined, formatOptions)} CCX
+                  <span className="tx-available-text">AVAILABLE:</span>&nbsp;
+                  <span className="tx-white"><FormattedAmount amount={selectedWallet.balance} /></span>
                 </div>
               </span>
           </div>
-          {sendTxResponse &&
-            <div className={`${sendTxResponse.status}-message`}>
-              {
-                sendTxResponse.status === 'error'
-                  ? <div className="text-danger">{sendTxResponse.message}</div>
-                  : <>
-                      TX Hash: <a
-                        href={`${appSettings.explorerURL}/index.html?hash=${sendTxResponse.message.transactionHash}#blockchain_transaction`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {sendTxResponse.message.transactionHash}
-                      </a><br />
-                      Secret Key: {sendTxResponse.message.transactionSecretKey}
-                    </>
-              }
-            </div>
-          }
         </form>
       </Modal.Body>
       <Modal.Footer>

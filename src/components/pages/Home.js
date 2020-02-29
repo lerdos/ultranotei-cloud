@@ -1,10 +1,22 @@
 import React, { useContext, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  FaBars,
+  FaCloudDownloadAlt,
+  FaDiscord,
+  FaFacebook,
+  FaGithub,
+  FaMedium,
+  FaSignInAlt,
+  FaTelegram,
+  FaTimes,
+  FaTwitter,
+  FaUserPlus,
+} from 'react-icons/fa';
 import AOS from 'aos';
 
 import { AppContext } from '../ContextProvider';
-import { ReactComponent as Logo } from '../../static/img/logo.svg';
+import { useAddToHomescreenPrompt } from "../../helpers/HomeScreen";
 
 import landingImg1 from '../../static/img/landing_img1.jpg';
 import landingImg2 from '../../static/img/landing_img2.jpg';
@@ -13,10 +25,8 @@ import landingImg4 from '../../static/img/landing_img4.jpg';
 import landingImg5 from '../../static/img/landing_img5.jpg';
 import landingImg6 from '../../static/img/landing_img6.jpg';
 
-import '../../static/css/aos.css';
-import '../../static/css/landing.css';
-
 const Home = props => {
+  const [getIsVisible, promptToInstall] = useAddToHomescreenPrompt();
   const { state } = useContext(AppContext);
   const { layout, user } = state;
   const { redirectToReferrer } = layout;
@@ -26,17 +36,53 @@ const Home = props => {
       duration: 800,
       easing: 'slide',
       once: true,
-    })
+    });
+
+    const script=document.createElement('script');
+    script.src='https://code.jquery.com/jquery-3.2.1.slim.min.js';
+    document.body.appendChild(script);
+
+    const jQuery=document.createElement('script');
+    jQuery.src='https://conceal.network/landing/js/main.js';
+    document.body.appendChild(jQuery);
+
+    const landingCSS=document.createElement('link');
+    landingCSS.href='https://conceal.network/landing/css/cloud-landing.css';
+    landingCSS.rel='stylesheet';
+    landingCSS.type='text/css';
+    document.getElementsByTagName('head')[0].appendChild(landingCSS);
+
+    const AOSCSS=document.createElement('link');
+    AOSCSS.href='https://conceal.network/landing/css/aos.css';
+    AOSCSS.rel='stylesheet';
+    AOSCSS.type='text/css';
+    document.getElementsByTagName('head')[0].appendChild(AOSCSS);
+
+    return () => {
+      document.body.removeChild(script);
+      document.body.removeChild(jQuery);
+      document.getElementsByTagName('head')[0].removeChild(landingCSS);
+      document.getElementsByTagName('head')[0].removeChild(AOSCSS);
+    }
+
   }, []);
 
   // create a scroll element to which we scroll
-  const scrollElement = React.createRef()
+  const scrollElement = React.createRef();
 
-  const onScrollToContent = () =>
+  /*const onScrollToContent = () =>
     scrollElement.current.scrollIntoView({
       behavior: 'smooth',
       block: 'start',
     });
+
+  const onHomeScreenClick = (e) => {
+    try {
+      promptToInstall();
+    } finally {
+      e && e.preventDefault()
+    }
+  }*/
 
   if (redirectToReferrer && props.location.state && user.loggedIn()) {
     const { from } = props.location.state;
@@ -51,7 +97,7 @@ const Home = props => {
       <div className="site-mobile-menu">
         <div className="site-mobile-menu-header">
           <div className="site-mobile-menu-close mt-3">
-            <span className="icon-close2 js-menu-toggle" />
+            <span className="js-menu-toggle"><FaTimes /></span>
           </div>
         </div>
         <div className="site-mobile-menu-body" />
@@ -60,25 +106,26 @@ const Home = props => {
       <header className="site-navbar py-3" role="banner" id="siteHeader">
         <div className="container-fluid">
           <div className="row align-items-center">
-            <div className="col-12 col-md-4 logoDiv">
-              <Logo className="logo" id="logo" />
+            <div class="col-12 col-md-2" id="logoDiv">
+              <a href="../"></a>
             </div>
             <div className="col-12 col-md-8 d-none d-xl-block">
               <nav className="site-navigation position-relative text-right" role="navigation">
                 <ul className="site-menu js-clone-nav mx-auto d-none d-lg-block">
-                  <li className="active"><Link to="/">CLOUD</Link></li>
-                  <li><a href="https://conceal.pay/">PAY</a></li>
-                  <li><a href="https://conceal.id/">ID</a></li>
-                  <li><a href="https://conceal.mobile/">MOBILE</a></li>
-                  <li className="cta"><Link to="/login">SIGN IN</Link></li>
+                <li><a href="https://conceal.network/banking/">BANKING</a></li>
+                <li className="active"><a href="https://conceal.cloud">CLOUD</a></li>
+                <li><a href="https://conceal.network/id/">ID</a></li>
+                <li><a href="https://conceal.network/labs/">LABS</a></li>
+                <li><a href="https://conceal.network/messaging/">MESSAGING</a></li>
+                <li><a href="https://conceal.network/mobile">MOBILE</a></li>
+                <li><a href="https://conceal.network/pay/">PAY</a></li>
+                  <li className="cta"><Link to="/login"><FaSignInAlt /> SIGN IN</Link></li>
                 </ul>
               </nav>
             </div>
-            {/*
-            <div className="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;">
-              <a href="#" className="site-menu-toggle js-menu-toggle text-white"><span className="icon-menu h3" /></a>
-            </div>
-            */}
+            <div className="d-inline-block d-xl-none ml-md-0 mr-auto py-3">
+            <a href="#" className="site-menu-toggle js-menu-toggle text-white"><FaBars /></a>
+          </div>
           </div>
         </div>
       </header>
@@ -88,28 +135,29 @@ const Home = props => {
           <div className="row align-items-center">
             <div className="col-md-10">
               <span className="d-block mb-3 caption" data-aos="fade-up" data-aos-delay="100">WELCOME TO CONCEAL CLOUD</span>
-              <h1 className="d-block mb-4" data-aos="fade-up" data-aos-delay="200">A secure, feature rich, and fast Conceal
-                Wallet</h1>
-              <span className="d-block mb-5 caption" data-aos="fade-up" data-aos-delay="300" />
-              <Link to="/signup" className="btn-custom btnSignMain" data-aos="fade-up" data-aos-delay="400"><span>SIGN UP</span></Link>
-              <Link to="/login" className="btn-custom btnSignMain" data-aos="fade-up" data-aos-delay="400"><span>SIGN IN</span></Link>
+              <h1 className="d-block mb-4" data-aos="fade-up" data-aos-delay="200"><strong>Powerful</strong> web-based wallet &amp; dashboard</h1>
+              <Link to="/signup" className="btn-custom btnSignMain" data-aos="fade-up"><span><FaUserPlus />&nbsp; SIGN UP</span></Link>
+              <Link to="/login" className="btn-custom btnSignMain" data-aos="fade-up"><span><FaSignInAlt />&nbsp; SIGN IN</span></Link>
+              {getIsVisible() && (
+                <button className="btn-custom btnSignMain btnAddToHomepage" data-aos="fade-up" onClick={() => promptToInstall()}><span><FaCloudDownloadAlt />&nbsp; Install</span></button>
+              )}
             </div>
           </div>
           <div className="downArrowWrapper">
-            <div className="downArrow" id="downArrowBtn" onClick={onScrollToContent} />
+            <a href="#downArrowBtn" className="downArrow" id="downArrowBtn"></a>
           </div>
         </div>
       </div>
 
       <div className="site-section" id="mainSection" ref={scrollElement}>
         <div className="container">
-          <div className="row mb-5 aboutSection">
+          <div className="row mb-12 aboutSection">
             <div className="col-lg-4" data-aos="fade-up" data-aos-delay="100">
               <div className="site-section-heading">
                 <h2>About</h2>
               </div>
             </div>
-            <div className="col-lg-5 mt-5 pl-lg-5" data-aos="fade-up" data-aos-delay="200">
+            <div className="col-lg-8 mt-5 pl-lg-5" id="aboutDesc" data-aos="fade-up" data-aos-delay="200">
               <p>We aim to make the Conceal crypto-currency as easy to use as possible. With Conceal Cloud you have a wallet
                 that is secure, fast, and easy to use. All you need to get started is an account.</p>
             </div>
@@ -160,7 +208,7 @@ const Home = props => {
 
           <div className="row align-items-center speaker">
             <div className="col-lg-6 mb-5 mb-lg-0 order-lg-2 imageWrapper_rounded" data-aos="fade" data-aos-delay="100">
-              <img src={landingImg4} alth="Address Book" className="img-fluid rounded" />
+              <img src={landingImg4} alt="Address Book" className="img-fluid rounded" />
             </div>
             <div className="col-lg-6 ml-auto order-lg-1">
               <div className="bio pr-lg-5">
@@ -234,12 +282,12 @@ const Home = props => {
             <div className="col-md-4">
               <h2 className="footer-heading text-uppercase mb-4">Connect with Us</h2>
               <p>
-                <a href="https://www.facebook.com/concealnetwork" className="p-2 pl-0"><FontAwesomeIcon icon={['fab', 'facebook']} fixedWidth /></a>
-                <a href="https://twitter.com/ConcealNetwork" className="p-2"><FontAwesomeIcon icon={['fab', 'twitter']} fixedWidth /></a>
-                <a href="https://medium.com/@ConcealNetwork" className="p-2"><FontAwesomeIcon icon={['fab', 'medium']} fixedWidth /></a>
-                <a href="https://github.com/ConcealNetwork" className="p-2"><FontAwesomeIcon icon={['fab', 'github']} fixedWidth /></a>
-                <a href="https://discord.conceal.network" className="p-2"><FontAwesomeIcon icon={['fab', 'discord']} fixedWidth /></a>
-                <a href="https://t.co/55klBHKGUR" className="p-2"><FontAwesomeIcon icon={['fab', 'telegram']} fixedWidth /></a>
+                <a href="https://www.facebook.com/concealnetwork" className="p-2 pl-0"><FaFacebook /></a>
+                <a href="https://twitter.com/ConcealNetwork" className="p-2"><FaTwitter /></a>
+                <a href="https://medium.com/@ConcealNetwork" className="p-2"><FaMedium /></a>
+                <a href="https://github.com/ConcealNetwork" className="p-2"><FaGithub /></a>
+                <a href="https://discord.conceal.network" className="p-2"><FaDiscord /></a>
+                <a href="https://t.co/55klBHKGUR" className="p-2"><FaTelegram /></a>
               </p>
             </div>
           </div>
