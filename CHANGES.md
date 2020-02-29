@@ -1,3 +1,14 @@
+#### 1.3.3 (2019-02-29)
+
+**Features**
+
+ - Updated notifications
+
+**Bug Fixes**
+
+ - Fixed an issue with sending funds
+ - BTC balance in Dashboard now includes locked balance in calculation
+
 #### 1.3.2 (2019-02-27)
 
 **Features**

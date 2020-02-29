@@ -8,7 +8,7 @@ const PortfolioBTC = () => {
   const { state } = useContext(AppContext);
   const { prices, wallets } = state;
 
-  const totalCCX = Object.keys(wallets).reduce((acc, curr) => acc + wallets[curr].balance || acc, 0);
+  const totalCCX = Object.keys(wallets).reduce((acc, curr) => acc + wallets[curr].balance + wallets[curr].locked || acc, 0);
 
   return (
     <div className="dash-content">

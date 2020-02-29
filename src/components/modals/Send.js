@@ -112,7 +112,7 @@ const SendModal = props => {
             sendTx(
               {
                 e,
-                wallet: selectedWallet,
+                wallet: props.address,
                 address,
                 paymentID,
                 amount,

@@ -4,7 +4,7 @@ import { withRouter } from 'react-router';
 import AuthHelper from '../helpers/AuthHelper';
 import ApiHelper from '../helpers/ApiHelper';
 import useAppState from './useAppState';
-import { NewTxMessage } from './elements/NotificationMessages';
+import { NewTxMessage, TxSentMessage } from './elements/NotificationMessages';
 import { showNotification } from '../helpers/utils';
 
 
@@ -262,6 +262,7 @@ const AppContextProvider = props => {
                   message: <NewTxMessage tx={tx} />,
                   title: `NEW ${tx.type === 'received' ? 'INCOMING' : 'OUTGOING'} TRANSACTION`,
                   type: tx.type === 'received' ? 'success' : 'danger',
+                  dismiss: { duration: 0, click: false, touch: false, showIcon: true },
                 });
               });
             }
@@ -371,36 +372,40 @@ const AppContextProvider = props => {
   };
 
   const sendTx = (options, extras) => {
-    const { e, address, paymentID, message, label, id } = options;
+    const { e, address, label, paymentID } = options;
     e.preventDefault();
     dispatch({ type: 'FORM_SUBMITTED', value: true });
-    let layoutMessage;
     let sendTxResponse;
     Api.sendTx(options)
       .then(res => {
         if (res.result === 'error' || res.message.error) {
-          sendTxResponse = {
-            status: 'error',
-            message: `Wallet Error: ${res.message.error ? res.message.error.message : res.message}`,
-          };
-          dispatch({ type: 'SEND_TX', sendTxResponse });
+          showNotification({
+            message: res.message.error ? res.message.error.message : res.message,
+            title: 'ERROR SENDING CCX',
+            type: 'danger',
+            dismiss: { duration: 0, click: false, touch: false, showIcon: true },
+          });
           return;
         }
-        sendTxResponse = {
-          status: 'success',
-          message: res.message.result,
-          redirect: res.message.redirect,
-        };
+        sendTxResponse = { redirect: res.message.redirect };
         dispatch({ type: 'SEND_TX', sendTxResponse });
         if (label && label !== '') addContact({ label, address, paymentID });
         extras.forEach(fn => fn());
+        showNotification({
+          message: <TxSentMessage tx={res.message.result} />,
+          title: 'CCX SENT',
+          type: 'success',
+          dismiss: { duration: 0, click: false, touch: false, showIcon: true },
+        });
         getWallets();
       })
-      .catch(err => { layoutMessage = `ERROR ${err}` })
-      .finally(() => {
-        dispatch({ type: 'FORM_SUBMITTED', value: false });
-        if (message) dispatch({ type: 'DISPLAY_MESSAGE', message: layoutMessage, id });
-      });
+      .catch(err => showNotification({
+        message: err,
+        title: 'ERROR SENDING CCX',
+        type: 'danger',
+        dismiss: { duration: 0, click: false, touch: false, showIcon: true },
+      }))
+      .finally(() => dispatch({ type: 'FORM_SUBMITTED', value: false }));
   };
 
   const getId = () => {
