@@ -380,7 +380,7 @@ const AppContextProvider = props => {
       .then(res => {
         if (res.result === 'error' || res.message.error) {
           showNotification({
-            message: res.message.error ? res.message.error.message : res.message,
+            message: res.message.error ? res.message.error.message : res.message[0],
             title: 'ERROR SENDING CCX',
             type: 'danger',
             dismiss: { duration: 0, click: false, touch: false, showIcon: true },
