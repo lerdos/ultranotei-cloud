@@ -2,20 +2,20 @@ import { useEffect, useState } from 'react';
 import WAValidator from 'multicoin-address-validator';
 
 
-export const useFormInput = (init) => {
+export const useFormInput = init => {
   const [value, setValue] = useState(init);
   const onChange = e => setValue(e.target.value);
   const reset = () => setValue('');
   return { bind: { value, onChange }, reset, setValue, value };
 };
 
-export const useFormValidation = (init) => {
+export const useFormValidation = init => {
   const [formValid, setFormValid] = useState(false);
   useEffect(() => { setFormValid(init) }, [init]);
   return formValid;
 };
 
-export const useTypeaheadInput = (init) => {
+export const useTypeaheadInput = init => {
   const [defaultInputValue, setDefaultInputValue] = useState(init);
   const [paymentIDValue, setPaymentIDValue] = useState('');
   const onInputChange = value => setDefaultInputValue(value);
