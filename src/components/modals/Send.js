@@ -25,8 +25,8 @@ const SendModal = props => {
   const [walletAddress, setWalletAddress] = useState('');
   const [qrReaderOpened, setQrReaderOpened] = useState(false);
 
-  const { value: address, bind: bindAddress, reset: resetAddress, paymentIDValue } = useTypeaheadInput('');
-  const { value: paymentID, bind: bindPaymentID, setValue: setPaymentIDValue, reset: resetPaymentID } = useFormInput('');
+  const { value: address, bind: bindAddress, paymentIDValue } = useTypeaheadInput(props.contact ? props.contact.address : '');
+  const { value: paymentID, bind: bindPaymentID, setValue: setPaymentIDValue, reset: resetPaymentID } = useFormInput(props.contact ? props.contact.paymentID : '');
   const { value: amount, bind: bindAmount, setValue: setAmountValue, reset: resetAmount } = useFormInput('');
   const { value: message, bind: bindMessage, setValue: setMessageValue, reset: resetMessage } = useFormInput('');
   const { value: twoFACode, bind: bindTwoFACode, reset: resetTwoFACode } = useFormInput('');
@@ -45,14 +45,14 @@ const SendModal = props => {
   const formValid = useSendFormValidation({
     amount,
     appSettings,
-    fromAddress: props.address,
+    fromAddress: props.address ? props.address : walletAddress,
     message,
     password,
     paymentID,
     toAddress: address,
     twoFACode,
     userSettings,
-    wallet,
+    wallet: selectedWallet,
   });
 
   let addressInput = null;
@@ -82,6 +82,8 @@ const SendModal = props => {
   const handleError = err => {
     console.error(err)
   };
+
+  const resetAddressInput = () => addressInput.clear();
 
   return (
     <Modal
@@ -123,7 +125,7 @@ const SendModal = props => {
                 id: 'sendForm',
               },
               [
-                resetAddress,
+                resetAddressInput,
                 resetPaymentID,
                 resetAmount,
                 resetMessage,
@@ -139,7 +141,7 @@ const SendModal = props => {
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
                 From
-                <FormLabelDescription>Address from which funds will be sent from</FormLabelDescription>
+                <FormLabelDescription>Address which funds will be sent from</FormLabelDescription>
               </div>
               <div className="col-7 col-sm-9 wallet-address">
                 {props.address ||
@@ -159,7 +161,7 @@ const SendModal = props => {
             <div className="row no-gutters">
               <div className="col-5 col-sm-3">
                 To
-                <FormLabelDescription>Address to send funds to</FormLabelDescription>
+                <FormLabelDescription>Address to send funds</FormLabelDescription>
               </div>
               <div className="col-7 col-sm-9">
                 <Typeahead
@@ -321,6 +323,7 @@ const SendModal = props => {
                       name="password"
                       type="password"
                       minLength={8}
+                      autoComplete="new-password"
                     />
                   </div>
                 </div>

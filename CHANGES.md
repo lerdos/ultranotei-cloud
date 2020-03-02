@@ -1,3 +1,11 @@
+#### 1.3.4 (2019-03-02)
+
+**Bug Fixes**
+
+ - Fixed issues with Typeahead input field which was preventing sending funds in some cases
+ - Sending funds to contact from Address Book now properly pre-fills input fields with address and payment ID
+ - Removed pre-filling of password field in forms related to sending funds
+
 #### 1.3.3 (2019-02-29)
 
 **Features**

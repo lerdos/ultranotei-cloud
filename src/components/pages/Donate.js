@@ -196,6 +196,7 @@ const Donate = props => {
                                 type="password"
                                 minLength={8}
                                 disabled={Object.keys(availableWallets).length === 0}
+                                autoComplete="new-password"
                               />
                             </div>
                           </>
