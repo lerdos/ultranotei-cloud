@@ -42,21 +42,6 @@ const initialState = Auth => ({
     priceBTCUSD: 0,
     priceCCXBTC: 0,
   },
-  markets: {
-    stex: {
-      apiURL: 'https://api.wallet.conceal.network/api/stex/status',
-      ask: 0,
-      bid: 0,
-      volume: 0,
-    },
-    tradeogre: {
-      apiURL: 'https://tradeogre.com/api/v1/ticker/BTC-CCX',
-      ask: 0,
-      bid: 0,
-      volume: 0,
-    },
-  },
-  marketData: null,
   intervals: [],
 });
 

@@ -1,4 +1,4 @@
-let CACHE_NAME = 'conceal-cloud';
+let CACHE_NAME = 'xuni-cloud';
 let urlsToCache = [
   '/',
   '/completed'
