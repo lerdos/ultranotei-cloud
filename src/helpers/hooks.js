@@ -49,13 +49,13 @@ export const useCalculatedValues = (amount, marketData) => {
   const [btcValue, setBtcValue] = useState(amount);
   const [usdValue, setUsdValue] = useState(amount);
 
-  const ccxToUSD =  marketData ? marketData.market_data.current_price.usd : 0;
-  const ccxToBTC =  marketData ? marketData.market_data.current_price.btc : 0;
+  const xuniToUSD =  marketData ? marketData.market_data.current_price.usd : 0;
+  const xuniToBTC =  marketData ? marketData.market_data.current_price.btc : 0;
 
   useEffect(() => {
-    setBtcValue(parseFloat(amount) > 0 ? amount * ccxToBTC : 0);
-    setUsdValue(parseFloat(amount) > 0 ? amount * ccxToUSD : 0);
-  }, [amount, ccxToBTC, ccxToUSD]);
+    setBtcValue(parseFloat(amount) > 0 ? amount * xuniToBTC : 0);
+    setUsdValue(parseFloat(amount) > 0 ? amount * xuniToUSD : 0);
+  }, [amount, xuniToBTC, xuniToUSD]);
 
   return { btcValue, usdValue };
 };
