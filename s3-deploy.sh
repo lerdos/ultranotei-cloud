@@ -11,12 +11,12 @@ if [[ "$2" == "" ]]; then
 fi
 
 if [[ "$3" == "" ]]; then
-    echo "Please specify api endpoint like https://api.wallet.conceal.network/api"
+    echo "Please specify api endpoint like https://api.wallet.ultranotei.network/api"
     exit 1;
 fi
 
 if [[ "$1" == "live" ]]; then
-    DOMAIN="conceal.cloud"
+    DOMAIN="ultranotei.cloud"
     DISTR="E1GRNOKTY1DVG"
 
     # Checkout the branch
@@ -38,7 +38,7 @@ npm install
 export REACT_APP_API_ENDPOINT="$3" && npm run-script build
 
 if [[ "$1" == "staging" ]]; then
-    DOMAIN="staging.conceal.cloud"
+    DOMAIN="staging.ultranotei.cloud"
 fi
 
 aws s3 rm s3://$DOMAIN/ --recursive
